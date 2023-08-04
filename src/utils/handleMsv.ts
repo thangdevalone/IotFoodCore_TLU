@@ -4,7 +4,7 @@ export function handleMsv(text:string):string[]{
         const character = text[i];
         console.log(character)
         if(character in ['1','2','3','4','5','6','7','8','9']){
-            rs.push(`/src/assets/audio/${character}.mp3`)
+            rs.push(`/assets/audio/${character}.mp3`)
         }
       }
       console.log(rs)
