@@ -4,6 +4,8 @@ import "./App.css"
 import { NotFound, ProtectAuth } from "./components/Common"
 import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
+import { ProtectSignUp } from "./components/Common/ProtectSignUp"
+import { AuthCard } from "./features/auth/pages/AuthCard"
 
 function App() {
   const theme = useTheme()
@@ -14,10 +16,12 @@ function App() {
 
         <Route path="/" element={<ProtectAuth />}>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register" element={<ProtectSignUp/>} >
+            <Route path="" element={<RegisterPage/>}/>
+          </Route>
         </Route>
-
-        <Route element={<NotFound />}></Route>
+        <Route path="/auth/the-sv" element={<AuthCard/>}/>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </ThemeProvider>
   )
