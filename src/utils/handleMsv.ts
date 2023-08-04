@@ -1,5 +1,5 @@
 export function handleMsv(text:string):string[]{
-    const rs:string[]=['/src/assets/audio/detect.mp3','/src/assets/audio/A.mp3']
+    const rs:string[]=['/assets/audio/detect.mp3','/assets/audio/A.mp3']
     for (let i = 0; i < text.length; i++) {
         const character = text[i];
         console.log(character)

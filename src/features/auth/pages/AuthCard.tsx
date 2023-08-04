@@ -19,7 +19,7 @@ export function AuthCard(props: AuthCardProps) {
   hints.set(DecodeHintType.PURE_BARCODE, false)
 
   const codeReader = new BrowserMultiFormatReader(hints)
-  const au = new Audio("/src/assets/audio/continue.mp3")
+  const au = new Audio("/assets/audio/continue.mp3")
   useEffect(() => {
     codeReader
       .getVideoInputDevices()

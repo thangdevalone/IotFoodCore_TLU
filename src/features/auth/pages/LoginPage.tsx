@@ -78,7 +78,7 @@ export function LoginPage(props: LoginPageProps) {
             >
               <img
                 style={{ width: "60%" }}
-                src="src/assets/logo_iot.png"
+                src="/assets/logo_iot.png"
                 alt="logo-iot"
               />
             </Stack>
