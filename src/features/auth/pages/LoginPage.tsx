@@ -32,7 +32,7 @@ export function LoginPage(props: LoginPageProps) {
     password: yup
       .string()
       .required("Cần nhập mật khẩu")
-      .min(8, "Mật khẩu cần dài hơn 8 kí tự"),
+      .min(6, "Mật khẩu cần dài hơn 6 kí tự"),
   })
 
   const form = useForm<LoginForm>({
@@ -50,10 +50,10 @@ export function LoginPage(props: LoginPageProps) {
   }, [actionAuth])
 
   return (
-    <div className="container-cs w-screen h-screen flex items-center justify-center relative">
+    <div className="container-cs w-screen h-screen flex items-center justify-center">
       {logging && (
         <LinearProgress
-          sx={{ position: "absolute", top: "0px", left: "0", width: "100%" }}
+          sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
         />
       )}
       <Paper

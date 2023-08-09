@@ -1,7 +1,7 @@
 import History from "@/Router/History"
 import authApi from "@/api/authApi"
 import StorageKeys from "@/constants/storage-keys"
-import { LoginForm, User } from "@/models"
+import { LoginForm, RegisterForm, User } from "@/models"
 
 import { PayloadAction } from "@reduxjs/toolkit"
 import { call, fork, put, take } from "redux-saga/effects"
@@ -26,6 +26,18 @@ function* handleLogin(payload: LoginForm) {
     // Handle the error here
   }
 }
+function* handleRegister(payload: RegisterForm) {
+  try {
+    const res: ApiResAuth = yield call(authApi.register, payload)
+    const user = res.data
+    yield put(authActions.registerSuccess(user))
+    localStorage.setItem(StorageKeys.TOKEN, user.token)
+    localStorage.setItem(StorageKeys.NAMEUSER, user.accountName)
+    History.push("/")
+  } catch (error) {
+    // Handle the error here
+  }
+}
 function* handleLogout() {
   localStorage.removeItem(StorageKeys.TOKEN)
   localStorage.removeItem(StorageKeys.NAMEUSER)
@@ -35,12 +47,16 @@ function* handleLogout() {
 function* watchLoginFlow() {
   while (true) {
     const isLoggedIn = Boolean(localStorage.getItem(StorageKeys.TOKEN))
-
     if (!isLoggedIn) {
-      const action: PayloadAction<LoginForm> = yield take(
+      const registerAction: PayloadAction<RegisterForm> = yield take(
+        authActions.register.type,
+      )
+      yield fork(handleRegister, registerAction.payload)
+
+      const loginAction: PayloadAction<LoginForm> = yield take(
         authActions.login.type,
       )
-      yield fork(handleLogin, action.payload)
+      yield fork(handleLogin, loginAction.payload)
     }
 
     yield take(authActions.logout.type)

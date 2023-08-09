@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { InputField, PasswordField } from "@/components/FormControls"
 import { RegisterForm } from "@/models"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -10,12 +11,15 @@ import {
   Container,
   FormControlLabel,
   Grid,
+  LinearProgress,
   Typography,
 } from "@mui/material"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import * as yup from "yup"
+import { authActions } from "../AuthSlice"
+import { useSnackbar } from "notistack"
 export interface RegisterPageProps {}
 
 function Copyright(props: any) {
@@ -37,7 +41,10 @@ function Copyright(props: any) {
 }
 
 export function RegisterPage(props: RegisterPageProps) {
-  const [loadding, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
+  const registering = useAppSelector((state) => state.auth.registering)
+  const actionAuth = useAppSelector((state) => state.auth.actionAuth)
+  const { enqueueSnackbar } = useSnackbar()
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -74,7 +81,7 @@ export function RegisterPage(props: RegisterPageProps) {
     password: yup
       .string()
       .required("Nhập mật khẩu")
-      .min(8, "Mật khẩu phải dài hơn 8 kí tự")
+      .min(6, "Mật khẩu phải dài hơn 6 kí tự")
       .matches(/[A-Z]+/, "Mật khẩu cần ít nhất 1 kí tự in hoa"),
     rePassword: yup
       .string()
@@ -85,11 +92,22 @@ export function RegisterPage(props: RegisterPageProps) {
     resolver: yupResolver(schema),
   })
   const handleRegister: SubmitHandler<RegisterForm> = (data) => {
-    console.log(data)
+    dispatch(authActions.register(data))
   }
-
+  useEffect(() => {
+    if (actionAuth == "Failed") {
+      enqueueSnackbar("Tài khoản mật khẩu không chính xác hoặc không tồn tại", {
+        variant: "error",
+      })
+    }
+  }, [actionAuth])
   return (
     <div>
+      {registering && (
+        <LinearProgress
+          sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
+        />
+      )}
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -148,7 +166,7 @@ export function RegisterPage(props: RegisterPageProps) {
               />
               <Button
                 type="submit"
-                disabled={loadding || !checked}
+                disabled={registering || !checked}
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
