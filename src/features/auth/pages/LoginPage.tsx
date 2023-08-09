@@ -21,14 +21,12 @@ import * as yup from "yup"
 import { authActions } from "../AuthSlice"
 import { useEffect } from "react"
 export interface LoginPageProps {}
-
 export function LoginPage(props: LoginPageProps) {
   const logging = useAppSelector((state) => state.auth.logging)
   const actionAuth = useAppSelector((state) => state.auth.actionAuth)
   const { enqueueSnackbar } = useSnackbar()
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
-
   const schema = yup.object().shape({
     username: yup.string().required("Cần nhập mã sinh viên"),
     password: yup
