@@ -24,7 +24,7 @@ export interface LoginPageProps {}
 
 export function LoginPage(props: LoginPageProps) {
   const logging = useAppSelector((state) => state.auth.logging)
-  const actionAuth=useAppSelector((state)=> state.auth.actionAuth)
+  const actionAuth = useAppSelector((state) => state.auth.actionAuth)
   const { enqueueSnackbar } = useSnackbar()
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
@@ -43,9 +43,13 @@ export function LoginPage(props: LoginPageProps) {
   const handleLogin: SubmitHandler<LoginForm> = (data) => {
     dispatch(authActions.login(data))
   }
-  useEffect(() => {if (actionAuth=="Failed"){
-    enqueueSnackbar("Tài khoản mật khẩu không chính xác hoặc không tồn tại",{variant:"error"})
-  }}, [actionAuth])
+  useEffect(() => {
+    if (actionAuth == "Failed") {
+      enqueueSnackbar("Tài khoản mật khẩu không chính xác hoặc không tồn tại", {
+        variant: "error",
+      })
+    }
+  }, [actionAuth])
 
   return (
     <div className="container-cs w-screen h-screen flex items-center justify-center relative">
@@ -70,17 +74,28 @@ export function LoginPage(props: LoginPageProps) {
           sx={{ width: "100%", height: "100%", position: "relative" }}
           flexDirection={"row"}
         >
-          <Typography
-            sx={{
-              color: "white",
-              fontSize: "20px",
-              position: "absolute",
-              top: "15px",
-              left: "15px",
-            }}
-          >
-            Name App
-          </Typography>
+          {width > 900 ? (
+            <img
+              style={{
+                position: "absolute",
+                top: "15px",
+                width: "100px",
+                left: "15px",
+              }}
+              src="/assets/iotfood.png"
+            />
+          ) : (
+            <img
+              style={{
+                position: "absolute",
+                top: "15px",
+                width: "100px",
+                transform:"translateX(-50%)",
+                left: "50%",
+              }}
+              src="/assets/iotfood_b.png"
+            />
+          )}
           {width > 900 && (
             <Stack
               sx={{
