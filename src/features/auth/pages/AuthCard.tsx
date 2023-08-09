@@ -17,6 +17,8 @@ export function AuthCard(props: AuthCardProps) {
   const [next, setNext] = useState(false)
   const hints = new Map()
   hints.set(DecodeHintType.PURE_BARCODE, false)
+  hints.set(DecodeHintType.TRY_HARDER, false)
+  hints.set(DecodeHintType.RETURN_CODABAR_START_END, true)
 
   const codeReader = new BrowserMultiFormatReader(hints)
   const au = new Audio("/assets/audio/continue.mp3")
@@ -47,7 +49,7 @@ export function AuthCard(props: AuthCardProps) {
     codeReader.reset()
     setCode("Chưa xác nhận được mã sinh viên")
     setNext(false)
-    sessionStorage.removeItem('TheSinhVien')
+    sessionStorage.removeItem("TheSinhVien")
   }
 
   function decodeContinuously(selectedDeviceId: any) {
@@ -61,10 +63,10 @@ export function AuthCard(props: AuthCardProps) {
       },
     )
   }
-  const navigate=useNavigate()
-  const handleNextSignUp=()=>{
+  const navigate = useNavigate()
+  const handleNextSignUp = () => {
     au.pause()
-    navigate('/register')
+    navigate("/register")
   }
   useEffect(() => {
     decodeContinuously(selectedDeviceId)
@@ -79,7 +81,7 @@ export function AuthCard(props: AuthCardProps) {
     if (index >= playlist.length) {
       au.play()
       setNext(true)
-      
+
       return
     }
 
@@ -90,13 +92,31 @@ export function AuthCard(props: AuthCardProps) {
       playSequentially(playlist, index + 1)
     })
   }
-
+  const handleNoAuth = () => {
+    sessionStorage.setItem("TheSinhVien", "No Auth")
+    navigate("/register", { replace: true })
+  }
   // Gọi hàm để bắt đầu phát danh sách các bài hát một cách tuần tự
   return (
-    <main className="flex items-center justify-center w-screen h-screen">
+    <main className="flex items-center justify-center w-screen h-screen relative">
+      <Button
+        variant="contained"
+        sx={{ top: "10px", right: "10px", position: "absolute" }}
+        onClick={handleNoAuth}
+      >
+        Bỏ qua
+      </Button>
+      <section
+        style={{ width: "200px", marginRight: "20px" }}
+        className="p-4 border border-slate-300 rounded-md"
+      >
+        <b style={{ color: "red" }}>Chú ý: </b>Xác thực thẻ sinh viên đang
+        trong giai đoạn thử nghiệm bạn có thể bấm <b>bỏ qua</b> để tiếp tục đăng
+        kí
+      </section>
       <section
         className="  p-4 border border-slate-300 rounded-md"
-        style={{ maxWidth: "600px", width:"100vw" }}
+        style={{ maxWidth: "600px", width: "100vw" }}
         id="demo-content"
       >
         <div id="sourceSelectPanel" className="mt-2 mb-2">
@@ -140,16 +160,23 @@ export function AuthCard(props: AuthCardProps) {
           </span>
         </div>
 
-        <Stack  sx={{ mt: 2 }} flexDirection="row" justifyContent="space-between">
+        <Stack
+          sx={{ mt: 2 }}
+          flexDirection="row"
+          justifyContent="space-between"
+        >
           <Button
             variant="contained"
-           
             id="resetButton"
             onClick={() => resetClick()}
           >
             Reset
           </Button>
-          <Button variant="outlined" onClick={handleNextSignUp} disabled={!next}>
+          <Button
+            variant="outlined"
+            onClick={handleNextSignUp}
+            disabled={!next}
+          >
             Tiếp tục
           </Button>
         </Stack>

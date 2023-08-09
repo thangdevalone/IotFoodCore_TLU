@@ -7,6 +7,6 @@ export function handleMsv(text:string):string[]{
             rs.push(`/assets/audio/${character}.mp3`)
         }
       }
-      console.log(rs)
+  
     return rs
 }

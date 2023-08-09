@@ -2,23 +2,33 @@ import { InputField, PasswordField } from "@/components/FormControls"
 import { useWindowDimensions } from "@/hooks"
 
 import { LoginForm } from "@/models"
-
+import { useSnackbar } from "notistack"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
   Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  LinearProgress,
   Paper,
   Stack,
   Typography,
-  FormControlLabel,
-  Checkbox,
-  Button,
 } from "@mui/material"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import * as yup from "yup"
+import { authActions } from "../AuthSlice"
+import { useEffect } from "react"
 export interface LoginPageProps {}
 
 export function LoginPage(props: LoginPageProps) {
+  const logging = useAppSelector((state) => state.auth.logging)
+  const actionAuth=useAppSelector((state)=> state.auth.actionAuth)
+  const { enqueueSnackbar } = useSnackbar()
+  const { width } = useWindowDimensions()
+  const dispatch = useAppDispatch()
+
   const schema = yup.object().shape({
     username: yup.string().required("Cần nhập mã sinh viên"),
     password: yup
@@ -26,21 +36,31 @@ export function LoginPage(props: LoginPageProps) {
       .required("Cần nhập mật khẩu")
       .min(8, "Mật khẩu cần dài hơn 8 kí tự"),
   })
+
   const form = useForm<LoginForm>({
     resolver: yupResolver(schema),
   })
   const handleLogin: SubmitHandler<LoginForm> = (data) => {
-    console.log(data)
+    dispatch(authActions.login(data))
   }
-  const { width } = useWindowDimensions()
+  useEffect(() => {if (actionAuth=="Failed"){
+    enqueueSnackbar("Tài khoản mật khẩu không chính xác hoặc không tồn tại",{variant:"error"})
+  }}, [actionAuth])
+
   return (
     <div className="container-cs w-screen h-screen flex items-center justify-center relative">
+      {logging && (
+        <LinearProgress
+          sx={{ position: "absolute", top: "0px", left: "0", width: "100%" }}
+        />
+      )}
       <Paper
         elevation={8}
         sx={{
           zIndex: 5,
           maxWidth: "1000px",
-          width: "80%",
+          maxHeight: "500px",
+          width: "90%",
           height: "70%",
           backgroundColor: "white",
           borderRadius: "8px",
@@ -84,7 +104,7 @@ export function LoginPage(props: LoginPageProps) {
             </Stack>
           )}
 
-          <Stack sx={{ flex: "1 1" }}>
+          <Stack sx={{ flex: "1 1", position: "relative" }}>
             <Box
               sx={{
                 padding: "0 20px 0 20px",
@@ -95,7 +115,7 @@ export function LoginPage(props: LoginPageProps) {
             >
               <Box sx={{ marginBottom: "20px" }}>
                 <Typography variant="h4" sx={{ fontWeight: 500 }}>
-                  Đăng nhập!
+                  Đăng nhập
                 </Typography>
                 <span style={{ color: "rgb(122, 122, 122)" }}>
                   Hãy đăng nhập để tiếp tục
@@ -112,11 +132,13 @@ export function LoginPage(props: LoginPageProps) {
                     control={<Checkbox value="remember" color="primary" />}
                     label="Tự động đăng nhập lần sau"
                   />
+
                   <Button
                     size="large"
                     sx={{ marginTop: 1 }}
                     variant="contained"
                     type="submit"
+                    disabled={logging}
                   >
                     Đăng nhập
                   </Button>
@@ -124,14 +146,35 @@ export function LoginPage(props: LoginPageProps) {
               </FormProvider>
               <Typography sx={{ textAlign: "center", marginTop: "10px" }}>
                 Chưa có tài khoản?{" "}
-                <Link
-                  style={{ color: "blue", textDecoration: "underline" }}
-                  to="/register"
-                >
+                <Link style={{ color: "blue" }} to="/register">
                   Đăng kí
                 </Link>
               </Typography>
             </Box>
+            <Stack
+              justifyContent={"space-between"}
+              flexDirection={"row"}
+              sx={{
+                position: "absolute",
+                bottom: "10px",
+                width: "100%",
+                padding: "0 20px 0px 20px",
+              }}
+            >
+              <Link style={{ color: "blue" }} to="/forgot">
+                Quên mật khẩu?
+              </Link>
+              <Typography variant="body2" color="text.secondary">
+                <Link
+                  color="inherit"
+                  style={{ textDecoration: "underline" }}
+                  to="https://github.com/thangdevalone"
+                >
+                  @thangdevalone
+                </Link>{" "}
+                {new Date().getFullYear()}
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
       </Paper>
