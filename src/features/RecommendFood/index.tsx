@@ -57,19 +57,19 @@ export function RecommendFood(props: RecommendFoodProps) {
 
   return (
     <div className="flex gap-3 mt-8">
-      <Box
-        onClick={slidePrev}
-        className="flex items-center justify-center cursor-pointer"
-      >
-        <IconButton>
+      {width > 600 && 
+        <Box
+        className="flex items-center justify-center cursor-pointer">
+          <IconButton onClick={slidePrev}>
           <ChevronLeft fontSize="large" />
         </IconButton>
       </Box>
+      }
       <Swiper
         modules={[]}
         loop={true}
         style={{ width: "100%" }}
-        slidesPerView={window.innerWidth <= 600 ? 1 : 4}
+        slidesPerView={width <= 600 ? 1.2 : 4}
         spaceBetween={25}
         allowTouchMove={true}
         ref={swiperRef}
@@ -79,9 +79,9 @@ export function RecommendFood(props: RecommendFoodProps) {
             <Box
               className="w-screen rounded-md cursor-pointer object-cover"
               sx={{
-                width: "47vh",
-                maxHeight: "200px",
-                minHeight: "200px",
+                width: `${width < 601 ? '38vh' : '45vh'}`,
+                maxHeight: `${width < 601 ? '150px' : '200px'}`,
+                minHeight: `${width < 601 ? '150px' : '200px'}`,
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 backgroundImage: `url(${item.imgFood})`,
@@ -123,11 +123,13 @@ export function RecommendFood(props: RecommendFoodProps) {
           </SwiperSlide>
         ))}
       </Swiper>
-      <Box onClick={slideNext} className="flex items-center justify-center">
-        <IconButton>
-          <ChevronRight fontSize="large" />
-        </IconButton>
+      {width > 600 && 
+        <Box className="flex items-center justify-center">
+          <IconButton onClick={slideNext} >
+            <ChevronRight fontSize="large" />
+          </IconButton>
       </Box>
+      }
     </div>
   )
 }
