@@ -1,20 +1,22 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { LoginForm, RegisterForm, User } from "@/models"
-import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface AuthState {
-  isLoggedIn: boolean
   logging?: boolean
   registering?: boolean
   actionAuth: "No action" | "Success" | "Failed"
   currentUser?: User
+  isRehydrating: boolean // Trạng thái khôi phục
 }
+
 const initialState: AuthState = {
-  isLoggedIn: false,
   logging: false,
   registering: false,
   actionAuth: "No action",
   currentUser: undefined,
+  isRehydrating: true, // Khởi tạo là true
 }
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -26,13 +28,11 @@ const authSlice = createSlice({
 
     loginSuccess(state, action: PayloadAction<User>) {
       state.logging = false
-      state.isLoggedIn = true
       state.actionAuth = "Success"
       state.currentUser = action.payload
     },
     loginFailed(state) {
       state.logging = false
-      state.isLoggedIn = false
       state.actionAuth = "Failed"
     },
     register(state, action: PayloadAction<RegisterForm>) {
@@ -41,7 +41,6 @@ const authSlice = createSlice({
     },
     registerSuccess(state, action: PayloadAction<User>) {
       state.registering = false
-      state.isLoggedIn = true
       state.actionAuth = "Success"
       state.currentUser = action.payload
     },
@@ -50,7 +49,6 @@ const authSlice = createSlice({
       state.actionAuth = "Failed"
     },
     logout(state) {
-      state.isLoggedIn = false
       state.logging = false
       state.registering = false
       state.actionAuth = "No action"
@@ -59,6 +57,15 @@ const authSlice = createSlice({
     resetAction(state) {
       state.actionAuth = "No action"
     },
+    // ...các action khác
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      (action) => action.type.endsWith("/REHYDRATE"),
+      (state) => {
+        state.isRehydrating = false
+      },
+    )
   },
 })
 
