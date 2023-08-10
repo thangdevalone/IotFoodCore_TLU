@@ -6,12 +6,16 @@ import { SearchFood } from "@/features/SearchFood"
 import { RecommendFood } from "@/features/RecommendFood"
 import TypeFood from "@/features/TypeFood"
 import "./styles_home.css"
+
+
 export interface HomeProps {}
 
 export function Home(props: HomeProps) {
+
   return (
-    <Box className="relative overflow-x-hidden">
+    <Box className="relative">
       <Header />
+      
       <Banner />
       <section className="container-base search-food">
         <SearchFood />

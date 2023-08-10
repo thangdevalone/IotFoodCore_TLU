@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -12,6 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 code {
@@ -19,14 +18,15 @@ code {
     monospace;
 }
 
-:root{
-  --color-df-1:#02093D;
+:root {
+  --color-df-1: #02093d;
   --color-df-2: #df1a1a;
+  --color-layer-2: #d51515;
   --color-df-3: white;
-  --color-tx-1:#0f164c;
+  --color-tx-1: #0f164c;
 }
 
-.container-base{
+.container-base {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
@@ -37,7 +37,8 @@ code {
   overflow: hidden;
   background-color: var(--color-df-2);
 }
-.container-cs:before,.container-cs:after {
+.container-cs:before,
+.container-cs:after {
   content: "";
   width: 60vmax;
   height: 60vmax;
@@ -45,11 +46,11 @@ code {
   background: rgba(255, 255, 255, 0.2);
   left: -20vmin;
   top: -20vmin;
-  animation: morph 15s linear infinite alternate,spin 20s linear infinite;
+  animation: morph 15s linear infinite alternate, spin 20s linear infinite;
   z-index: 1;
-  will-change: border-radius,transform;
+  will-change: border-radius, transform;
   transform-origin: 55% 55%;
-  pointer-events: none
+  pointer-events: none;
 }
 
 .container-cs:after {
@@ -59,20 +60,28 @@ code {
   right: -10vmin;
   top: auto;
   bottom: 0;
-  animation: morph 10s linear infinite alternate,spin 26s linear infinite reverse;
-  transform-origin: 20% 20%
+  animation: morph 10s linear infinite alternate,
+    spin 26s linear infinite reverse;
+  transform-origin: 20% 20%;
+}
+.caption-tx {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #676767;
+  margin-bottom: 16px;
+  margin-top: 8px;
 }
 @keyframes morph {
   0% {
-      border-radius: 40% 60% 60% 40%/70% 30%
+    border-radius: 40% 60% 60% 40%/70% 30%;
   }
 
   to {
-      border-radius: 40% 60%
+    border-radius: 40% 60%;
   }
 }
 @keyframes spin {
   to {
-      transform: rotate(1turn)
+    transform: rotate(1turn);
   }
 }
