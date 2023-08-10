@@ -66,7 +66,7 @@ export function Banner(props: BannerProps) {
               minHeight:"350px",
               backgroundPosition:"center",
               backgroundSize:"cover",
-              backgroundImage: "url('/assets/banner-1.png')",
+              backgroundImage: "url('/assets/banner-4.jpg')",
             }}
           ></Box>
         </SwiperSlide>

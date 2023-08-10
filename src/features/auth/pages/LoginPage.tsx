@@ -43,7 +43,7 @@ export function LoginPage(props: LoginPageProps) {
   }
   useEffect(() => {
     if (actionAuth == "Failed") {
-      enqueueSnackbar("Tài khoản mật khẩu không chính xác hoặc không tồn tại", {
+      enqueueSnackbar("Mã sinh viên hoặc mật khẩu không chính xác", {
         variant: "error",
       })
     }
