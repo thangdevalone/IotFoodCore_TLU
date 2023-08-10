@@ -96,7 +96,7 @@ export function RegisterPage(props: RegisterPageProps) {
   }
   useEffect(() => {
     if (actionAuth == "Failed") {
-      enqueueSnackbar("Tài khoản mật khẩu không chính xác hoặc không tồn tại", {
+      enqueueSnackbar("Mã sinh viên đã được sử dụng", {
         variant: "error",
       })
     }

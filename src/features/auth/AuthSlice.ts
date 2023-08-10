@@ -21,6 +21,7 @@ const authSlice = createSlice({
   reducers: {
     login(state, action: PayloadAction<LoginForm>) {
       state.logging = true
+      state.actionAuth = "No action"
     },
 
     loginSuccess(state, action: PayloadAction<User>) {
@@ -36,6 +37,7 @@ const authSlice = createSlice({
     },
     register(state, action: PayloadAction<RegisterForm>) {
       state.registering = true
+      state.actionAuth = "No action"
     },
     registerSuccess(state, action: PayloadAction<User>) {
       state.registering = false
@@ -46,14 +48,17 @@ const authSlice = createSlice({
     registerFailed(state) {
       state.registering = false
       state.actionAuth = "Failed"
+      state.actionAuth = "No action"
     },
     logout(state) {
-      state = {
-        isLoggedIn: false,
-        logging: false,
-        actionAuth: "No action",
-        currentUser: undefined,
-      }
+      state.isLoggedIn = false
+      state.logging = false
+      state.registering = false
+      state.actionAuth = "No action"
+      state.currentUser = undefined
+    },
+    resetAction(state) {
+      state.actionAuth = "No action"
     },
   },
 })

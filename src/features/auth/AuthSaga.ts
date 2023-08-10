@@ -4,7 +4,7 @@ import StorageKeys from "@/constants/storage-keys"
 import { LoginForm, RegisterForm, User } from "@/models"
 
 import { PayloadAction } from "@reduxjs/toolkit"
-import { call, fork, put, take } from "redux-saga/effects"
+import { call, delay, put, takeLatest } from "redux-saga/effects"
 import { authActions } from "./AuthSlice"
 
 type ApiResAuth = {
@@ -14,56 +14,47 @@ type ApiResAuth = {
   data: User
 }
 
-function* handleLogin(payload: LoginForm) {
+function* handleLogin(action: PayloadAction<LoginForm>) {
   try {
-    const res: ApiResAuth = yield call(authApi.login, payload)
+    const res: ApiResAuth = yield call(authApi.login,action.payload)
     const user = res.data
     yield put(authActions.loginSuccess(user))
     localStorage.setItem(StorageKeys.TOKEN, user.token)
     localStorage.setItem(StorageKeys.NAMEUSER, user.accountName)
+    localStorage.setItem(StorageKeys.USER,JSON.stringify(user))
     History.push("/")
   } catch (error) {
     // Handle the error here
+    yield put(authActions.loginFailed())
+    yield delay(100);
+    yield put(authActions.resetAction());
   }
 }
-function* handleRegister(payload: RegisterForm) {
+function* handleRegister(action: PayloadAction<RegisterForm>) {
   try {
-    const res: ApiResAuth = yield call(authApi.register, payload)
+    const res: ApiResAuth = yield call(authApi.register, action.payload)
     const user = res.data
     yield put(authActions.registerSuccess(user))
     localStorage.setItem(StorageKeys.TOKEN, user.token)
     localStorage.setItem(StorageKeys.NAMEUSER, user.accountName)
+    localStorage.setItem(StorageKeys.USER,JSON.stringify(user))
     History.push("/")
   } catch (error) {
     // Handle the error here
+    yield put(authActions.registerFailed())
+    yield delay(100);
+    yield put(authActions.resetAction());
   }
 }
 function* handleLogout() {
   localStorage.removeItem(StorageKeys.TOKEN)
   localStorage.removeItem(StorageKeys.NAMEUSER)
-  yield put(authActions.logout())
+  localStorage.removeItem(StorageKeys.USER)
 }
 
-function* watchLoginFlow() {
-  while (true) {
-    const isLoggedIn = Boolean(localStorage.getItem(StorageKeys.TOKEN))
-    if (!isLoggedIn) {
-      const registerAction: PayloadAction<RegisterForm> = yield take(
-        authActions.register.type,
-      )
-      yield fork(handleRegister, registerAction.payload)
-
-      const loginAction: PayloadAction<LoginForm> = yield take(
-        authActions.login.type,
-      )
-      yield fork(handleLogin, loginAction.payload)
-    }
-
-    yield take(authActions.logout.type)
-    yield call(handleLogout)
-  }
-}
 
 export function* authSaga() {
-  yield fork(watchLoginFlow)
+  yield takeLatest(authActions.login.type, handleLogin)
+  yield takeLatest(authActions.register.type,handleRegister)
+  yield takeLatest(authActions.logout.type, handleLogout)
 }
