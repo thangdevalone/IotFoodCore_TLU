@@ -12,7 +12,8 @@ export function Banner(props: BannerProps) {
     <Box>
       <Swiper
         autoplay={true}
-        speed={1000}
+        speed={1100}
+        
         modules={[Autoplay]}
         loop={true}
         style={{ width: "100vw" }}

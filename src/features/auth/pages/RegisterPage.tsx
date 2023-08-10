@@ -58,9 +58,12 @@ export function RegisterPage(props: RegisterPageProps) {
       .string()
       .required("Hãy nhập tên đầy đủ của bạn")
       .test(
-        "Họ và tên nên gồm 2 từ trờ lên",
         "Họ và tên nên gồm 2 từ trở lên",
-        (value) => value.split(" ").length >= 2,
+        "Họ và tên nên gồm ít nhất 2 từ không bao gồm chữ số",
+        (value) => {
+          const words = value.trim().split(" ")
+          return words.length >= 2 && words.every((word) => !/\d/.test(word))
+        },
       ),
     username: yup
       .string()
@@ -81,8 +84,10 @@ export function RegisterPage(props: RegisterPageProps) {
     password: yup
       .string()
       .required("Nhập mật khẩu")
-      .min(6, "Mật khẩu phải dài hơn 6 kí tự")
-      .matches(/[A-Z]+/, "Mật khẩu cần ít nhất 1 kí tự in hoa"),
+      .min(8, "Mật khẩu phải dài hơn 8 kí tự")
+      .max(32, "Mật khẩu quá dài")
+      .matches(/[A-Z]+/, "Mật khẩu cần ít nhất 1 kí tự in hoa")
+      .matches(/[a-z]+/, "Mật khẩu cần ít nhất 1 kí tự in thường"),
     rePassword: yup
       .string()
       .required("Nhập lại mật khẩu")
@@ -92,7 +97,8 @@ export function RegisterPage(props: RegisterPageProps) {
     resolver: yupResolver(schema),
   })
   const handleRegister: SubmitHandler<RegisterForm> = (data) => {
-    dispatch(authActions.register(data))
+    const rsData:RegisterForm={...data,name:data.name.trim()}
+    dispatch(authActions.register(rsData))
   }
   useEffect(() => {
     if (actionAuth == "Failed") {

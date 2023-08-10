@@ -48,7 +48,6 @@ const authSlice = createSlice({
     registerFailed(state) {
       state.registering = false
       state.actionAuth = "Failed"
-      state.actionAuth = "No action"
     },
     logout(state) {
       state.isLoggedIn = false

@@ -7,7 +7,7 @@ import { SwitchLightDark } from "."
 import { CustomButton } from "../Custom/CustomButon"
 import { BagIcon, NotiIcon } from "../Icon"
 import { MenuUser } from "./MenuUser"
-
+import "./styles_common.css"
 export interface HeaderProps {}
 
 export function Header(props: HeaderProps) {

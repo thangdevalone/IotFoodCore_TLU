@@ -32,13 +32,13 @@ export function LoginPage(props: LoginPageProps) {
     password: yup
       .string()
       .required("Cần nhập mật khẩu")
-      .min(6, "Mật khẩu cần dài hơn 6 kí tự"),
   })
 
   const form = useForm<LoginForm>({
     resolver: yupResolver(schema),
   })
   const handleLogin: SubmitHandler<LoginForm> = (data) => {
+  
     dispatch(authActions.login(data))
   }
   useEffect(() => {
