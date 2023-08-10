@@ -13,5 +13,5 @@ export interface RecommendFoodData {
 export interface TypeFoodsData {
   id: number,
   nameType: string,
-  imgTypeFood?:string,
+  imgFood:string,
 }
