@@ -1,13 +1,11 @@
-import { Box, IconButton, Stack, Typography, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import * as React from "react";
 import foodsApis from "@/api/foodsApi";
 import { TypeFoodsData } from "@/models/Foods";
-import { useWindowDimensions } from "@/hooks"; 
 
 const TypeFood = () => {
 
   const [data, setData] = React.useState<TypeFoodsData[]>([]);
-
 
   React.useEffect(() => { 
     const fetchData = async () => {
@@ -23,7 +21,7 @@ const TypeFood = () => {
         {data?.map(item =>
           <Grid item xs={12} sm={6} md={3} key={item.id}>
             <Box className="flex flex-col items-center justify-center">
-              <div className="h-[150px] w-[300px] lg:w-[350px] bg-gray-300"></div>
+              <div className="h-[150px] w-[300px] lg:w-[400px] bg-gray-300"></div>
             </Box>
             <span className='text-xl font-semibold flex justify-start lg:ml-3 ml-[44px]'>{item.nameType}</span>
           </Grid>
