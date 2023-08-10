@@ -15,21 +15,31 @@ import { useWindowDimensions } from "@/hooks";
 export interface RecommendFoodProps {}
 
 export function RecommendFood(props: RecommendFoodProps) {
-  const [data, setData] = React.useState<RecommendFoodData[]>([]);
+  const [data, setData] = React.useState<RecommendFoodData[]>([])
 
-  const swiperRef = React.useRef<any>(null);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const response = await foodsApis.getRecommendFood()
+      if (response?.status) {
+        setData(response?.data)
+      }
+    }
+    fetchData()
+  }, [])
+
+  const swiperRef = React.useRef<any>(null)
 
   const slidePrev = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slidePrev();
+      swiperRef.current.swiper.slidePrev()
     }
-  };
+  }
 
   const slideNext = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideNext();
+      swiperRef.current.swiper.slideNext()
     }
-  };
+  }
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -47,66 +57,77 @@ export function RecommendFood(props: RecommendFoodProps) {
 
   return (
     <div className="flex gap-3 mt-8">
-      {width > 900 && 
-        <Box className="flex items-center justify-center cursor-pointer">
-          <IconButton onClick={slidePrev} >
-            <ChevronLeft fontSize="large" />
-          </IconButton>
-        </Box>
-      }
+      <Box
+        onClick={slidePrev}
+        className="flex items-center justify-center cursor-pointer"
+      >
+        <IconButton>
+          <ChevronLeft fontSize="large" />
+        </IconButton>
+      </Box>
       <Swiper
         modules={[]}
         loop={true}
-        style={{ width: "100%"}}
-        slidesPerView={ width < 601 ? 1.2 : 4}
+        style={{ width: "100%" }}
+        slidesPerView={window.innerWidth <= 600 ? 1 : 4}
         spaceBetween={25}
         allowTouchMove={true}
         ref={swiperRef}
       >
-        {data?.map((item,index) => (
-            <SwiperSlide key={index + item?.id}>
-              <Box
-                className="w-screen rounded-md cursor-pointer object-cover"
-                sx={{
-                  width: `${width < 601 ? '38vh' : '45vh'}`,
-                  maxHeight: `${width < 601 ? '150px' : '200px'}`,
-                  minHeight: `${width < 601 ? '150px' : '200px'}`,
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  backgroundImage: `url(${item.imgFood})`,
-                }}
-              ></Box>
-              <Stack className="">
-                <span className="text-lg font-semibold capitalize">{item.nameRestaurantFood}</span>
-                    <Box className="flex gap-5 capitalize">
-                      <Typography>{item.nameFood}</Typography>
-                      <Typography className="text-gray-400">{handlePrice(item.price)} VND</Typography>
-                    </Box>
-                    <Box className="flex gap-10 items-center mt-2">
-                      <Typography className="text-[20px] flex items-center justify-center">
-                        <StarRateRoundedIcon style={{ color: 'orange', width: '30px', height : '30px' }} />
-                      <Typography> {item.star} </Typography>
-                      </Typography>
-                      <Box className="flex gap-2">
-                        <Typography className="flex items-center justify-center gap-2">
-                          <AccessTimeRoundedIcon style={{ width: '30px', height: '30px' }} />
-                          {item.time} phút 
-                        </Typography>
-                        <FiberManualRecordIcon style={{ width: '9px', height: '9px', marginTop: '10px' }} />
-                        <Typography className="flex items-center justify-center">{item.distance} km</Typography>
-                      </Box>
-                    </Box>  
-              </Stack>
-            </SwiperSlide>
+        {data?.map((item, index) => (
+          <SwiperSlide key={index + item?.id}>
+            <Box
+              className="w-screen rounded-md cursor-pointer object-cover"
+              sx={{
+                width: "47vh",
+                maxHeight: "200px",
+                minHeight: "200px",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundImage: `url(${item.imgFood})`,
+              }}
+            ></Box>
+            <Stack className="">
+              <span className="text-lg font-semibold capitalize">
+                {item.nameRestaurantFood}
+              </span>
+              <Box className="flex gap-5 capitalize">
+                <Typography>{item.nameFood}</Typography>
+                <Typography className="text-gray-400">
+                  {handlePrice(item.price)} VND
+                </Typography>
+              </Box>
+              <Box className="flex gap-10 items-center mt-2">
+                <Typography className="text-[20px] flex  justify-center items-center">
+                  <StarRateRoundedIcon
+                    style={{ color: "orange", width: "30px", height: "30px" }}
+                  />
+                  <Typography> {item.star} </Typography>
+                </Typography>
+                <Box className="flex gap-2">
+                  <Typography className="flex items-center justify-center gap-2">
+                    <AccessTimeRoundedIcon
+                      style={{ width: "30px", height: "30px" }}
+                    />
+                    {item.time} phút
+                  </Typography>
+                  <FiberManualRecordIcon
+                    style={{ width: "9px", height: "9px", marginTop: "10px" }}
+                  />
+                  <Typography className="flex items-center justify-center">
+                    {item.distance} km
+                  </Typography>
+                </Box>
+              </Box>
+            </Stack>
+          </SwiperSlide>
         ))}
       </Swiper>
-      {width > 900 && 
-        <Box className="flex items-center justify-center">
-          <IconButton  onClick={slideNext}>
-            <ChevronRight fontSize="large"/>
-          </IconButton>
-        </Box>
-      }
+      <Box onClick={slideNext} className="flex items-center justify-center">
+        <IconButton>
+          <ChevronRight fontSize="large" />
+        </IconButton>
+      </Box>
     </div>
-  );
+  )
 }

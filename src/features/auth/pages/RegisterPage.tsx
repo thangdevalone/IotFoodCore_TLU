@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { InputField, PasswordField } from "@/components/FormControls"
 import { RegisterForm } from "@/models"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -10,12 +11,15 @@ import {
   Container,
   FormControlLabel,
   Grid,
+  LinearProgress,
   Typography,
 } from "@mui/material"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import * as yup from "yup"
+import { authActions } from "../AuthSlice"
+import { useSnackbar } from "notistack"
 export interface RegisterPageProps {}
 
 function Copyright(props: any) {
@@ -37,7 +41,10 @@ function Copyright(props: any) {
 }
 
 export function RegisterPage(props: RegisterPageProps) {
-  const [loadding, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
+  const registering = useAppSelector((state) => state.auth.registering)
+  const actionAuth = useAppSelector((state) => state.auth.actionAuth)
+  const { enqueueSnackbar } = useSnackbar()
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -51,9 +58,12 @@ export function RegisterPage(props: RegisterPageProps) {
       .string()
       .required("Hãy nhập tên đầy đủ của bạn")
       .test(
-        "Họ và tên nên gồm 2 từ trờ lên",
         "Họ và tên nên gồm 2 từ trở lên",
-        (value) => value.split(" ").length >= 2,
+        "Họ và tên nên gồm ít nhất 2 từ không bao gồm chữ số",
+        (value) => {
+          const words = value.trim().split(" ")
+          return words.length >= 2 && words.every((word) => !/\d/.test(word))
+        },
       ),
     username: yup
       .string()
@@ -75,7 +85,9 @@ export function RegisterPage(props: RegisterPageProps) {
       .string()
       .required("Nhập mật khẩu")
       .min(8, "Mật khẩu phải dài hơn 8 kí tự")
-      .matches(/[A-Z]+/, "Mật khẩu cần ít nhất 1 kí tự in hoa"),
+      .max(32, "Mật khẩu quá dài")
+      .matches(/[A-Z]+/, "Mật khẩu cần ít nhất 1 kí tự in hoa")
+      .matches(/[a-z]+/, "Mật khẩu cần ít nhất 1 kí tự in thường"),
     rePassword: yup
       .string()
       .required("Nhập lại mật khẩu")
@@ -85,11 +97,23 @@ export function RegisterPage(props: RegisterPageProps) {
     resolver: yupResolver(schema),
   })
   const handleRegister: SubmitHandler<RegisterForm> = (data) => {
-    console.log(data)
+    const rsData:RegisterForm={...data,name:data.name.trim()}
+    dispatch(authActions.register(rsData))
   }
-
+  useEffect(() => {
+    if (actionAuth == "Failed") {
+      enqueueSnackbar("Mã sinh viên đã được sử dụng", {
+        variant: "error",
+      })
+    }
+  }, [actionAuth])
   return (
     <div>
+      {registering && (
+        <LinearProgress
+          sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
+        />
+      )}
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -148,7 +172,7 @@ export function RegisterPage(props: RegisterPageProps) {
               />
               <Button
                 type="submit"
-                disabled={loadding || !checked}
+                disabled={registering || !checked}
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}

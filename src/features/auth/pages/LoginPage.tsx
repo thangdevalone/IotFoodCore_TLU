@@ -32,28 +32,28 @@ export function LoginPage(props: LoginPageProps) {
     password: yup
       .string()
       .required("Cần nhập mật khẩu")
-      .min(8, "Mật khẩu cần dài hơn 8 kí tự"),
   })
 
   const form = useForm<LoginForm>({
     resolver: yupResolver(schema),
   })
   const handleLogin: SubmitHandler<LoginForm> = (data) => {
+  
     dispatch(authActions.login(data))
   }
   useEffect(() => {
     if (actionAuth == "Failed") {
-      enqueueSnackbar("Tài khoản mật khẩu không chính xác hoặc không tồn tại", {
+      enqueueSnackbar("Mã sinh viên hoặc mật khẩu không chính xác", {
         variant: "error",
       })
     }
   }, [actionAuth])
 
   return (
-    <div className="container-cs w-screen h-screen flex items-center justify-center relative">
+    <div className="container-cs w-screen h-screen flex items-center justify-center">
       {logging && (
         <LinearProgress
-          sx={{ position: "absolute", top: "0px", left: "0", width: "100%" }}
+          sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
         />
       )}
       <Paper

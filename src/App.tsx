@@ -13,16 +13,12 @@ function App() {
     <ThemeProvider theme={theme}>
       <Routes>
         <Route path="/" element={<Home />} />
-
-        <Route path="/login" element={<ProtectAuth />}>
-          <Route path="" element={<LoginPage />} />
+        <Route element={<ProtectAuth />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/auth/the-sv" element={<AuthCard />} />
         </Route>
 
-        <Route path="/register" element={<ProtectSignUp />}>
-          <Route path="" element={<RegisterPage />} />
-        </Route>
-        
-        <Route path="/auth/the-sv" element={<AuthCard />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </ThemeProvider>
