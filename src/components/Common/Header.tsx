@@ -20,6 +20,7 @@ export function Header(props: HeaderProps) {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  console.log(user)
 
   return (
     <Box
