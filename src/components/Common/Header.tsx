@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { useInforUser, useScroll } from "@/hooks"
+import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
 import { Avatar, Box, Stack } from "@mui/material"
 import { MouseEvent, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
@@ -12,12 +12,11 @@ import classNames from "classnames"
 import { CartDrawer } from "./CartDrawer"
 import { cartActions } from "./CartDrawer/CartSlice"
 
-
 export interface HeaderProps {}
 
 export function Header(props: HeaderProps) {
   const user = useInforUser()
-  const dispatch=useAppDispatch()
+  const dispatch = useAppDispatch()
   const scrollY = useScroll()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const handleClick = (event: MouseEvent<HTMLImageElement>) => {
@@ -26,8 +25,10 @@ export function Header(props: HeaderProps) {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const { width } = useWindowDimensions()
   const setterBg = scrollY >= 100 ? true : false
-  const handleOpenCard=()=>{
+  const mobile = width <= 750 ? true : false
+  const handleOpenCard = () => {
     dispatch(cartActions.toggleCart())
   }
   return (
@@ -40,35 +41,41 @@ export function Header(props: HeaderProps) {
           "items-center",
           "justify-center",
           "ani-bg",
-          { "header-sd": !setterBg, "header-color": setterBg },
+          { "header-sd": !setterBg && !mobile, "header-color": setterBg },
         )}
-        sx={{ height: "80px", position: "fixed", zIndex: 20 }}
+        sx={{ height: "80px", position: "fixed", zIndex: 20, top: 0 }}
       >
         <Stack
           flexDirection={"row"}
           justifyContent={"space-between"}
           alignItems={"center"}
-          className="container-base"
+          className="container-base base-pd"
           sx={{
             position: "fixed",
             top: "0",
             height: "inherit",
-            padding: "0 40px 0 40px",
           }}
         >
           <img
-            src="/assets/iotfood.png"
+            src={
+              mobile && setterBg
+                ? "/assets/iotfood.png"
+                : mobile
+                ? "/assets/iotfood_b.png"
+                : "/assets/iotfood.png"
+            }
             style={{ width: "130px" }}
             alt="logo"
           />
           <Stack direction={"row"} alignItems="center">
-            <CustomButton 
-              onClick={handleOpenCard}
-              sx={{ padding: "10px 12px", mr: 1, minWidth: "unset" }}
-            >
-              <BagIcon />
-            </CustomButton>
-
+            {width > 450 && (
+              <CustomButton
+                onClick={handleOpenCard}
+                sx={{ padding: "10px 12px", mr: 1, minWidth: "unset" }}
+              >
+                <BagIcon />
+              </CustomButton>
+            )}
             {user ? (
               <>
                 <CustomButton
@@ -96,7 +103,7 @@ export function Header(props: HeaderProps) {
                 </CustomButton>
               </Link>
             )}
-            <SwitchLightDark />
+            {width > 750 && <SwitchLightDark />}
           </Stack>
         </Stack>
       </Box>

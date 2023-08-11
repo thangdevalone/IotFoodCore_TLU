@@ -15,12 +15,12 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
       variant={variant}
       sx={{
         color: "var(--color-tx-1)",
-        border: "1px solid #f0efef",
+        border: "1px solid #c8c8c8",
         fontSize: "12px",
         background: "white",
         "&:hover": {
           color: "var(--color-tx-1)",
-          border: "1px solid #f0efef",
+          border: "1px solid #c8c8c8",
           background: "white",
         },
         ...sx, // Sử dụng spread operator để chèn các style tùy chỉnh

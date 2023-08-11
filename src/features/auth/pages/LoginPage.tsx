@@ -10,16 +10,18 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  IconButton,
   LinearProgress,
   Paper,
   Stack,
   Typography,
 } from "@mui/material"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import * as yup from "yup"
 import { authActions } from "../AuthSlice"
 import { useEffect } from "react"
+import { ArrowBack } from "@mui/icons-material"
 export interface LoginPageProps {}
 export function LoginPage(props: LoginPageProps) {
   const logging = useAppSelector((state) => state.auth.logging)
@@ -48,9 +50,24 @@ export function LoginPage(props: LoginPageProps) {
       })
     }
   }, [actionAuth])
+  
 
+useEffect(() => {
+  document.body.style.overflow = "hidden"; // Set overflow to hidden when the component mounts
+
+  return () => {
+    document.body.style.overflow = "hidden scroll"; // Reset overflow to hidden when the component unmounts
+  };
+}, []);
+  const navigate=useNavigate()
+  const handleHome=()=>{
+    navigate('/')
+  }
   return (
-    <div className="container-cs w-screen h-screen flex items-center justify-center">
+    <div className="container-cs w-screen relative h-screen flex items-center justify-center">
+      <IconButton onClick={handleHome} sx={{position:"absolute"}} className="top-[15px] left-[15px]">
+        <ArrowBack htmlColor="white"/>
+      </IconButton>
       {logging && (
         <LinearProgress
           sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}

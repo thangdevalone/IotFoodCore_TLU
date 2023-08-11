@@ -18,7 +18,7 @@ export function MenuUser(props: MenuUserProps) {
   const dispatch = useAppDispatch()
 
   const handleLogOut = () => {
-    console.log("a")
+    handleClose()
     dispatch(authActions.logout())
   }
   return (

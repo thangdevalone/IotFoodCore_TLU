@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, Divider, Typography } from "@mui/material"
 import * as React from "react"
 import { Header } from "../Common"
 import { Banner } from "@/features/Banner"
@@ -6,32 +6,32 @@ import { SearchFood } from "@/features/SearchFood"
 import { RecommendFood } from "@/features/RecommendFood"
 import TypeFood from "@/features/TypeFood"
 import "./styles_home.css"
-
+import { useWindowDimensions } from "@/hooks"
 
 export interface HomeProps {}
 
 export function Home(props: HomeProps) {
-
+  const { width } = useWindowDimensions()
   return (
-    <Box className="relative">
+    <Box className="relative tx-df-sz">
       <Header />
-      
-      <Banner />
+      {width > 750 && <Banner />}
       <section className="container-base search-food">
         <SearchFood />
       </section>
-      <Box
-        sx={{
-          marginTop: "80px",
-          marginBottom: "80px",
-          border: "1px solid #e5e9f0",
-        }}
-      ></Box>
-      
-      <section className="recommend-food my-10">
+      <div className="line-1"></div>
+      <p className="base-tx base-pd mb-[32px]">
+        Cửa hàng bán chạy nhất tại{" "}
+        <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
+      </p>
+      <section className=" recommend-store">
         <RecommendFood />
       </section>
-      <section className="type-food">
+
+      <p className="base-tx  base-pd  mb-[32px]">
+        Các loại đồ ăn có sẵn để lựa chọn
+      </p>
+      <section className="container-base base-pd type-food">
         <TypeFood />
       </section>
     </Box>

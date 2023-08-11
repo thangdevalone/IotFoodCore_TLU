@@ -5,17 +5,25 @@ import { InputField } from "@/components/FormControls"
 
 import classNames from "classnames"
 import { CustomButton } from "@/components/Custom/CustomButon"
+import { useWindowDimensions } from "@/hooks"
 export interface SearchFoodProps {}
 
 export function SearchFood(props: SearchFoodProps) {
+  const { width } = useWindowDimensions()
   return (
     <Box
       className={classNames({
-        [classes.mainSearch]: true,
-        "container-base": false,
+        [classes.mainSearch]: width > 750 ? true : false,
+        "base-pd": true,
       })}
     >
-      <Paper elevation={2} className={classes.container}>
+      <Paper
+        elevation={width > 750 ? 2 : 0}
+        className={classNames({
+          [classes.container]: width > 750 ? true : false,
+          [classes.dsMobile]: width <= 750 ? true : false,
+        })}
+      >
         <Stack
           direction={"column"}
           sx={{ height: "100%" }}
@@ -27,13 +35,11 @@ export function SearchFood(props: SearchFoodProps) {
           </Box>
 
           <Box sx={{ mb: 1, mt: 1, postion: "relative" }}>
-            <img
-              className="absolute"
-              style={{ top: "105px", right: "25px", width: "150px" }}
-              src="/assets/cook.gif"
-            />
+            {width > 550 && (
+              <img className={classes.chef} src="/assets/cook.gif" />
+            )}
             <input
-              className=" appearance-none border-2  rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+              className="appearance-none border-2 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="search-food"
               style={{
                 height: "50px",

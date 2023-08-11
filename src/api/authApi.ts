@@ -13,6 +13,10 @@ const authApi={
         const url="auth/register"
         const form:RegisterFormApi={accountName:data.name,password:data.password,username:data.username,sdt:data.phoneNumber}
         return axiosClient.post(url,form)
+    },
+    hello(){
+        const url="auth/hello"
+        return axiosClient.get(url)
     }
 }
 export default authApi
