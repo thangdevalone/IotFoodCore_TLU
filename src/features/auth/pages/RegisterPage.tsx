@@ -74,7 +74,8 @@ export function RegisterPage(props: RegisterPageProps) {
         (values) => {
           return values.length === 6 && values[0] === "A"
         },
-      ),
+      )
+      .matches(/^A\d{5}$/, "Mã sinh viên không hợp lệ"),
     phoneNumber: yup
       .string()
       .required("Điền số điện thoại")
