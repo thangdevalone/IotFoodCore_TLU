@@ -44,8 +44,15 @@ export function RecommendFood(props: RecommendFoodProps) {
 
   return (
     <>
-      {seeAll ? (
-        <Box className="flex h-[280px]" sx={{margin:`${width<=750?"0 20px":width<=900?"0 40px":"0px"}`}}>
+      {width > 900 ? (
+        <Box
+          className="flex h-[280px]"
+          sx={{
+            margin: `${
+              width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px"
+            }`,
+          }}
+        >
           {width > 900 && (
             <Box className="flex items-center justify-center mr-[5px]">
               <IconButton onClick={slidePrev}>
@@ -57,7 +64,7 @@ export function RecommendFood(props: RecommendFoodProps) {
             modules={[]}
             className="slide-base"
             style={{ width: "100%" }}
-            slidesPerView={width <= 450?1.2:width <= 600 ? 1.7 : width<=750?2.2 :width<=900?2.6 :width<=1200?3:4}
+            slidesPerView={ width <= 450 ? 1.2: width <= 600 ? 1.7 : width <= 750 ? 2.2 : width <= 900? 2.6 : width <= 1200? 3: 4}
             spaceBetween={25}
             allowTouchMove={true}
             ref={swiperRef}
@@ -67,7 +74,6 @@ export function RecommendFood(props: RecommendFoodProps) {
                 <ItemRecommend
                   width={width}
                   imgFood={item.imgFood}
-                  nameRestaurantFood={item.nameRestaurantFood}
                   nameFood={item.nameFood}
                   price={item.price}
                   star={item.star}
@@ -86,57 +92,74 @@ export function RecommendFood(props: RecommendFoodProps) {
           )}
         </Box>
       ) : (
-        <Stack className="mx-16 mt-8 items-center justify-center">
-          <Grid
-            className=""
-            container
-            spacing={4}
-            columnSpacing={{ xs: 1, sm: 3, md: 4 }}
-          >
-            {data?.map((item) => (
-              <Grid item xs={12} sm={6} md={3} key={item.id}>
-                <ItemRecommend
-                  width={width}
-                  imgFood={item.imgFood}
-                  nameRestaurantFood={item.nameRestaurantFood}
-                  nameFood={item.nameFood}
-                  price={item.price}
-                  star={item.star}
-                  time={item.time}
-                  distance={item.distance}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Stack>
+        <>
+          {seeAll ? <Box className="flex items-center justify-center">
+            <Grid
+              className=""
+              container
+              spacing={4}
+              columnSpacing={{ xs: 1, sm: 3, md: 4 }}
+            >
+              {data?.slice(0, 2).map((item) => (
+                <Grid item xs={12} sm={6} md={3} key={item.id}>
+                  <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
+                    <div className=""></div>
+                  </Box>
+                  <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
+                    a
+                  </span>
+                </Grid>
+              ))}
+            </Grid>
+          </Box> : <Box className="flex items-center justify-center">
+            <Grid
+              className=""
+              container
+              spacing={4}
+              columnSpacing={{ xs: 1, sm: 3, md: 4 }}
+            >
+              {data?.map((item) => (
+                <Grid item xs={12} sm={6} md={3} key={item.id}>
+                  <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
+                    <div className=""></div>
+                  </Box>
+                  <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
+                    a
+                  </span>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>}
+          <Stack alignItems="center">
+            <Box className="container-base">
+              <CustomButton
+                onClick={() => setSeeAll(!seeAll)}
+                fullWidth
+                sx={{
+                  width: "100%",
+                  border: "1px solid var(--color-df-1)",
+                  color: "var(--color-df-1)",
+                  mt: "15px",
+                  mb: "20px",
+                  borderRadius: "6px",
+                  fontSize: "17px",
+                  height: "50px",
+                  fontWeight: "600",
+                  textTransform: "unset",
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    border: "1px solid var(--color-df-1)",
+                    background: "rgb(241, 245, 249)",
+                    color: "var(--color-df-1)",
+                  },
+                }}
+              >
+                Xem thêm món ăn
+              </CustomButton>
+            </Box>
+          </Stack>
+        </>
       )}
-      <Stack alignItems="center">
-        <Box className="container-base base-pd" >
-          <CustomButton
-            fullWidth
-            sx={{
-              width: "100%",
-              border: "1px solid var(--color-df-1)",
-              color: "var(--color-df-1)",
-              mt: "15px",
-              mb:"20px",
-              borderRadius: "6px",
-              fontSize: "17px",
-              height: "50px",
-              fontWeight: "600",
-              textTransform: "unset",
-              transition: "all 0.2s",
-              "&:hover": {
-                border: "1px solid var(--color-df-1)",
-                background: "rgb(241, 245, 249)",
-                color: "var(--color-df-1)",
-              },
-            }}
-          >
-            Xem thêm cửa hàng
-          </CustomButton>
-        </Box>
-      </Stack>
     </>
   )
 }
