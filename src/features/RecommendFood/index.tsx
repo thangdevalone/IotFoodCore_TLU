@@ -31,7 +31,7 @@ export function RecommendFood(props: RecommendFoodProps) {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const response = await foodsApis.getRecommendFood()
+      const response = await foodsApis.getRecommendFoods()
       if (response?.status) {
         setData(response?.data)
       }
