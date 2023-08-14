@@ -6,6 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
+
 import { useEffect, useState } from "react"
 import { Outlet } from "react-router-dom"
 
@@ -28,7 +29,7 @@ function LinearProgressWithLabel(
 }
 export function LoadServer(props: LoadServerProps) {
   const [progress, setProgress] = useState(0)
-  const [done, setDone] = useState(false)
+  const [done, setDone] = useState(true)
   useEffect(() => {
     const timer = setInterval(() => {
       const random = Math.floor(Math.random() * 9) + 1
@@ -63,11 +64,10 @@ export function LoadServer(props: LoadServerProps) {
       clearInterval(timer)
     }
   }, [])
-  console.log(true)
   return done ? (
     <Outlet />
   ) : (
-    <Stack className="w-screen h-screen relative z-[10000] bg-white justify-center items-center">
+    <Stack className="w-screen h-screen relative z-[5] bg-white justify-center items-center">
       <Stack
         direction={"column"}
         justifyContent={"center"}

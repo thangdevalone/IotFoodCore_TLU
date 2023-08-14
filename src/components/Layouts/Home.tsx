@@ -11,8 +11,11 @@ import { Question, WhyChoose } from "@/features/About"
 import { Footer } from "../Common/Footer"
 import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 
+import { ChatBoxs } from "@/features/ChatBoxs"
 export interface HomeProps {}
+const chatAPI = [
 
+]
 export function Home(props: HomeProps) {
   const { width } = useWindowDimensions()
   return (
@@ -57,7 +60,8 @@ export function Home(props: HomeProps) {
       <section className="container-base base-pd why-choose">
         <Question />
       </section>
-      <Footer />
+      <Footer/>
+      <ChatBoxs />
     </Box>
   )
 }
