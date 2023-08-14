@@ -29,9 +29,10 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const response: unknown = await foodsApis.getRestaurantFoods()
-      const responseModel: RestaurantData[] = response as RestaurantData[];
-      setData(responseModel);
+      const response = await foodsApis.getRecommendRestaurants()
+      if (response?.status) {
+        setData(response?.data)
+      }
     }
     fetchData()
   }, [])
