@@ -9,9 +9,11 @@ import "./styles_home.css"
 import { useWindowDimensions } from "@/hooks"
 import {Question, WhyChoose } from "@/features/About"
 import { Footer } from "../Common/Footer"
-
+import { ChatBoxs } from "@/features/ChatBoxs"
 export interface HomeProps {}
+const chatAPI = [
 
+]
 export function Home(props: HomeProps) {
   const { width } = useWindowDimensions()
   return (
@@ -48,6 +50,7 @@ export function Home(props: HomeProps) {
         <Question/>
       </section>
       <Footer/>
+      <ChatBoxs />
     </Box>
   )
 }
