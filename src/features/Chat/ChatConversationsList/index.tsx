@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { ChatHeader } from "./ChatHeader"
 import { ItemMessage } from "./ItemMessage"
 import { Box, Paper, Stack, Typography } from "@mui/material"
+import { MessageSearch } from "./MessageSearch"
 
 export interface ContainerChatProps {
     setChatOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -124,6 +125,7 @@ export function ChatConversationsList(props: ContainerChatProps) {
     return (
         <Stack direction="column" className=" w-[310px] bg-[#fff] rounded-md shadow-2xl overflow-hidden">
             <ChatHeader />
+            <MessageSearch />
             <div>
                 {chatApi.map(messageRoom => {
                     return <ItemMessage messageRoomData={messageRoom} key={messageRoom.id} setChatOpen={setChatOpen} />

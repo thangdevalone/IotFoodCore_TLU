@@ -11,8 +11,8 @@ import { Question, WhyChoose } from "@/features/About"
 import { Footer } from "../Common/Footer"
 import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 
-import { ChatBoxs } from "@/features/ChatBoxs"
-export interface HomeProps {}
+import { ChatBoxs } from "@/features/Chat/ChatBoxs"
+export interface HomeProps { }
 const chatAPI = [
 
 ]
@@ -31,7 +31,7 @@ export function Home(props: HomeProps) {
         <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
       </p>
       <section className="recommend-store">
-        <RecommendRestaurant/>
+        <RecommendRestaurant />
       </section>
       <p className="base-tx base-pd mb-[32px]">
         Các món bán chạy nhất tại{" "}
@@ -60,7 +60,7 @@ export function Home(props: HomeProps) {
       <section className="container-base base-pd why-choose">
         <Question />
       </section>
-      <Footer/>
+      <Footer />
       <ChatBoxs />
     </Box>
   )

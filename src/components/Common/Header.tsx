@@ -12,7 +12,7 @@ import "./styles_common.css"
 import classNames from "classnames"
 import { CartDrawer } from "./CartDrawer"
 import { cartActions } from "./CartDrawer/CartSlice"
-import { ChatConversationsList } from "./Chat/ChatConversationsList/index"
+import { ChatConversationsList } from "../../features/Chat/ChatConversationsList/index"
 export interface HeaderProps { }
 
 export function Header(props: HeaderProps) {
