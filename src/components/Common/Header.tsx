@@ -1,16 +1,15 @@
-import { useAppDispatch, useAppSelector } from "@/app/hooks"
+import { useAppDispatch } from "@/app/hooks"
 import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
 import { Avatar, Box, Stack } from "@mui/material"
-import { MouseEvent, useEffect, useState } from "react"
+import classNames from "classnames"
+import { MouseEvent, useState } from "react"
 import { Link } from "react-router-dom"
-import { SwitchLightDark } from "."
+import { CartDrawer, SwitchLightDark } from "."
 import { CustomButton } from "../Custom/CustomButon"
 import { BagIcon, NotiIcon } from "../Icon"
+import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
-import classNames from "classnames"
-import { CartDrawer } from "./CartDrawer"
-import { cartActions } from "./CartDrawer/CartSlice"
 
 export interface HeaderProps {}
 

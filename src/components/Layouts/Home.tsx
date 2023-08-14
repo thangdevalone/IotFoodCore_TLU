@@ -1,14 +1,13 @@
-import { Box, Divider, Typography } from "@mui/material"
-import * as React from "react"
-import { Header } from "../Common"
+import { Question, WhyChoose } from "@/features/About"
 import { Banner } from "@/features/Banner"
-import { SearchFood } from "@/features/SearchFood"
 import { RecommendFood } from "@/features/RecommendFood"
+import { SearchFood } from "@/features/SearchFood"
 import TypeFood from "@/features/TypeFood"
-import "./styles_home.css"
 import { useWindowDimensions } from "@/hooks"
-import {Question, WhyChoose } from "@/features/About"
+import { Box } from "@mui/material"
+import { Header } from "../Common"
 import { Footer } from "../Common/Footer"
+import "./styles_home.css"
 
 export interface HomeProps {}
 

@@ -10,15 +10,15 @@ import "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
-      <BrowserRouter>
-        <SnackbarProvider
-          autoHideDuration={2500}
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-        >
-          <NavigateSetter />
-          <CssBaseline />
-          <App />
-        </SnackbarProvider>
-      </BrowserRouter>
+    <BrowserRouter>
+      <SnackbarProvider
+        autoHideDuration={2500}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+      >
+        <NavigateSetter />
+        <CssBaseline />
+        <App />
+      </SnackbarProvider>
+    </BrowserRouter>
   </Provider>,
 )
