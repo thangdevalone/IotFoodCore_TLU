@@ -2,11 +2,11 @@ import { useEffect, useState } from "react"
 import { Avatar } from '@mui/material';
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { ChatBoxActions } from "@/features/Chat/ChatBoxs/MessageSlice"
-import { TypeMessageData } from "@/models";
+
 export interface ItemMessageProps {
     messageRoomData: any
     setChatOpen: React.Dispatch<React.SetStateAction<boolean>>
-    // messageList: Array<TypeMessageData>
+
 }
 
 export function ItemMessage(props: ItemMessageProps) {
