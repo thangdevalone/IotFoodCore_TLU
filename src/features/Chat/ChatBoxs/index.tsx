@@ -17,13 +17,12 @@ export function ChatBoxs(props: ChatBoxsProps) {
     useEffect(()=>{
         setChatBoxsDisplay(chatBoxsDisplayState)
     },[chatBoxsDisplayState])
-    console.log({chatBoxsDisplay})
     const hanldeCloseBox = (chatBox: TypeChatConversationData) => {
         dispatch(ChatBoxActions.DeleteChatBox(chatBox))
     }
 
     return (
-        <div className="fixed flex bottom-0 z-10 right-10">
+        <div className="fixed flex bottom-0 z-20 right-10">
             {
                 chatBoxsDisplay.map((chatBox: TypeChatConversationData, idx:number) => (
                     <div className={`${idx===1 && chatBoxsDisplay.length > 1 && "hidden lg:block"} pb-1 w-[310px] bg-[#fff] h-[455px] z-40 shadow-xl rounded-md mx-3`} key={chatBox.id}>

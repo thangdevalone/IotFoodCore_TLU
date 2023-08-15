@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import NavigateSetter from "./Router/NavigateSetter"
 import { store } from "./app/store"
+import { ChatBoxs } from "@/features/Chat/ChatBoxs"
 import "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         >
           <NavigateSetter />
           <CssBaseline />
+          <ChatBoxs />
           <App />
         </SnackbarProvider>
       </BrowserRouter>

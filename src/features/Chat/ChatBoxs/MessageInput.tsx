@@ -76,7 +76,6 @@ export function MessageInput(props: MessageInputProps) {
 
     return (
         <div className="absolute bottom-0 flex justify-between py-3 ">
-            {/* {image && <img src={image.preview} alt="Image Preview" />} */}
             <IconButton type="button" sx={{ p: '5px' }} onClick={() => { imageInputRef.current?.click() }}>
                 <ImageIcon sx={{ color: "#0084ff" }} />
                 <input type="file" style={{ display: "none" }} ref={imageInputRef} onChange={handleImageChange} />

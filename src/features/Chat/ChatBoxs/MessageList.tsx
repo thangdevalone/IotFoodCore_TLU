@@ -13,18 +13,15 @@ export function MessageList(props: MessageListProps) {
     const scrollToBottom = () => {
         const container = messageListRef.current;
         if (container) {
-            console.log(container.scrollTop)
-            console.log(container.scrollHeight)
             container.scrollTop = container.scrollHeight;
         }
     };
     useEffect(() => {
         scrollToBottom();
-        console.log("hello")
     }, [messageList]);
     const RenderMessage = ({ messageData }: { messageData: TypeMessageData }) => {
         return (
-            <div key={messageData.idMessage}>
+            <div>
                 {messageData.sender == "idSender" ?
                     <>
                         <div className="flex justify-end">
@@ -49,7 +46,7 @@ export function MessageList(props: MessageListProps) {
     return (
         <div className="pt-3 pb-1 px-4 flex flex-col overflow-x-hidden overflow-y-auto h-[345px]" ref={messageListRef}>
             {messageList.map((messageData: TypeMessageData) =>
-                <RenderMessage messageData={messageData} />
+                <RenderMessage messageData={messageData} key={messageData.idMessage}/>
             )}
         </div>
     )

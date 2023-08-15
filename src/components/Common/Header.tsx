@@ -106,7 +106,7 @@ export function Header(props: HeaderProps) {
                 >
                   <ChatIcon />
                 </CustomButton>
-                <div className="absolute top-[50px] right-0" ref={ChatConversationsListRef}>
+                <div className="absolute top-[50px] right-0 z-50" ref={ChatConversationsListRef}>
                   {chatOpen && <ChatConversationsList setChatOpen={setChatOpen} />}
                 </div>
                 <CustomButton

@@ -11,7 +11,7 @@ import { Question, WhyChoose } from "@/features/About"
 import { Footer } from "../Common/Footer"
 import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 
-import { ChatBoxs } from "@/features/Chat/ChatBoxs"
+
 export interface HomeProps { }
 const chatAPI = [
 
@@ -63,7 +63,7 @@ export function Home(props: HomeProps) {
         <Question />
       </section>
       <Footer />
-      <ChatBoxs />
+      
     </Box>
   )
 }
