@@ -13,8 +13,6 @@ export interface DetailProps {}
 
 const DetailStore = (props: DetailProps) => {
 
-  
-
   const { idStore } = useParams();
   const [data, setData] = React.useState<StoreDetailData>();
   const { width } = useWindowDimensions();
