@@ -69,7 +69,7 @@ export function RecommendFood(props: RecommendFoodProps) {
             allowTouchMove={true}
             ref={swiperRef}
           >
-            {data?.map((item, index) => (
+            {/* {data?.map((item, index) => ( 
               <SwiperSlide key={index + item?.id}>
                 <ItemRecommend
                   id={item.id}
@@ -83,7 +83,7 @@ export function RecommendFood(props: RecommendFoodProps) {
                   storeCheck={false}
                 />
               </SwiperSlide>
-            ))}
+            ))} */}
           </Swiper>
           {width > 900 && (
             <Box className="flex items-center justify-center ml-[5px]">

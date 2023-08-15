@@ -12,7 +12,7 @@ import "./styles_common.css"
 import classNames from "classnames"
 import { CartDrawer } from "./CartDrawer"
 import { cartActions } from "./CartDrawer/CartSlice"
-import { ChatConversationsList } from "./Chat/ChatConversationsList/index"
+import { ChatConversationsList } from "../../features/Chat/ChatConversationsList/index"
 export interface HeaderProps { }
 
 export function Header(props: HeaderProps) {
@@ -106,7 +106,7 @@ export function Header(props: HeaderProps) {
                 >
                   <ChatIcon />
                 </CustomButton>
-                <div className="absolute top-[50px]" ref={ChatConversationsListRef}>
+                <div className="absolute top-[50px] right-0" ref={ChatConversationsListRef}>
                   {chatOpen && <ChatConversationsList setChatOpen={setChatOpen} />}
                 </div>
                 <CustomButton
