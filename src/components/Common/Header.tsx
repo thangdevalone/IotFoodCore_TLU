@@ -76,17 +76,19 @@ export function Header(props: HeaderProps) {
             height: "inherit",
           }}
         >
-          <img
-            src={
-              mobile && setterBg
-                ? "/assets/iotfood.png"
-                : mobile
-                  ? "/assets/iotfood_b.png"
-                  : "/assets/iotfood.png"
-            }
-            style={{ width: "130px" }}
-            alt="logo"
-          />
+          <Link to='/'>
+            <img
+              src={
+                mobile && setterBg
+                  ? "/assets/iotfood.png"
+                  : mobile
+                    ? "/assets/iotfood_b.png"
+                    : "/assets/iotfood.png"
+              }
+              style={{ width: "130px" }}
+              alt="logo"
+              />
+          </Link>
           <Stack direction={"row"} alignItems="center" position={"relative"}>
             {width > 450 && (
               <CustomButton

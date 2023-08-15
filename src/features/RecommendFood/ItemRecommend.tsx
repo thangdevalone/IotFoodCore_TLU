@@ -4,16 +4,20 @@ import { handlePrice } from "@/utils"
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { useNavigate } from "react-router-dom"
 
 interface propsData {
+  id:number
   nameRestaurantFood?: string
   nameFood?: string
   price?: number
   star?: number
   time?: number
-  distance: number
-  imgFood: string
-  width: number
+  distance?: number
+  imgFood?: string
+  width: number,
+  storeCheck ?: boolean, // cua hang hay foods
 }
 
 // width: `${width < 601 ? '38vh' : '45vh'}`,
@@ -22,6 +26,7 @@ interface propsData {
 
 const ItemRecommend = (props: propsData) => {
   const {
+    id,
     nameRestaurantFood,
     nameFood,
     price,
@@ -30,11 +35,19 @@ const ItemRecommend = (props: propsData) => {
     distance,
     imgFood,
     width,
+    storeCheck = false
   } = props
+  
+  const navigate = useNavigate();
+
+  const handleRouter = (id:number) => {
+    navigate(storeCheck ?  `/store/detail-store/${id}` : '');
+  }
 
   return (
     <Box className="w-[100%] h-[100%]">
       <Box
+        onClick={()=>handleRouter(id)}
         className="w-[100%] h-[60%] rounded-md cursor-pointer object-cover"
         sx={{
           backgroundPosition: "center",
@@ -70,6 +83,7 @@ const ItemRecommend = (props: propsData) => {
               {distance} km
             </Typography>
           </Box>
+          { !storeCheck && <Box className="cursor-pointer hover:opacity-90"><AddCircleIcon style={{ color: "green", fontSize :"29px" }}/></Box>}
         </Box>
       </Stack>
     </Box>

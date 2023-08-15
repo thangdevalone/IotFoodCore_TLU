@@ -18,11 +18,41 @@ export interface TypeFoodsData {
 
 export interface RestaurantData {
   id: number
-  restaurantName: string
-  quantitySold: number
-  businessHours?: number
-  distance: number
-  phoneNumber: string
-  address?: string
-  imgRes: string
+  foodName: string
+  detail: number
+  price: number
+  star: number
+  quantity: number
+  timeout: number
+  typeFoodEntityId: number,
+  quantityPurchased: number,
+  restaurantName?: string,
+  imgRes?:string
+}
+
+export interface StoreDetailData {
+  id: 1,
+  restaurantName: string,
+  address?: string,
+  quantitySold: number,
+  businessHours?: number,
+  distance: number,
+  detail: string,
+  phoneNumber: string,
+  imgRes: string,
+  foodEntities : foodEntitiesData[],
+}
+
+export interface foodEntitiesData {
+  id: number,
+  foodName: string,
+  detail?: string,
+  price: number,
+  star: number,
+  quantity: number,
+  timeout: number,
+  quantityPurchased: number,
+  typeFoodEntityId: number,
+  imgFood: string,
+  restaurantEntityId: number,
 }

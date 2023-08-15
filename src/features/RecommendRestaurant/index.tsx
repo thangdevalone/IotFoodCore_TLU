@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
-import { Box, IconButton, Stack, Grid } from "@mui/material"
+import { Box, IconButton, Stack } from "@mui/material"
 import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 import * as React from "react"
 import foodsApis from "@/api/foodsApi"
@@ -8,13 +8,14 @@ import { useWindowDimensions } from "@/hooks"
 import ItemRecommend from "../RecommendFood/ItemRecommend"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { RestaurantData } from "@/models/Foods"
+import { useNavigate } from "react-router-dom"
 
 export interface RecommendRestaurantProps {}
 
 export function RecommendRestaurant(props: RecommendRestaurantProps) {
   const [data, setData] = React.useState<RestaurantData[]>([])
   const swiperRef = React.useRef<any>(null)
-
+  const navigate = useNavigate();
   const slidePrev = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slidePrev()
@@ -37,6 +38,10 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
     fetchData()
   }, [])
   const { width } = useWindowDimensions()
+
+  const handleStore = () => {
+    navigate('/store/get-all-store');
+  };
 
   //
 
@@ -80,11 +85,13 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
         >
           {data?.map((item, index) => (
               <SwiperSlide key={index + item?.id}>
-                 <ItemRecommend
+              <ItemRecommend
+                  id={item.id}
                   width={width}
                   imgFood={item.imgRes}
                   nameRestaurantFood={item.restaurantName}
                   distance={item.distance}
+                  storeCheck={true}
                 />
                     
               </SwiperSlide>
@@ -98,8 +105,8 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           </Box>
         )}
       </Box>
-      <Stack alignItems="center">
-        <Box className="container-base base-pd">
+      <Stack alignItems="center" onClick={()=> handleStore()}>
+        <Box  className="container-base base-pd">
           <CustomButton
             fullWidth
             sx={{

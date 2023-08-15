@@ -17,7 +17,9 @@ const chatAPI = [
 
 ]
 export function Home(props: HomeProps) {
-  const { width } = useWindowDimensions()
+  const { width } = useWindowDimensions();
+  React.useEffect(()=>{window.scrollTo(0, 0);},[])
+
   return (
     <Box className="relative tx-df-sz">
       <Header />

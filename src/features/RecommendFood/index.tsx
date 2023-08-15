@@ -72,6 +72,7 @@ export function RecommendFood(props: RecommendFoodProps) {
             {data?.map((item, index) => (
               <SwiperSlide key={index + item?.id}>
                 <ItemRecommend
+                  id={item.id}
                   width={width}
                   imgFood={item.imgFood}
                   nameFood={item.nameFood}
@@ -79,6 +80,7 @@ export function RecommendFood(props: RecommendFoodProps) {
                   star={item.star}
                   time={item.time}
                   distance={item.distance}
+                  storeCheck={false}
                 />
               </SwiperSlide>
             ))}
@@ -103,7 +105,6 @@ export function RecommendFood(props: RecommendFoodProps) {
               {data?.slice(0, 2).map((item) => (
                 <Grid item xs={12} sm={6} md={3} key={item.id}>
                   <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
-                    <div className=""></div>
                   </Box>
                   <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
                     a
@@ -121,7 +122,6 @@ export function RecommendFood(props: RecommendFoodProps) {
               {data?.map((item) => (
                 <Grid item xs={12} sm={6} md={3} key={item.id}>
                   <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
-                    <div className=""></div>
                   </Box>
                   <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
                     a
