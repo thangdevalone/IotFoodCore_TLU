@@ -24,7 +24,8 @@ const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
       color="inherit"
       href="/"
     >
-      <span className={`${width > 450 ? 'text-base' : '"text-xl'} hover:text-blue-500 capitalize`}>
+      {/* width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px" */}
+      <span className={`${ width <= 460 ? 'text-[12px]' : width <= 750 ? 'text-base' :  width <= 900 ? "text-xl" : "text-2xl"} hover:text-blue-500 capitalize`}>
         Trang chủ
       </span>
     </Link>
@@ -33,7 +34,7 @@ const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
   const breadcrumbs = [defaultBreadcrumb, ...items.map((item, index) => {
     if (index === items.length - 1) {
       return (
-        <span key={index} className={`${width > 450 ? 'text-base' : '"text-xl'} text-blue-500 capitalize`}>{item.name}</span>
+        <span key={index} className={`${ width <= 460 ? 'text-[12px]' : width <= 750 ? 'text-base' :  width <= 900 ? "text-xl" : "text-2xl"} text-blue-500 capitalize`}>{item.name}</span>
       );
     } else {
       return (
@@ -43,7 +44,7 @@ const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
           color="inherit"
           href={item.link}
         >
-          <span className={`${width > 450 ? 'text-base' : '"text-xl'} hover:text-blue-500 capitalize`}>{item.name}</span>
+          <span className={`${ width <= 460 ? 'text-[12px]' : width <= 750 ? 'text-base' :  width <= 900 ? "text-xl" : "text-2xl"} hover:text-blue-500 capitalize`}>{item.name}</span>
         </Link>
       );
     }

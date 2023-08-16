@@ -41,14 +41,15 @@ const DetailStore = (props: DetailProps) => {
       <Box className=''>
           <BreadcrumbsCommon items={breadcrumbItems}/>
       </Box>
-      <div className="gap-3 flex">
-        <Box className='flex-2 '>
-          <span className="text-xl font-semibold flex justify-start ">
+      <Box className="gap-3 flex">
+        <Box className='flex-2'>
+          <span className={`${ width <= 460 ? 'text-lg' : width <= 750 ? 'text-xl' :  width <= 900 ? "text-2xl" : "text-3xl"} font-semibold flex justify-start capitalize`}>
               {data?.restaurantName}
           </span>
           <Box className="flex flex-col gap-3">
             <Typography>
-              {data?.detail.slice(0,30)}
+                {/* {data?.detail.slice(0,30)} */}
+                detail
             </Typography>
             <Box className="flex gap-5 items-center mt-2">
               <Box className=" flex  justify-center items-center ">
@@ -79,34 +80,37 @@ const DetailStore = (props: DetailProps) => {
                 backgroundImage: `url(${data?.imgRes})`,
             }}
         ></Box>
-      </div>
       </Box>
-      <Box className="flex gap-5 flex-col">
-        <span className="text-2xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
-            Ưu đãi hôm nay
-        </span>
-        <Box >
-          <Grid
-        className=""
-        container
-        spacing={4}
-        columnSpacing={{ xs: 1, sm: 3, md: 4 }}
-      >
-        {data?.foodEntities?.map((item) => (
-          <Grid item xs={12} sm={6} md={3} key={item.id} className='h-[290px]'>
-            <ItemRecommend
-              id={item.id}
-              width={width}
-              imgFood={item.imgFood}
-              key={item.id}
-              nameRestaurantFood={item.foodName}
-              star={4}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      </Box>
+      {data?.foodEntities && 
+        <Box className="flex gap-5 flex-col">
+          <span className="text-2xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
+              Ưu đãi hôm nay
+          </span>
+          <Box >
+            <Grid
+          className=""
+          container
+          spacing={4}
+          columnSpacing={{ xs: 1, sm: 3, md: 4 }}
+        >
+          {data?.foodEntities?.map((item) => (
+            <Grid item xs={12} sm={6} md={3} key={item.id} className='h-[290px]'>
+              <ItemRecommend
+                id={item.id}
+                width={width}
+                imgFood={item.imgFood}
+                key={item.id}
+                foodName={item.foodName}
+                star={4}
+                price={item.price}
+              />
+            </Grid>
+          ))}
+        </Grid>
+          </Box>
         </Box>
-      </Box>
+      }
     </Box>
   )
 }

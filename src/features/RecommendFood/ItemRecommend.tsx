@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom"
 interface propsData {
   id:number
   nameRestaurantFood?: string
-  nameFood?: string
+  foodName?: any | string
   price?: number
   star?: number
   time?: number
@@ -28,7 +28,7 @@ const ItemRecommend = (props: propsData) => {
   const {
     id,
     nameRestaurantFood,
-    nameFood,
+    foodName,
     price,
     star,
     time = 10,
@@ -41,9 +41,13 @@ const ItemRecommend = (props: propsData) => {
   const navigate = useNavigate();
 
   const handleRouter = (id:number) => {
-    navigate(storeCheck ?  `/store/detail-store/${id}` : '');
+    navigate(storeCheck ?  `/store/detail-store/${id}` : `/store/detail-food/${id}`);
   }
 
+  const handleAddToCart = (name : string) => {
+    alert(`add to cart ${name}`);
+  }
+  
   return (
     <Box className="w-[100%] h-[100%]">
       <Box
@@ -59,8 +63,8 @@ const ItemRecommend = (props: propsData) => {
         <span className="text-lg font-semibold capitalize">
           {nameRestaurantFood}
         </span>
-        {price && <Box className="flex  gap-5 capitalize">
-          <Typography sx={{ fontSize: !nameRestaurantFood ? '16px' : "14px" }}>{nameFood}</Typography>
+        {price && <Box className="flex gap-5 capitalize items-center ">
+          {foodName && <Typography sx={{ fontSize: !nameRestaurantFood ? '16px' : "14px" }}>{foodName}</Typography>}
           <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
             {handlePrice(price)} VND
           </Typography>
@@ -83,7 +87,7 @@ const ItemRecommend = (props: propsData) => {
               {distance} km
             </Typography>
           </Box>
-          { !storeCheck && <Box className="cursor-pointer hover:opacity-90"><AddCircleIcon style={{ color: "green", fontSize :"29px" }}/></Box>}
+          { !storeCheck && <Box className="cursor-pointer hover:opacity-90" onClick={()=>handleAddToCart(storeCheck ? ' asd' : foodName)}><AddCircleIcon style={{ color: "green", fontSize :"29px" }}/></Box>}
         </Box>
       </Stack>
     </Box>

@@ -1,6 +1,6 @@
 export interface RecommendFoodData {
   id: number
-  nameFood: string
+  foodName: string
   price: number
   nameRestaurantFood: string
   imgFood: string
@@ -8,6 +8,9 @@ export interface RecommendFoodData {
   time: number
   star: number
   quantity: number
+  detail: string
+  quantityPurchased: number
+  typeFoodEntityId : number
 }
 
 export interface TypeFoodsData {
@@ -18,7 +21,6 @@ export interface TypeFoodsData {
 
 export interface RestaurantData {
   id: number
-  foodName: string
   detail: number
   price: number
   star: number
@@ -27,7 +29,8 @@ export interface RestaurantData {
   typeFoodEntityId: number,
   quantityPurchased: number,
   restaurantName?: string,
-  imgRes?:string
+  imgRes?: string,
+  distance?:number
 }
 
 export interface StoreDetailData {
@@ -40,19 +43,23 @@ export interface StoreDetailData {
   detail: string,
   phoneNumber: string,
   imgRes: string,
-  foodEntities : foodEntitiesData[],
+  foodEntities : foodData[],
 }
 
-export interface foodEntitiesData {
+export interface foodData {
   id: number,
   foodName: string,
-  detail?: string,
   price: number,
+  detail: string,
+  nameRestaurantFood: string
+  imgFood: string,
+  distance:number
+  time: number,
   star: number,
   quantity: number,
-  timeout: number,
+  createBy?: string
+  createAt ?: Date
   quantityPurchased: number,
   typeFoodEntityId: number,
-  imgFood: string,
   restaurantEntityId: number,
 }

@@ -9,6 +9,7 @@ import { RegisterPage } from "./features/auth/pages/RegisterPage"
 import { Store } from "./components/Layouts/Store"
 import GetAllStore from "./features/Store"
 import DetailStore from "./features/DetailStore"
+import DetailFood from "./features/DetailFood"
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="/store" element={<Store />} >
                 <Route path="get-all-store" element={<GetAllStore />} />
                 <Route path="detail-store/:idStore" element={<DetailStore />} />
+                <Route path="detail-food/:idFood" element={<DetailFood />} />
             </Route>
             <Route element={<ProtectAuth />}>
                 <Route path="/login" element={<LoginPage />} />

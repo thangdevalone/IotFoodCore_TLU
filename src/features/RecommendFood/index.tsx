@@ -69,13 +69,13 @@ export function RecommendFood(props: RecommendFoodProps) {
             allowTouchMove={true}
             ref={swiperRef}
           >
-            {/* {data?.map((item, index) => ( 
+            {data?.map((item, index) => ( 
               <SwiperSlide key={index + item?.id}>
                 <ItemRecommend
                   id={item.id}
                   width={width}
                   imgFood={item.imgFood}
-                  nameFood={item.nameFood}
+                  foodName={item.foodName}
                   price={item.price}
                   star={item.star}
                   time={item.time}
@@ -83,7 +83,7 @@ export function RecommendFood(props: RecommendFoodProps) {
                   storeCheck={false}
                 />
               </SwiperSlide>
-            ))} */}
+            ))}
           </Swiper>
           {width > 900 && (
             <Box className="flex items-center justify-center ml-[5px]">
@@ -104,11 +104,17 @@ export function RecommendFood(props: RecommendFoodProps) {
             >
               {data?.slice(0, 2).map((item) => (
                 <Grid item xs={12} sm={6} md={3} key={item.id}>
-                  <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
-                  </Box>
-                  <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
-                    a
-                  </span>
+                  <ItemRecommend
+                    id={item.id}
+                    width={width}
+                    imgFood={item.imgFood}
+                    foodName={item.foodName}
+                    price={item.price}
+                    star={item.star}
+                    time={item.time}
+                    distance={item.distance}
+                    storeCheck={false}
+                  />
                 </Grid>
               ))}
             </Grid>
