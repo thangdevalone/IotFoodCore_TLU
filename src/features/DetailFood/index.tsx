@@ -20,7 +20,7 @@ const DetailFood = (props:DetailProps) => {
   React.useEffect(() => {
     const fetchData = async () => {
       if (idFood) {
-        const response = await foodsApis.getDetailFood(parseInt(idFood));
+        const response = await foodsApis.getDetailFood(+idFood);
         if (response?.status) {
           setData(response?.data);
         }
@@ -33,7 +33,7 @@ const DetailFood = (props:DetailProps) => {
   const breadcrumbItems = [
     { name: "Cửa hàng", link: "/store/get-all-store" },
     { name: `${data?.nameRestaurantFood}`, link: `/store/detail-store/${data?.restaurantEntityId}` },
-    { name: `${data?.foodName}`},
+    { name: `${data?.foodName}`, link:'/'},
   ];
 
 

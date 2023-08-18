@@ -5,18 +5,22 @@ import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
+import { foodData } from '@/models/Foods';
 
 interface propsData {
-  id:number
-  nameRestaurantFood?: string
+  idFood:number
+  nameStore: string
   foodName?: any | string
-  price?: number
+  price: number
   star?: number
   time?: number
   distance?: number
-  imgFood?: string
+  imgFood: string
   width: number,
+  idStore : number
   storeCheck ?: boolean, // cua hang hay foods
 }
 
@@ -26,8 +30,8 @@ interface propsData {
 
 const ItemRecommend = (props: propsData) => {
   const {
-    id,
-    nameRestaurantFood,
+    idFood,
+    nameStore,
     foodName,
     price,
     star,
@@ -35,23 +39,35 @@ const ItemRecommend = (props: propsData) => {
     distance,
     imgFood,
     width,
-    storeCheck = false
+    storeCheck = false,
+    idStore
   } = props
   
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleRouter = (id:number) => {
     navigate(storeCheck ?  `/store/detail-store/${id}` : `/store/detail-food/${id}`);
   }
 
-  const handleAddToCart = (name : string) => {
-    alert(`add to cart ${name}`);
+  const handleAddToCart = () => {
+    const data = {
+      idFood,
+      name: foodName,
+      price,
+      quantity: 1,
+      idStore,
+      nameStore,
+      imgFood,
+    }
+    dispatch(cartActions.addToCart(data));
   }
+  
   
   return (
     <Box className="w-[100%] h-[100%]">
       <Box
-        onClick={()=>handleRouter(id)}
+        onClick={()=>handleRouter(idFood)}
         className="w-[100%] h-[60%] rounded-md cursor-pointer object-cover"
         sx={{
           backgroundPosition: "center",
@@ -61,10 +77,10 @@ const ItemRecommend = (props: propsData) => {
       ></Box>
       <Stack className="mt-[8px]">
         <span className="text-lg font-semibold capitalize">
-          {nameRestaurantFood}
+          {nameStore}
         </span>
         {price && <Box className="flex gap-5 capitalize items-center ">
-          {foodName && <Typography sx={{ fontSize: !nameRestaurantFood ? '16px' : "14px" }}>{foodName}</Typography>}
+          {foodName && <Typography sx={{ fontSize: !nameStore ? '16px' : "14px" }}>{foodName}</Typography>}
           <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
             {handlePrice(price)} VND
           </Typography>
@@ -87,7 +103,7 @@ const ItemRecommend = (props: propsData) => {
               {distance} km
             </Typography>
           </Box>
-          { !storeCheck && <Box className="cursor-pointer hover:opacity-90" onClick={()=>handleAddToCart(storeCheck ? ' asd' : foodName)}><AddCircleIcon style={{ color: "green", fontSize :"29px" }}/></Box>}
+          { !storeCheck && <Box className="cursor-pointer hover:opacity-90" onClick={()=>handleAddToCart()}><AddCircleIcon style={{ color: "green", fontSize :"29px" }}/></Box>}
         </Box>
       </Stack>
     </Box>

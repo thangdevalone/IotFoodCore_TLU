@@ -1,18 +1,3 @@
-export interface RecommendFoodData {
-  id: number
-  foodName: string
-  price: number
-  nameRestaurantFood: string
-  imgFood: string
-  distance: number
-  time: number
-  star: number
-  quantity: number
-  detail: string
-  quantityPurchased: number
-  typeFoodEntityId : number
-}
-
 export interface TypeFoodsData {
   id: number
   nameType: string
@@ -28,8 +13,8 @@ export interface RestaurantData {
   timeout: number
   typeFoodEntityId: number,
   quantityPurchased: number,
-  restaurantName?: string,
-  imgRes?: string,
+  restaurantName: string,
+  imgRes: string,
   distance?:number
 }
 
@@ -62,4 +47,15 @@ export interface foodData {
   quantityPurchased: number,
   typeFoodEntityId: number,
   restaurantEntityId: number,
+}
+
+export interface CartItemData {
+    idFood : number;
+    name: string;
+    price: number;
+    quantity: number;
+    idStore: number;
+    nameStore: string;
+    type?: boolean;
+    imgFood: string;
 }

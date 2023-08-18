@@ -1,12 +1,12 @@
 import * as React from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Link } from "@mui/material"
 import { useWindowDimensions } from '@/hooks';
+import { NavLink } from 'react-router-dom';
 
 interface BreadcrumbItem {
   name: string;
-  link?: string;
+  link: string | '';
 }
 
 interface BreadcrumbsCommonProps {
@@ -18,17 +18,15 @@ const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
   const { width } = useWindowDimensions();
 
   const defaultBreadcrumb = (
-    <Link
-      underline="none"
+    <NavLink
       key="home"
       color="inherit"
-      href="/"
+      to="/"
     >
-      {/* width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px" */}
       <span className={`${ width <= 460 ? 'text-[12px]' : width <= 750 ? 'text-base' :  width <= 900 ? "text-xl" : "text-2xl"} hover:text-blue-500 capitalize`}>
         Trang chủ
       </span>
-    </Link>
+    </NavLink>
   );
 
   const breadcrumbs = [defaultBreadcrumb, ...items.map((item, index) => {
@@ -38,14 +36,13 @@ const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
       );
     } else {
       return (
-        <Link
-          underline="none"
+        <NavLink
           key={index}
           color="inherit"
-          href={item.link}
+          to={item.link}
         >
           <span className={`${ width <= 460 ? 'text-[12px]' : width <= 750 ? 'text-base' :  width <= 900 ? "text-xl" : "text-2xl"} hover:text-blue-500 capitalize`}>{item.name}</span>
-        </Link>
+        </NavLink>
       );
     }
   })];

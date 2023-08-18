@@ -44,6 +44,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
   };
 
   //
+  // console.log(data);
 
   return (
     <>
@@ -86,12 +87,14 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           {data?.map((item, index) => (
               <SwiperSlide key={index + item?.id}>
               <ItemRecommend
-                  id={item.id}
+                  idFood={item.id}
                   width={width}
                   imgFood={item.imgRes}
-                  nameRestaurantFood={item.restaurantName}
+                  nameStore={item.restaurantName}
                   distance={item.distance}
                   storeCheck={true}
+                  price={item.price}
+                  idStore = {item.id}
                 />
                     
               </SwiperSlide>

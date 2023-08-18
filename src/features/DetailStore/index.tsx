@@ -20,7 +20,7 @@ const DetailStore = (props: DetailProps) => {
   React.useEffect(() => {
     const fetchData = async () => {
       if (idStore) {
-        const response = await foodsApis.getDetailStore(parseInt(idStore));
+        const response = await foodsApis.getDetailStore(+idStore);
         if (response?.status) setData(response.data);
       }
     }
@@ -30,7 +30,7 @@ const DetailStore = (props: DetailProps) => {
 
   const breadcrumbItems = [
     { name: "Cửa hàng", link: "/store/get-all-store" },
-    { name: `${data?.restaurantName}` },
+    { name: `${data?.restaurantName}`,link:'/' },
   ];
 
   // console.log(data);
@@ -97,13 +97,15 @@ const DetailStore = (props: DetailProps) => {
           {data?.foodEntities?.map((item) => (
             <Grid item xs={12} sm={6} md={3} key={item.id} className='h-[290px]'>
               <ItemRecommend
-                id={item.id}
+                idFood={item.id}
                 width={width}
                 imgFood={item.imgFood}
                 key={item.id}
                 foodName={item.foodName}
                 star={4}
                 price={item.price}
+                idStore={item.restaurantEntityId}
+                nameStore={data.restaurantName}
               />
             </Grid>
           ))}

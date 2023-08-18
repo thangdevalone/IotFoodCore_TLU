@@ -4,7 +4,7 @@ import { Box, IconButton, Stack, Grid, Button } from "@mui/material"
 import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 import * as React from "react"
 import foodsApis from "@/api/foodsApi"
-import { RecommendFoodData } from "@/models/Foods"
+import { foodData } from "@/models/Foods"
 import { useWindowDimensions } from "@/hooks"
 import ItemRecommend from "./ItemRecommend"
 import { CustomButton } from "@/components/Custom/CustomButon"
@@ -12,7 +12,7 @@ import { CustomButton } from "@/components/Custom/CustomButon"
 export interface RecommendFoodProps {}
 
 export function RecommendFood(props: RecommendFoodProps) {
-  const [data, setData] = React.useState<RecommendFoodData[]>([])
+  const [data, setData] = React.useState<foodData[]>([])
   const [seeAll, setSeeAll] = React.useState<boolean>(true)
 
   const swiperRef = React.useRef<any>(null)
@@ -41,6 +41,7 @@ export function RecommendFood(props: RecommendFoodProps) {
   const { width } = useWindowDimensions()
 
   //
+  // console.log(data);
 
   return (
     <>
@@ -72,7 +73,7 @@ export function RecommendFood(props: RecommendFoodProps) {
             {data?.map((item, index) => ( 
               <SwiperSlide key={index + item?.id}>
                 <ItemRecommend
-                  id={item.id}
+                  idFood={item.id}
                   width={width}
                   imgFood={item.imgFood}
                   foodName={item.foodName}
@@ -81,6 +82,8 @@ export function RecommendFood(props: RecommendFoodProps) {
                   time={item.time}
                   distance={item.distance}
                   storeCheck={false}
+                  idStore={item.restaurantEntityId}
+                  nameStore={item.nameRestaurantFood}
                 />
               </SwiperSlide>
             ))}
@@ -105,7 +108,7 @@ export function RecommendFood(props: RecommendFoodProps) {
               {data?.slice(0, 2).map((item) => (
                 <Grid item xs={12} sm={6} md={3} key={item.id}>
                   <ItemRecommend
-                    id={item.id}
+                    idFood={item.id}
                     width={width}
                     imgFood={item.imgFood}
                     foodName={item.foodName}
@@ -114,6 +117,8 @@ export function RecommendFood(props: RecommendFoodProps) {
                     time={item.time}
                     distance={item.distance}
                     storeCheck={false}
+                    nameStore={item.nameRestaurantFood}
+                    idStore={item.restaurantEntityId}
                   />
                 </Grid>
               ))}
