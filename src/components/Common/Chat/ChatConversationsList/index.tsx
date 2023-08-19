@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { ChatHeader } from "./ChatHeader"
 import { ItemMessage } from "./ItemMessage"
 import { Box, Paper, Stack, Typography } from "@mui/material"
+import { ChatHeader } from "./ChatHeader"
 
 export interface ContainerChatProps {
     setChatOpen: React.Dispatch<React.SetStateAction<boolean>>

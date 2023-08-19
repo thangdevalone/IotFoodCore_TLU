@@ -1,7 +1,10 @@
+import { useAppSelector } from "@/app/hooks"
 import { FilterAlt, Search, ViewList } from "@mui/icons-material"
 import { Box, Button, Stack } from "@mui/material"
+import { EnhancedTableToolbar } from "."
 
 export function ToolbarAdmin() {
+  const isSelected = useAppSelector((state) => state.admin.isSelected)
   return (
     <Stack
       direction="row"
@@ -20,25 +23,26 @@ export function ToolbarAdmin() {
           <CloudUpload fontSize="small" htmlColor="black" />
         </IconButton> */}
       </Stack>
-      <Box className="flex items-center max-w-[500px] min-w-[300px] w-[100%]">
-        <label htmlFor="simple-search" className="sr-only">
-          Search
-        </label>
-        <div className="relative w-full">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Search />
+      {isSelected ? (
+        <EnhancedTableToolbar />
+      ) : (
+        <Box className="flex items-center max-w-[500px] min-w-[300px] w-[100%]">
+          <div className="relative w-full">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <Search />
+            </div>
+            <input
+              type="text"
+              id="simple-search"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tìm kiếm..."
+            />
+            <button className="absolute top-0 right-0 h-full p-2 text-sm font-medium text-white bg-gray-500 rounded-r-lg border border-gray-500 hover:bg-gray-600 focus:outline-none  ">
+              <FilterAlt fontSize="small" />
+            </button>
           </div>
-          <input
-            type="text"
-            id="simple-search"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Tìm kiếm..."
-          />
-          <button className="absolute top-0 right-0 h-full p-2 text-sm font-medium text-white bg-gray-500 rounded-r-lg border border-gray-500 hover:bg-gray-600 focus:outline-none  ">
-            <FilterAlt fontSize="small" />
-          </button>
-        </div>
-      </Box>
+        </Box>
+      )}
       <Stack direction="row">
         <button
           type="button"

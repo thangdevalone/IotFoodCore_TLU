@@ -8,14 +8,9 @@ import { Avatar, IconButton, Stack, Tooltip } from "@mui/material"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { MenuAdmin } from "."
+import { ConfigList, InvoiceList, OrderList, ProductList } from "@/constants"
 
-function getList(labelList: string[], navList: string[]) {
-  const list = labelList.map((item, index) => ({
-    label: item,
-    nav: "/admin" + navList[index],
-  }))
-  return list
-}
+
 
 export function HeaderAdmin() {
   const [openOrder, setOpenOrder] = useState(false)
@@ -23,23 +18,7 @@ export function HeaderAdmin() {
   const [openReport, setOpenReport] = useState(false)
   const [openProduct, setOpenProduct] = useState(false)
   const [openConfig, setOpenConfig] = useState(false)
-
-  const OrderList = getList(
-    ["Báo giá", "Đơn hàng", "Nhân viên", "Khách hàng"],
-    ["/quote", "/order", "/employee", "/customer"],
-  )
-  const InvoiceList = getList(
-    ["Hóa đơn", "Thống kê hóa đơn"],
-    ["/invoice", "/invoice-stat"],
-  )
-  const ProductList = getList(
-    ["Sản phẩm", "Loại sản phẩm", "Nhà cung cấp"],
-    ["/product", "/type", "/supplier"],
-  )
-  const ConfigList = getList(
-    ["Cài đặt", "Nhân viên", "Phương thức thanh toán"],
-    ["/setting", "/config-emp", "/pay-method"],
-  )
+ 
   const user = useInforUser()
   const [hovered, setHovered] = useState(false)
   const navigate = useNavigate()

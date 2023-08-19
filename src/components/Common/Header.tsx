@@ -1,28 +1,48 @@
 import { useAppDispatch } from "@/app/hooks"
 import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
 import { Avatar, Box, Stack } from "@mui/material"
-import classNames from "classnames"
-import { MouseEvent, useState } from "react"
+import { MouseEvent, useEffect, useState, useRef } from "react"
 import { Link } from "react-router-dom"
 import { CartDrawer, SwitchLightDark } from "."
 import { CustomButton } from "../Custom/CustomButon"
 import { BagIcon, NotiIcon } from "../Icon"
-import { cartActions } from "./CartDrawer/CartSlice"
+import ChatIcon from '@mui/icons-material/Chat';
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
+import classNames from "classnames"
+import { cartActions } from "./CartDrawer/CartSlice"
+import { ChatConversationsList } from "./Chat/ChatConversationsList/index"
 
-export interface HeaderProps {}
-
+export interface HeaderProps { }
 export function Header(props: HeaderProps) {
   const user = useInforUser()
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [chatOpen, setChatOpen] = useState(false)
+  let ChatConversationsListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Xử lý sự kiện khi click ra ngoài ChatConversationsList
+    let handleOnclickOutside = (e: any) => {
+      if (!ChatConversationsListRef.current?.contains(e.target)) {
+        setChatOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleOnclickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleOnclickOutside)
+    }
+  }, [])
+
   const handleClick = (event: MouseEvent<HTMLImageElement>) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+  const handleClickChatIcon = () => {
+    setChatOpen(true)
   }
   const { width } = useWindowDimensions()
   const setterBg = scrollY >= 100 ? true : false
@@ -60,13 +80,13 @@ export function Header(props: HeaderProps) {
               mobile && setterBg
                 ? "/assets/iotfood.png"
                 : mobile
-                ? "/assets/iotfood_b.png"
-                : "/assets/iotfood.png"
+                  ? "/assets/iotfood_b.png"
+                  : "/assets/iotfood.png"
             }
             style={{ width: "130px" }}
             alt="logo"
           />
-          <Stack direction={"row"} alignItems="center">
+          <Stack direction={"row"} alignItems="center" position={"relative"}>
             {width > 450 && (
               <CustomButton
                 onClick={handleOpenCard}
@@ -78,10 +98,20 @@ export function Header(props: HeaderProps) {
             {user ? (
               <>
                 <CustomButton
+                  sx={{ padding: "10px 12px", mr: 1, minWidth: "unset" }}
+                  onClick={handleClickChatIcon}
+                >
+                  <ChatIcon />
+                </CustomButton>
+                <div className="absolute top-[50px]" ref={ChatConversationsListRef}>
+                  {chatOpen && <ChatConversationsList setChatOpen={setChatOpen} />}
+                </div>
+                <CustomButton
                   sx={{ padding: "10px 12px", mr: 2, minWidth: "unset" }}
                 >
                   <NotiIcon />
                 </CustomButton>
+
                 <Avatar
                   sx={{
                     cursor: "pointer",

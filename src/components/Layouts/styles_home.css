@@ -14,6 +14,13 @@
   margin: 0 auto;
   max-width: 1280px;
 }
+.tx-24-700 {
+  font-weight: 700;
+  color: #050505;
+  font-size: 1.5rem;
+  line-height: 28px;
+
+}
 .line-1 {
   margin-top: 80px;
   margin-bottom: 80px;

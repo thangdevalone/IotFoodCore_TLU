@@ -31,22 +31,13 @@ export default function Admin() {
     <Box className="h-screen w-screen">
       <HeaderAdmin />
 
-      <Box sx={{ height: "calc(100vh - 60px)" }} className="w-screen">
+      <Box sx={{ height: "calc(100vh - 124px)",padding:"10px" }} className="w-screen">
         <Routes>
           <Route path="/" element={<WelComeAdmin />} />
-          <Route
-            element={
-              <>
-                <ToolbarAdmin />
-                <Box sx={{ height: "calc(100% - 64px)", padding: "10px" }}>
-                  <Outlet />{" "}
-                </Box>
-              </>
-            }
-          >
+        
             <Route path="/quote" element={<Quote />} />
             <Route path="/product" element={<Product />} />
-          </Route>
+       
         </Routes>
       </Box>
     </Box>

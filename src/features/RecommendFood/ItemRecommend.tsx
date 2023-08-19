@@ -6,11 +6,11 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
 
 interface propsData {
-  nameRestaurantFood: string
-  nameFood: string
-  price: number
-  star: number
-  time: number
+  nameRestaurantFood?: string
+  nameFood?: string
+  price?: number
+  star?: number
+  time?: number
   distance: number
   imgFood: string
   width: number
@@ -26,7 +26,7 @@ const ItemRecommend = (props: propsData) => {
     nameFood,
     price,
     star,
-    time,
+    time = 10,
     distance,
     imgFood,
     width,
@@ -46,24 +46,20 @@ const ItemRecommend = (props: propsData) => {
         <span className="text-lg font-semibold capitalize">
           {nameRestaurantFood}
         </span>
-        <Box className="flex  gap-5 capitalize">
-          <Typography sx={{ fontSize: "14px" }}>{nameFood}</Typography>
+        {price && <Box className="flex  gap-5 capitalize">
+          <Typography sx={{ fontSize: !nameRestaurantFood ? '16px' : "14px" }}>{nameFood}</Typography>
           <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
             {handlePrice(price)} VND
           </Typography>
-        </Box>
+        </Box>}
         <Box className="flex gap-10 items-center mt-2">
-          <Box className=" flex  justify-center items-center ">
-            <StarRateRoundedIcon
-              style={{ color: "orange" }}
-            />
+          {star && <Box className=" flex  justify-center items-center ">
+            <StarRateRoundedIcon style={{ color: "orange" }} />
             <Typography sx={{ fontSize: "14px" }}>{star}</Typography>
-          </Box>
+          </Box>}
           <Box className="flex gap-2">
             <Box className="flex items-center justify-center gap-2">
-              <AccessTimeRoundedIcon
-             
-              />
+              <AccessTimeRoundedIcon />
               <Typography sx={{ fontSize: "14px" }}>{time} phút</Typography>
             </Box>
             •
