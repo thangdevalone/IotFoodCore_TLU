@@ -3,19 +3,19 @@ import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
 import { Avatar, Box, Stack, Typography } from "@mui/material"
 import { MouseEvent, useEffect, useState, useRef } from "react"
 import { Link } from "react-router-dom"
-import { SwitchLightDark } from "."
+import { CartDrawer, SwitchLightDark } from "."
 import { CustomButton } from "../Custom/CustomButon"
 import { BagIcon, NotiIcon } from "../Icon"
 import ChatIcon from "@mui/icons-material/Chat"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
 import classNames from "classnames"
-import { CartDrawer } from "./CartDrawer"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { ChatConversationsList } from "../../features/Chat/ChatConversationsList/index"
 import { handlePrice } from "@/utils"
 export interface HeaderProps {}
 
+export interface HeaderProps { }
 export function Header(props: HeaderProps) {
   const user = useInforUser()
   const dispatch = useAppDispatch()
@@ -57,8 +57,8 @@ export function Header(props: HeaderProps) {
   }
 
   useEffect(() => {
-    setQuantityCart(items.reduce((sum, item) => sum + item.quantity, 0))
-    setPrice(items.reduce((sum, item) => sum + item.price * item.quantity, 0))
+    setQuantityCart(items.reduce((sum:any, item:any) => sum + item.quantity, 0))
+    setPrice(items.reduce((sum:any, item:any) => sum + item.price * item.quantity, 0))
   }, [items])
 
   return (

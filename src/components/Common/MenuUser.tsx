@@ -1,12 +1,15 @@
-import { useAppDispatch } from "@/app/hooks"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { authActions } from "@/features/auth/AuthSlice"
+import { useInforUser } from "@/hooks"
 import {
-    AccountCircleOutlined,
-    Logout,
-    ReceiptOutlined,
-    SettingsOutlined
+  AccountCircleOutlined,
+  Logout,
+  ReceiptOutlined,
+  SettingsOutlined,
+  StorageOutlined,
 } from "@mui/icons-material"
 import { Divider, ListItemIcon, Menu, MenuItem } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 
 export interface MenuUserProps {
   anchorEl: null | HTMLElement
@@ -16,10 +19,15 @@ export interface MenuUserProps {
 export function MenuUser(props: MenuUserProps) {
   const { anchorEl, handleClose } = props
   const dispatch = useAppDispatch()
-
+  const navigate=useNavigate()
+  const user = useInforUser()
   const handleLogOut = () => {
     handleClose()
     dispatch(authActions.logout())
+  }
+  const handleAdmin= ()=>{
+    handleClose()
+    navigate("/admin")
   }
   return (
     <Menu
@@ -46,7 +54,7 @@ export function MenuUser(props: MenuUserProps) {
               display: "block",
               position: "absolute",
               top: 0,
-              right: 14,
+              right: 19,
               width: 10,
               height: 10,
               bgcolor: "background.paper",
@@ -65,6 +73,14 @@ export function MenuUser(props: MenuUserProps) {
         </ListItemIcon>
         Tài khoản
       </MenuItem>
+      {user?.role[0].authority==="ADMIN" && (
+        <MenuItem onClick={handleAdmin}>
+          <ListItemIcon>
+            <StorageOutlined fontSize="small" />
+          </ListItemIcon>
+          Trang quản trị
+        </MenuItem>
+      )}
       <Divider />
       <MenuItem onClick={handleClose}>
         <ListItemIcon>

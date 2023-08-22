@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material"
 import * as React from "react"
 import foodsApis from "@/api/foodsApi"
-import { TypeFoodsData } from "@/models/Foods"
+import { TypeFoodsData } from "@/models"
 
 const TypeFood = () => {
   const [data, setData] = React.useState<TypeFoodsData[]>([])

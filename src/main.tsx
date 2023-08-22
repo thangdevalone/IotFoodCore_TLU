@@ -6,21 +6,20 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import NavigateSetter from "./Router/NavigateSetter"
 import { store } from "./app/store"
-import { ChatBoxs } from "@/features/Chat/ChatBoxs"
 import "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
-      <BrowserRouter>
-        <SnackbarProvider
-          autoHideDuration={2500}
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-        >
-          <NavigateSetter />
-          <CssBaseline />
-          <ChatBoxs />
-          <App />
-        </SnackbarProvider>
-      </BrowserRouter>
-  </Provider>,
+    <BrowserRouter>
+      <SnackbarProvider
+        autoHideDuration={2500}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+      >
+        <NavigateSetter />
+        <CssBaseline />
+        <App />
+      </SnackbarProvider>
+    </BrowserRouter>
+     
+  </Provider>
 )

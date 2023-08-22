@@ -4,10 +4,10 @@ import { Box, IconButton, Stack, Grid, Button } from "@mui/material"
 import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 import * as React from "react"
 import foodsApis from "@/api/foodsApi"
-import { foodData } from "@/models/Foods"
 import { useWindowDimensions } from "@/hooks"
 import ItemRecommend from "./ItemRecommend"
 import { CustomButton } from "@/components/Custom/CustomButon"
+import { foodData } from "@/models"
 
 export interface RecommendFoodProps {}
 
@@ -65,7 +65,19 @@ export function RecommendFood(props: RecommendFoodProps) {
             modules={[]}
             className="slide-base"
             style={{ width: "100%" }}
-            slidesPerView={ width <= 450 ? 1.2: width <= 600 ? 1.7 : width <= 750 ? 2.2 : width <= 900? 2.6 : width <= 1200? 3: 4}
+            slidesPerView={
+              width <= 450
+                ? 1.2
+                : width <= 600
+                ? 1.7
+                : width <= 750
+                ? 2.2
+                : width <= 900
+                ? 2.6
+                : width <= 1200
+                ? 3
+                : 4
+            }
             spaceBetween={25}
             allowTouchMove={true}
             ref={swiperRef}

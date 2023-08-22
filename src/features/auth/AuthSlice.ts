@@ -6,7 +6,6 @@ export interface AuthState {
   registering?: boolean
   actionAuth: "No action" | "Success" | "Failed"
   currentUser?: User
-  isRehydrating: boolean // Trạng thái khôi phục
 }
 
 const initialState: AuthState = {
@@ -14,7 +13,6 @@ const initialState: AuthState = {
   registering: false,
   actionAuth: "No action",
   currentUser: undefined,
-  isRehydrating: true, // Khởi tạo là true
 }
 
 const authSlice = createSlice({
@@ -59,14 +57,7 @@ const authSlice = createSlice({
     },
     // ...các action khác
   },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      (action) => action.type.endsWith("/REHYDRATE"),
-      (state) => {
-        state.isRehydrating = false
-      },
-    )
-  },
+  
 })
 
 export const authActions = authSlice.actions

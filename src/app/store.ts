@@ -15,6 +15,7 @@ const persistConfig = {
   whitelist: ['auth','cart'],
 
 };
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({

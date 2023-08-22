@@ -1,15 +1,15 @@
-import { Box, Divider, Typography } from "@mui/material"
-import * as React from "react"
-import { Header } from "../Common"
-import { Banner } from "@/features/Banner"
-import { SearchFood } from "@/features/SearchFood"
-import { RecommendFood } from "@/features/RecommendFood"
-import TypeFood from "@/features/TypeFood"
-import "./styles_home.css"
-import { useWindowDimensions } from "@/hooks"
 import { Question, WhyChoose } from "@/features/About"
-import { Footer } from "../Common/Footer"
+import { Banner } from "@/features/Banner"
+import { RecommendFood } from "@/features/RecommendFood"
+import { SearchFood } from "@/features/SearchFood"
+import TypeFood from "@/features/TypeFood"
+import { useWindowDimensions } from "@/hooks"
+import "./styles_home.css"
+import { Box } from "@mui/material"
+import { Footer, Header } from "../Common"
 import { RecommendRestaurant } from "@/features/RecommendRestaurant"
+import React from "react"
+export interface HomeProps {}
 
 
 export interface HomeProps { }
