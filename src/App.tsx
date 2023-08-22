@@ -10,6 +10,7 @@ import { Store } from "./components/Layouts/Store"
 import GetAllStore from "./features/Store"
 import DetailStore from "./features/DetailStore"
 import DetailFood from "./features/DetailFood"
+import SearchList from "./features/SearchFood/components/SearchList"
 
 
 function App() {
@@ -23,6 +24,10 @@ function App() {
                 <Route path="get-all-store" element={<GetAllStore />} />
                 <Route path="detail-store/:idStore" element={<DetailStore />} />
                 <Route path="detail-food/:idFood" element={<DetailFood />} />
+            </Route>
+            <Route path="/search" element={<Store />} >
+                <Route path=":searchParams" element={<SearchList />} />
+                
             </Route>
             <Route element={<ProtectAuth />}>
                 <Route path="/login" element={<LoginPage />} />

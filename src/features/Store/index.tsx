@@ -28,7 +28,7 @@ const GetAllStore = (props: propsData) => {
     }, []);
 
     const breadcrumbItems = [
-        { name: "Cửa hàng"},
+        { name: "Cửa hàng", link:'/',},
     ];
 
     // console.log(data)

@@ -35,7 +35,7 @@ export function CartDrawer(props: CardDrawerProps) {
     setPrice(items.reduce((sum, item) => sum += item.price * item.quantity, 0))
   }, [items]);
 
-  // console.log(items);
+  // console.log(items); 
 
   return (
     <div>
@@ -72,7 +72,7 @@ export function CartDrawer(props: CardDrawerProps) {
             {items.length ?
               <>
                 <CartList items={items} />
-                <Box className="absolute bottom-3 border-t pt-3 w-[96%]">
+                <Box className="absolute bottom-3 border-t pt-3 w-[96%] bg-white">
                   <Box className='flex justify-between items-center text-xl'>
                     <span className="font-semibold">Tổng tiền :</span>
                     <span>{handlePrice(price)} VND</span>
