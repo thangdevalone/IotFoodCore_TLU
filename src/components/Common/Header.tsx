@@ -11,7 +11,7 @@ import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
 import classNames from "classnames"
 import { cartActions } from "./CartDrawer/CartSlice"
-import { ChatConversationsList } from "./Chat/ChatConversationsList/index"
+import { ChatConversationsList } from "../../features/Chat/ChatConversationsList/index"
 
 export interface HeaderProps { }
 export function Header(props: HeaderProps) {
@@ -75,17 +75,19 @@ export function Header(props: HeaderProps) {
             height: "inherit",
           }}
         >
-          <img
-            src={
-              mobile && setterBg
-                ? "/assets/iotfood.png"
-                : mobile
-                  ? "/assets/iotfood_b.png"
-                  : "/assets/iotfood.png"
-            }
-            style={{ width: "130px" }}
-            alt="logo"
-          />
+          <Link to='/'>
+            <img
+              src={
+                mobile && setterBg
+                  ? "/assets/iotfood.png"
+                  : mobile
+                    ? "/assets/iotfood_b.png"
+                    : "/assets/iotfood.png"
+              }
+              style={{ width: "130px" }}
+              alt="logo"
+              />
+          </Link>
           <Stack direction={"row"} alignItems="center" position={"relative"}>
             {width > 450 && (
               <CustomButton
@@ -103,7 +105,7 @@ export function Header(props: HeaderProps) {
                 >
                   <ChatIcon />
                 </CustomButton>
-                <div className="absolute top-[50px]" ref={ChatConversationsListRef}>
+                <div className="absolute top-[50px] right-0 z-50" ref={ChatConversationsListRef}>
                   {chatOpen && <ChatConversationsList setChatOpen={setChatOpen} />}
                 </div>
                 <CustomButton

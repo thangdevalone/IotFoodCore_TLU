@@ -20,5 +20,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <App />
       </SnackbarProvider>
     </BrowserRouter>
-  </Provider>,
+     
+  </Provider>
 )

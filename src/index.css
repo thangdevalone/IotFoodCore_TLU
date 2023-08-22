@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield
+}
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -75,6 +89,35 @@ code {
   margin-bottom: 16px;
   margin-top: 8px;
 }
+.messageR, .messageL{
+  border-radius: 18px;
+  max-width: 160px;
+  margin-bottom: 4px;
+  padding: 8px 12px;
+}
+
+.messageL{
+  width: max-content;
+  color:#000;
+  background-color: #e4e6eb;
+}
+
+.messageR{
+  width: max-content;
+  color: #fff;
+  background-color: #0084ff;
+}
+.EmojiPickerReact{
+  position: absolute !important;
+  bottom: 50px;
+  right: 50px;
+  width: 260px !important;
+  height: 350px !important;
+}
+.EmojiPickerReact .Flex.FlexRow{
+  display: none !important;
+}
+
 @keyframes morph {
   0% {
     border-radius: 40% 60% 60% 40%/70% 30%;

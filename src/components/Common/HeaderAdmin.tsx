@@ -23,13 +23,13 @@ export function HeaderAdmin() {
   const [hovered, setHovered] = useState(false)
   const navigate = useNavigate()
   const handleMoveHome = () => {
-    navigate("/")
+    navigate("/",{replace:true})
   }
 
   return (
     <Stack
       direction="row"
-      className="p-[10px] border-b border-gray-200 "
+      className="p-[10px] border-b border-gray-300 "
       justifyContent="space-between "
     >
       <Stack direction="row" alignItems="center">

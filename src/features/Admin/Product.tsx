@@ -1,8 +1,12 @@
 import adminApi from "@/api/adminApi"
-import { ToolbarAdmin } from "@/components/Common"
-import { RecommendFoodData } from "@/models"
-import { useEffect, useMemo, useState } from "react"
 
+import { useEffect, useMemo, useRef, useState } from "react"
+
+import History from "@/Router/History"
+import { ProductItem, ProductRoot } from "@/models"
+import { formatCurrencyVND } from "@/utils"
+import { Delete, Settings } from "@mui/icons-material"
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material"
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -10,38 +14,15 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
 } from "material-react-table"
+import queryString from "query-string"
+import { useLocation, useNavigate } from "react-router-dom"
+import SettingMenu from "./components/SettingMenu"
 
-type UserApiResponse = {
-  data: Array<User>
-  meta: {
-    totalRowCount: number
-  }
-}
-
-type User = {
-  firstName: string
-  lastName: string
-  address: string
-  state: string
-  phoneNumber: string
-}
 export function Product() {
-  const [products, setProducts] = useState<RecommendFoodData[]>([])
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const res = await adminApi.getAllProducts({
-          pageIndex: 1,
-          pageSize: 10,
-        })
-        setProducts(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-    })()
-  }, [])
-
-  const [data, setData] = useState<User[]>([])
+  const location = useLocation() // Get the current location object
+  const queryParams = queryString.parse(location.search) // Parse query parameters from the location
+  const navigate = useNavigate()
+  const [products, setProducts] = useState<ProductItem[]>([])
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
@@ -55,41 +36,39 @@ export function Product() {
     pageIndex: 0,
     pageSize: 10,
   })
+  const [open, setOpen] = useState(false)
+  const settingRef = useRef<HTMLButtonElement>(null)
 
-  //if you want to avoid useEffect, look at the React Query example instead
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen)
+  }
   useEffect(() => {
     const fetchData = async () => {
-      if (!data.length) {
+      if (!products.length) {
         setIsLoading(true)
       } else {
         setIsRefetching(true)
       }
+      const updatedSearchParams = new URLSearchParams(location.search)
+      updatedSearchParams.set("page", `${pagination.pageIndex + 1}`)
+      updatedSearchParams.set("size", `${pagination.pageSize}`)
+      updatedSearchParams.set("filters", JSON.stringify(columnFilters ?? []))
+      updatedSearchParams.set("globalFilter", globalFilter ?? "")
+      updatedSearchParams.set("sorting", JSON.stringify(sorting ?? []))
 
-      const url = new URL(
-        "/api/data",
-        process.env.NODE_ENV === "production"
-          ? "https://www.material-react-table.com"
-          : "http://localhost:3000",
-      )
-      url.searchParams.set(
-        "start",
-        `${pagination.pageIndex * pagination.pageSize}`,
-      )
-      url.searchParams.set("size", `${pagination.pageSize}`)
-      url.searchParams.set("filters", JSON.stringify(columnFilters ?? []))
-      url.searchParams.set("globalFilter", globalFilter ?? "")
-      url.searchParams.set("sorting", JSON.stringify(sorting ?? []))
-
+      // Update the location object with the new search parameters
+      History.push({ search: updatedSearchParams.toString() })
       try {
-        const response = await fetch(url.href)
-        const json = (await response.json()) as UserApiResponse
-        setData(json.data)
-        setRowCount(json.meta.totalRowCount)
+        const res = await adminApi.getAllProducts(pagination)
+        const myProducts = res.data as ProductRoot
+        setProducts(myProducts.data)
+        setRowCount(myProducts.totalRow)
       } catch (error) {
         setIsError(true)
         console.error(error)
         return
       }
+
       setIsError(false)
       setIsLoading(false)
       setIsRefetching(false)
@@ -103,29 +82,42 @@ export function Product() {
     pagination.pageSize,
     sorting,
   ])
-
-  const columns = useMemo<MRT_ColumnDef<User>[]>(
+  const handleSelectRows = (row: any) => {
+    console.log(row)
+  }
+  const columns = useMemo<MRT_ColumnDef<ProductItem>[]>(
     () => [
+      { accessorKey: "id", header: "ID" },
+      { accessorKey: "foodName", header: "Tên sản phẩm" },
+      { accessorKey: "nameRestaurantFood", header: "Thuộc về" },
+      { accessorKey: "star", header: "Đánh giá" },
       {
-        accessorKey: "firstName",
-        header: "First Name",
+        accessorKey: "price",
+        header: "Đơn giá",
+        Cell: ({ cell }) => formatCurrencyVND(cell.getValue<string>()),
       },
-      //column definitions...
+      { accessorKey: "detail", header: "Mô tả" },
+      { accessorKey: "quantityPurchased", header: "Đã bán" },
+      { accessorKey: "status", header: "Trạng thái" },
     ],
     [],
   )
 
   return (
-    <div>
-      <ToolbarAdmin />
+    <Box sx={{ height: "100%" }}>
+      <SettingMenu anchorRef={settingRef} open={open} setOpen={setOpen} />
       <MaterialReactTable
+        muiTablePaperProps={{ sx: { height: "100%" } }}
+        muiTableContainerProps={{ sx: { height: "calc(100% - 112px)" } }}
         columns={columns}
-        data={data}
+        data={products}
         enableRowSelection
-        getRowId={(row) => row.phoneNumber}
-        initialState={{ showColumnFilters: true }}
         manualFiltering
         manualPagination
+        muiTableBodyRowProps={({ row }) => ({
+          onClick: () => console.log(row),
+          sx: { cursor: "pointer" },
+        })}
         manualSorting
         muiToolbarAlertBannerProps={
           isError
@@ -135,11 +127,56 @@ export function Product() {
               }
             : undefined
         }
+        positionToolbarAlertBanner="bottom"
+        muiLinearProgressProps={({ isTopToolbar }) => ({
+          sx: {
+            display: isTopToolbar ? "block" : "none", //hide bottom progress bar
+          },
+        })}
+        renderTopToolbarCustomActions={({ table }) => (
+          <Stack direction="row" alignItems="center">
+            <Button
+              disabled={isLoading}
+              sx={{ mr: "10px" }}
+              variant="contained"
+              onClick={() => {
+                navigate("/admin/new?form=product")
+              }}
+            >
+              Tạo
+            </Button>
+            <Typography sx={{ fontSize: "18px", fontWeight: 500, mr: "10px" }}>
+              Sản phẩm
+            </Typography>
+
+            <IconButton
+              ref={settingRef}
+              onClick={handleToggle}
+              size="small"
+              sx={{ mr: "5px" }}
+            >
+              <Settings htmlColor="black" fontSize="small" />
+            </IconButton>
+
+            {table.getSelectedRowModel().rows.length > 0 && (
+              <IconButton
+                size="small"
+                sx={{ mr: "5px" }}
+                onClick={() =>
+                  handleSelectRows(table.getSelectedRowModel().rows)
+                }
+              >
+                <Delete fontSize="small" htmlColor="black" />
+              </IconButton>
+            )}
+          </Stack>
+        )}
         onColumnFiltersChange={setColumnFilters}
         onGlobalFilterChange={setGlobalFilter}
         onPaginationChange={setPagination}
         onSortingChange={setSorting}
         rowCount={rowCount}
+        enableStickyHeader
         state={{
           columnFilters,
           globalFilter,
@@ -150,6 +187,6 @@ export function Product() {
           sorting,
         }}
       />
-    </div>
+    </Box>
   )
 }

@@ -4,6 +4,7 @@ import { Outlet, Route, Routes } from "react-router-dom"
 import { HeaderAdmin } from "../Common/HeaderAdmin"
 import { Product, Quote } from "@/features/Admin"
 import { ToolbarAdmin } from "../Common"
+import NewProduct from "@/features/Admin/components/NewProduct"
 
 const WelComeAdmin = () => {
   return (
@@ -31,13 +32,13 @@ export default function Admin() {
     <Box className="h-screen w-screen">
       <HeaderAdmin />
 
-      <Box sx={{ height: "calc(100vh - 124px)",padding:"10px" }} className="w-screen">
+      <Box sx={{ height: "calc(100vh - 61px)" }} className="w-screen">
         <Routes>
           <Route path="/" element={<WelComeAdmin />} />
-        
-            <Route path="/quote" element={<Quote />} />
-            <Route path="/product" element={<Product />} />
-       
+
+          <Route path="/quote" element={<Quote />} />
+          <Route path="/product" element={<Product />}/>
+          <Route path="/new" element={<NewProduct />} />
         </Routes>
       </Box>
     </Box>

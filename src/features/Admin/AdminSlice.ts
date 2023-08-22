@@ -1,10 +1,11 @@
-import { RecommendFoodData } from "@/models"
+
+import { foodData } from "@/models"
 import { createSlice,PayloadAction } from "@reduxjs/toolkit"
 
 
 export interface AdminState {
   isSelected:boolean,
-  product: {selected:number,data:RecommendFoodData[]},
+  product: {selected:number,data:foodData[]},
 }
 
 const initialState: AdminState = {
@@ -16,7 +17,7 @@ const adminSlice = createSlice({
   name: "admin",
   initialState,
   reducers: {
-    selectRowFood(state,action:PayloadAction<RecommendFoodData>){
+    selectRowFood(state,action:PayloadAction<foodData>){
       if(state.isSelected===false) state.isSelected=true
       state.product.selected+=1
       state.product.data=[...state.product.data,action.payload]

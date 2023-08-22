@@ -25,7 +25,6 @@ const TypeFood = () => {
         {data?.map((item) => (
           <Grid item xs={12} sm={6} md={3} key={item.id}>
             <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
-              <div className=""></div>
             </Box>
             <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
               {item.nameType}

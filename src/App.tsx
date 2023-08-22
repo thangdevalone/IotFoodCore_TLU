@@ -8,6 +8,11 @@ import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
 import { ProtectAdmin, ProtectAuth } from "./components/ProtectRouter"
 import Admin from "./components/Layouts/Admin"
+import { Store } from "./components/Layouts/Store"
+import GetAllStore from "./features/Store"
+import DetailStore from "./features/DetailStore"
+import DetailFood from "./features/DetailFood"
+
 
 function App() {
   const theme = useTheme()
@@ -24,6 +29,17 @@ function App() {
           <Route element={<ProtectAdmin />}>
             <Route path="/admin/*" element={<Admin />} />
           </Route>
+            <Route path="/" element={<Home />} />
+            <Route path="/store" element={<Store />} >
+                <Route path="get-all-store" element={<GetAllStore />} />
+                <Route path="detail-store/:idStore" element={<DetailStore />} />
+                <Route path="detail-food/:idFood" element={<DetailFood />} />
+            </Route>
+            <Route element={<ProtectAuth />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/auth/the-sv" element={<AuthCard />} />
+            </Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

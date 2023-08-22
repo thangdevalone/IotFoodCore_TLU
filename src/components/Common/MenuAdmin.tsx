@@ -39,9 +39,9 @@ export function MenuAdmin(props: MenuAdminProps) {
         aria-labelledby="dropdownDefaultButton"
       >
         {items.map((item) => (
-          <li key={item.label}>
+          <li key={item.label} className="cursor-pointer">
             <span
-              onClick={() => navigate(item.nav)}
+              onClick={() => {navigate(item.nav);setOpen(false)}}
               className="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               {item.label}

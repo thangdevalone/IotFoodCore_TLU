@@ -10,6 +10,7 @@ const History = {
       // You might want to handle this case in an appropriate way
     }
   },
+  
 };
 
 export default History;
