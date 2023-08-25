@@ -13,7 +13,7 @@ export function Store(props: propsData) {
 
   return (
     <Box className="tx-df-sz">
-      <Header />
+      <Header isHeaderColorRed={true}/>
       <Box className="mt-24">
         <Outlet/>
       </Box>

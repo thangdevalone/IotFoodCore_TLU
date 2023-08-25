@@ -8,6 +8,7 @@ export interface MessageListProps {
 
 export function MessageList(props: MessageListProps) {
     const { messageList, avatarShipper } = props
+    console.log({messageList})
     let messageListRef = useRef<HTMLDivElement>(null);
     // Hàm để cuộn xuống cuối container khi có tin nhắn mới
     const scrollToBottom = () => {
@@ -45,7 +46,7 @@ export function MessageList(props: MessageListProps) {
     }
     return (
         <div className="pt-3 pb-1 px-4 flex flex-col overflow-x-hidden overflow-y-auto h-[345px]" ref={messageListRef}>
-            {messageList.map((messageData: TypeMessageData) =>
+            {messageList?.map((messageData: TypeMessageData) =>
                 <RenderMessage messageData={messageData} key={messageData.idMessage}/>
             )}
         </div>

@@ -13,9 +13,12 @@ import classNames from "classnames"
 import { CartDrawer } from "./CartDrawer"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { ChatConversationsList } from "../../features/Chat/ChatConversationsList/index"
-export interface HeaderProps { }
+export interface HeaderProps {
+  isHeaderColorRed: boolean
+}
 
 export function Header(props: HeaderProps) {
+  const { isHeaderColorRed } = props
   const user = useInforUser()
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
@@ -61,7 +64,7 @@ export function Header(props: HeaderProps) {
           "items-center",
           "justify-center",
           "ani-bg",
-          { "header-sd": !setterBg && !mobile, "header-color": setterBg },
+          { "header-sd": !(setterBg || isHeaderColorRed) && !mobile, "header-color": setterBg || isHeaderColorRed },
         )}
         sx={{ height: "80px", position: "fixed", zIndex: 20, top: 0 }}
       >
@@ -87,7 +90,7 @@ export function Header(props: HeaderProps) {
               }
               style={{ width: "130px" }}
               alt="logo"
-              />
+            />
           </Link>
           <Stack direction={"row"} alignItems="center" position={"relative"}>
             {width > 450 && (

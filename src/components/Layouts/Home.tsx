@@ -13,16 +13,14 @@ import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 
 
 export interface HomeProps { }
-const chatAPI = [
 
-]
 export function Home(props: HomeProps) {
   const { width } = useWindowDimensions();
   React.useEffect(()=>{window.scrollTo(0, 0);},[])
 
   return (
     <Box className="relative tx-df-sz">
-      <Header />
+      <Header isHeaderColorRed={false}/>
       {width > 750 && <Banner />}
       <section className="container-base search-food">
         <SearchFood />
