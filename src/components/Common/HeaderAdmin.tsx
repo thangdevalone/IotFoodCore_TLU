@@ -10,20 +10,18 @@ import { useNavigate } from "react-router-dom"
 import { MenuAdmin } from "."
 import { ConfigList, InvoiceList, OrderList, ProductList } from "@/constants"
 
-
-
 export function HeaderAdmin() {
   const [openOrder, setOpenOrder] = useState(false)
   const [openInvoice, setOpenInvoice] = useState(false)
   const [openReport, setOpenReport] = useState(false)
   const [openProduct, setOpenProduct] = useState(false)
   const [openConfig, setOpenConfig] = useState(false)
- 
+
   const user = useInforUser()
   const [hovered, setHovered] = useState(false)
   const navigate = useNavigate()
   const handleMoveHome = () => {
-    navigate("/",{replace:true})
+    navigate("/", { replace: true })
   }
 
   return (
@@ -70,7 +68,10 @@ export function HeaderAdmin() {
         </div>
 
         <div className="relative">
-          <button onClick={() => setOpenInvoice(true)} className="bg-white translate-y-[1.5px] hover:bg-gray-200 text-gray-800 text-[14px]  py-1 px-3  hover:border-gray-300 rounded mr-1">
+          <button
+            onClick={() => setOpenInvoice(true)}
+            className="bg-white translate-y-[1.5px] hover:bg-gray-200 text-gray-800 text-[14px]  py-1 px-3  hover:border-gray-300 rounded mr-1"
+          >
             Hóa đơn
           </button>
           <MenuAdmin
@@ -80,7 +81,10 @@ export function HeaderAdmin() {
           />
         </div>
         <div className="relative">
-          <button onClick={() => setOpenProduct(true)} className="bg-white translate-y-[1.5px] hover:bg-gray-200 text-gray-800 text-[14px]  py-1 px-3  hover:border-gray-300 rounded mr-1">
+          <button
+            onClick={() => setOpenProduct(true)}
+            className="bg-white translate-y-[1.5px] hover:bg-gray-200 text-gray-800 text-[14px]  py-1 px-3  hover:border-gray-300 rounded mr-1"
+          >
             Sản phẩm
           </button>
           <MenuAdmin
@@ -98,7 +102,10 @@ export function HeaderAdmin() {
         </button>
 
         <div className="relative">
-          <button onClick={() => setOpenConfig(true)} className="bg-white translate-y-[1.5px] hover:bg-gray-200 text-gray-800 text-[14px]  py-1 px-3  hover:border-gray-300 rounded mr-1">
+          <button
+            onClick={() => setOpenConfig(true)}
+            className="bg-white translate-y-[1.5px] hover:bg-gray-200 text-gray-800 text-[14px]  py-1 px-3  hover:border-gray-300 rounded mr-1"
+          >
             Cấu hình
           </button>
           <MenuAdmin

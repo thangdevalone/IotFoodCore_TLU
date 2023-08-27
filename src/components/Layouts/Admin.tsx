@@ -1,10 +1,14 @@
 import { Box, Stack } from "@mui/material"
 import { useEffect } from "react"
-import { Outlet, Route, Routes } from "react-router-dom"
+import { Outlet, Route, Routes, useLocation } from "react-router-dom"
 import { HeaderAdmin } from "../Common/HeaderAdmin"
-import { Product, Quote } from "@/features/Admin"
+import { Product, Quote, Supplier } from "@/features/Admin"
 import { ToolbarAdmin } from "../Common"
 import NewProduct from "@/features/Admin/components/NewProduct"
+import NewType from "@/features/Admin/components/NewType"
+import TypeProduct from "@/features/Admin/TypeProduct"
+import queryString from "query-string"
+import NewStore from "@/features/Admin/components/NewStore"
 
 const WelComeAdmin = () => {
   return (
@@ -20,6 +24,22 @@ const WelComeAdmin = () => {
   )
 }
 
+const FormRouter = () => {
+  const location = useLocation()
+  const queryParams = queryString.parse(location.search)
+  const form = queryParams.form
+  switch (form) {
+    case "type":
+      return <NewType />
+    case "product":
+      return <NewProduct />
+    case "store":
+      return <NewStore />
+    default:
+      return null
+  }
+}
+
 export default function Admin() {
   useEffect(() => {
     document.body.style.overflow = "hidden" // Set overflow to hidden when the component mounts
@@ -31,14 +51,14 @@ export default function Admin() {
   return (
     <Box className="h-screen w-screen">
       <HeaderAdmin />
-
       <Box sx={{ height: "calc(100vh - 61px)" }} className="w-screen">
         <Routes>
           <Route path="/" element={<WelComeAdmin />} />
-
           <Route path="/quote" element={<Quote />} />
-          <Route path="/product" element={<Product />}/>
-          <Route path="/new" element={<NewProduct />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/type" element={<TypeProduct />} />
+          <Route path="/supplier" element={<Supplier />} />
+          <Route path="/new" element={<FormRouter />} />
         </Routes>
       </Box>
     </Box>
