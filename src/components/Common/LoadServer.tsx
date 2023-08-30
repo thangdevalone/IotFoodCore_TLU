@@ -32,11 +32,11 @@ export function LoadServer(props: LoadServerProps) {
   const [done, setDone] = useState(true)
   useEffect(() => {
     const timer = setInterval(() => {
-      const random = Math.floor(Math.random() * 9) + 1
+      const random = Math.floor(Math.random() * 4) + 1
       setProgress((prevProgress) =>
-        prevProgress >= 99 ? 99 : prevProgress + random,
+        prevProgress >= 95 ? 99 : prevProgress + random,
       )
-    }, 500)
+    }, 300)
     ;(async () => {
       try {
         const startTime = new Date()

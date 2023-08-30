@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react"
-import { Avatar, IconButton } from '@mui/material';
-import { MessageInput } from "./MessageInput";
 import CloseIcon from '@mui/icons-material/Close';
-import { MessageList } from './MessageList'
-import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { TypeChatConversationData } from "@/models"
+import { Avatar, IconButton } from '@mui/material';
+import { useEffect, useState } from "react";
+import { MessageInput } from "./MessageInput";
+import { MessageList } from './MessageList';
 import { ChatBoxActions } from "./MessageSlice";
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { TypeChatConversationData } from '@/models';
+
 export interface ChatBoxsProps {
 
 }

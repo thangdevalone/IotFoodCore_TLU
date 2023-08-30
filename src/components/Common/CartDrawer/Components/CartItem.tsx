@@ -21,6 +21,7 @@ const CartItem = (props: propsData) => {
         dispatch(cartActions.addToCart(item));
     };
 
+
     const handleRemove = () => {
         if (quantity === 1 ) {
             dispatch(cartActions.removerCart(item));
@@ -44,15 +45,20 @@ const CartItem = (props: propsData) => {
         }
     }
 
+    
+    React.useEffect(() => {
+        setQuantity(item.quantity);
+    },[item])
+
     return (
         <Stack direction="row" spacing={2} className="border-b w-full pb-5">
             <Box className="flex items-center gap-2 flex-1">
-                <Box onClick={()=>handleRemove()} className="cursor-pointer rounded-full bg-gray-200 p-1 hover:opacity-70">
-                    <RemoveIcon />
+                <Box onClick={()=>handleRemove()} className="cursor-pointer rounded-full flex items-center justify-center bg-gray-200 hover:opacity-70">
+                    <RemoveIcon fontSize="small"/>
                 </Box>
-                <input type="number" onBlur={(e)=>handleSetQuantity(+e.target.value)} onChange={(e) =>handleOnChangeInput(+e.target.value)} value={quantity} className='w-12 text-center text-xl' />
-                 <Box onClick={()=>handleAdd()} className="cursor-pointer rounded-full bg-gray-200 p-1 hover:opacity-70">
-                    <AddIcon />
+                <input type="number" onBlur={(e)=>handleSetQuantity(+e.target.value)} onChange={(e) =>handleOnChangeInput(+e.target.value)} value={quantity} className='w-6 text-center text-xl' />
+                 <Box onClick={()=>handleAdd()} className="cursor-pointer rounded-full flex items-center justify-center bg-gray-200 hover:opacity-70">
+                    <AddIcon fontSize="small"/>
                 </Box>
             </Box>
             <Stack direction="row" spacing={2} className='flex-5'>
@@ -64,7 +70,7 @@ const CartItem = (props: propsData) => {
                     backgroundImage: `url(${item.imgFood})`,
                     }}
                 ></Box>
-                <Typography variant='h6'>{item.name}</Typography>
+                <Typography variant='h6' sx={{ fontSize:"16px"}}>{item.name}</Typography>
             </Stack>
             <Typography className='flex-2'>{handlePrice(item.price)} VND</Typography>
         </Stack>

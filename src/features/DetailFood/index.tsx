@@ -8,7 +8,8 @@ import { handlePrice } from '@/utils'
 import { useWindowDimensions } from '@/hooks'
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
 import { CustomButton } from '@/components/Custom/CustomButon'
-
+import { useAppDispatch } from '@/app/hooks'
+import { cartActions } from '@/components/Common/CartDrawer/CartSlice'
 
 export interface DetailProps {}
 
@@ -16,6 +17,9 @@ const DetailFood = (props:DetailProps) => {
   const { width } = useWindowDimensions();
   const { idFood } = useParams();
   const [data, setData] = React.useState<foodData>();
+  const dispatch = useAppDispatch();
+
+
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +32,27 @@ const DetailFood = (props:DetailProps) => {
     }
     fetchData();
   }, [])
-  // console.log(data);
+
+  
+  const handleAddToCart = () => {
+    let item;
+    if (data) {
+      item = {
+      idFood: data.id,
+      name: data.foodName,
+      price: data.price,
+      quantity: 1,
+      idStore : data.restaurantEntityId,
+      nameStore : data.nameRestaurantFood,
+      imgFood: data.imgFood,
+      type :false,
+      }
+    }
+    if (item) {
+      dispatch(cartActions.addToCart(item));
+    }
+  }
+
 
   const breadcrumbItems = [
     { name: "Cửa hàng", link: "/store/get-all-store" },
@@ -67,6 +91,7 @@ const DetailFood = (props:DetailProps) => {
       </Box>
       </Box>
       <CustomButton
+          onClick={()=> handleAddToCart()}
           sx={{ padding: "10px 12px", mr: 1, minWidth: "unset", width:'100%', fontSize:`${width <= 500 ? '15px' : '20px'}` }}
         >
           add to cart

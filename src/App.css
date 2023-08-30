@@ -6,3 +6,6 @@
         padding:0px 20px;
     }
   } 
+.none{
+    display: none !important;
+}
