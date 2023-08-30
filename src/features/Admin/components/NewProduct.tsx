@@ -76,7 +76,6 @@ function NewProduct(props: NewProductProps) {
 
   const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
- 
     const sanitizedValue = rawValue.replace(/[^\d,]/g, "")
 
     // Convert comma-separated string to a numeric value
@@ -111,6 +110,7 @@ function NewProduct(props: NewProductProps) {
         if (file) {
           console.log(nameFood,price,typePick,resPick,detail)
           await adminApi.addFood(nameFood,parseInt(price.replace(/\D/g, "")),detail,file,Number(typePick?.id),Number(resPick?.id))
+          enqueueSnackbar("Tạo sản phẩm thành công",{variant:"success"})
         }
       } catch (error) {
         console.log(error)
