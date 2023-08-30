@@ -19,6 +19,10 @@ const adminApi = {
     const url = `ADMIN/paging-type-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  getAllResFoods(page: PageConfig) {
+    const url = `ADMIN/paging-res?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
+    return axiosClient.post(url)
+  },
   addRestaurant(
     restaurantName: string,
     address: string,

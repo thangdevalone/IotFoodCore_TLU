@@ -56,6 +56,7 @@ export function Product() {
       }
     })()
   }
+  
   useEffect(() => {
     const fetchData = async () => {
       if (!products.length) {
