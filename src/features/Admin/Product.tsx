@@ -35,7 +35,7 @@ export function Product() {
     pageIndex: 0,
     pageSize: 10,
   })
-  const [isDel,setIsDel]=useState(false)
+  const [isDel,setIsDel]=useState(false)  
   const [open, setOpen] = useState(false)
   const settingRef = useRef<HTMLButtonElement>(null)
 

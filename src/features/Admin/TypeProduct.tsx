@@ -15,6 +15,7 @@ import {
 import queryString from "query-string"
 import { useLocation, useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
+import { useSnackbar } from "notistack"
 
 const TypeProduct = () => {
   const location = useLocation() // Get the current location object
@@ -36,10 +37,28 @@ const TypeProduct = () => {
   })
   const [open, setOpen] = useState(false)
   const settingRef = useRef<HTMLButtonElement>(null)
+  const [isDel, setIsDel] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
+
+  const handleSelectRows = (row: any) => {
+    console.log(row)
+    const idData = row.map((item: any) => item.original.id)
+    ;(async () => {
+      try {
+        await adminApi.deleteType(idData)
+        enqueueSnackbar("Xóa thành công", { variant: "success" })
+        setIsDel((item) => !item)
+      } catch (error) {
+        enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
+        console.log(error)
+      }
+    })()
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       if (!products.length) {
@@ -77,13 +96,12 @@ const TypeProduct = () => {
   }, [
     columnFilters,
     globalFilter,
+    isDel,
     pagination.pageIndex,
     pagination.pageSize,
     sorting,
   ])
-  const handleSelectRows = (row: any) => {
-    console.log(row)
-  }
+
   const columns = useMemo<MRT_ColumnDef<TypeItem>[]>(
     () => [
       { accessorKey: "id", header: "ID" },

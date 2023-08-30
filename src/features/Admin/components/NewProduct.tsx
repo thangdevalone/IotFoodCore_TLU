@@ -61,7 +61,7 @@ export interface NewProductProps {}
 function NewProduct(props: NewProductProps) {
   const [tabs, setTabs] = React.useState(0)
   const [price, setPrice] = React.useState<string>("")
-  
+
   const [resPick, setResPick] = React.useState<searchRoot | null>(null)
   const [typePick, setTypePick] = React.useState<searchRoot | null>(null)
   const [file, setFile] = React.useState<File | null>()
@@ -69,13 +69,14 @@ function NewProduct(props: NewProductProps) {
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const [nameFood, setNameFood] = React.useState<string>("")
   const [detail, setDetail] = React.useState<string>("")
-  const {enqueueSnackbar}=useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue)
   }
 
   const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
+ 
     const sanitizedValue = rawValue.replace(/[^\d,]/g, "")
 
     // Convert comma-separated string to a numeric value
@@ -108,18 +109,20 @@ function NewProduct(props: NewProductProps) {
     async function uploadImage() {
       try {
         if (file) {
-          console.log(nameFood,price,typePick,resPick,detail)
           await adminApi.addFood(nameFood,parseInt(price.replace(/\D/g, "")),detail,file,Number(typePick?.id),Number(resPick?.id))
-          enqueueSnackbar("Tạo sản phẩm thành công",{variant:"success"})
+          enqueueSnackbar("Thêm mới sản phẩm thành công", { variant: "success" })
         }
       } catch (error) {
         console.log(error)
-        enqueueSnackbar("Có lỗi xảy ra vui lòng thử lại",{variant:"error"})
+        enqueueSnackbar("Có lỗi xảy ra vui lòng thử lại", { variant: "error" })
       }
     }
     uploadImage()
   }
-  const handleChangeInput=(value:string,callback:(newVal:string)=>void)=>{
+  const handleChangeInput = (
+    value: string,
+    callback: (newVal: string) => void,
+  ) => {
     callback(value)
   }
   const navigate = useNavigate()
@@ -159,10 +162,11 @@ function NewProduct(props: NewProductProps) {
           p: "10px",
           height: "calc(100% - 51px)",
         }}
+        className="overflow-x-hidden overflow-y-auto"
       >
         <Grid sx={{ width: "100%", height: "100%" }} container spacing={2}>
           <Grid item xs={8}>
-            <Box sx={{ width: "100%", height: "100%" }}>
+            <Box sx={{ width: "100%", height: "100%" }} className="mb-4">
               <p className="font-medium text-lg mb-2">Thêm sản phẩm mới</p>
               <div className="border   bg-white rounded-md border-gray-300 p-[15px]">
                 <div className="flex w-[100%]">
@@ -175,13 +179,14 @@ function NewProduct(props: NewProductProps) {
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
                       placeholder="VD: Trà sữa trân trâu đường đen"
                       value={nameFood}
-                      onChange={(e:React.ChangeEvent<HTMLInputElement>)=>handleChangeInput(e.target.value,setNameFood)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChangeInput(e.target.value, setNameFood)
+                      }
                     />
                     <div className="flex items-center mb-4 mt-3">
                       <input
                         id="state-product"
                         type="checkbox"
-                       
                         defaultChecked={true}
                         className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded"
                       />
@@ -340,7 +345,9 @@ function NewProduct(props: NewProductProps) {
                             id="message"
                             rows={4}
                             value={detail}
-                            onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>handleChangeInput(e.target.value,setDetail)}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLTextAreaElement>,
+                            ) => handleChangeInput(e.target.value, setDetail)}
                             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Viết mô tả về sản phẩm..."
                           ></textarea>
@@ -363,7 +370,7 @@ function NewProduct(props: NewProductProps) {
               elevation={1}
               sx={{
                 width: "100%",
-                height: "100%",
+                height: "95%",
                 borderRadius: "8px",
                 p: "10px",
               }}
