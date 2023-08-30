@@ -43,21 +43,39 @@ const adminApi = {
       },
     })
   },
-  addFood(name:string,price:number,detail:string,imgFood:File,typeFoodEntityId:number,restaurantEntityId:number){
-    const data=new FormData()
-    data.append("foodName",name)
-    data.append("price",price.toString())
-    data.append("detail",detail)
-    data.append("imgFood",imgFood)
-    data.append("typeFoodEntityId",typeFoodEntityId.toString())
-    data.append("restaurantEntityId",restaurantEntityId.toString())
-    const url="ADMIN/add-food"
-    return axiosClient.post(url,data,{
+  addFood(
+    name: string,
+    price: number,
+    detail: string,
+    imgFood: File,
+    typeFoodEntityId: number,
+    restaurantEntityId: number,
+  ) {
+    const data = new FormData()
+    data.append("foodName", name)
+    data.append("price", price.toString())
+    data.append("detail", detail)
+    data.append("imgFood", imgFood)
+    data.append("typeFoodEntityId", typeFoodEntityId.toString())
+    data.append("restaurantEntityId", restaurantEntityId.toString())
+    const url = "ADMIN/add-food"
+    return axiosClient.post(url, data, {
       headers: {
-        'Content-Type': 'multipart/form-data', // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
+        "Content-Type": "multipart/form-data", // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
       },
     })
-  }
+  },
+  addType(imgType: File, nameType: string) {
+    const data = new FormData()
+    data.append("imgType", imgType)
+    data.append("nameType", nameType)
+    const url = "ADMIN/add-type"
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  },
 }
 
 export default adminApi

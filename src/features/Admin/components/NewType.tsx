@@ -1,8 +1,4 @@
-import cloudUploadApi from "@/api/cloudUploadApi"
-import { AutoField } from "@/components/Common"
-import { CLOUD_NAME } from "@/constants"
-import { searchRoot } from "@/models"
-import { handlePrice } from "@/utils"
+import adminApi from "@/api/adminApi"
 import {
   ArrowBackIosNew,
   CloudUpload,
@@ -19,10 +15,8 @@ import {
   Input,
   Paper,
   Stack,
-  Tab,
-  Tabs,
-  Typography,
 } from "@mui/material"
+import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -30,8 +24,10 @@ export interface NewProductProps {}
 
 function NewType(props: NewProductProps) {
   const [file, setFile] = React.useState<File | null>()
+  const [type, setType] = React.useState<string>("")
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleImageClick = () => {
     if (imgRef.current !== null && !imagePreview) {
@@ -55,16 +51,12 @@ function NewType(props: NewProductProps) {
     async function uploadImage() {
       try {
         if (file) {
-          const data = new FormData()
-          data.append("file", file)
-          data.append("upload_preset", "thangdev_food")
-          data.append("cloud_name", CLOUD_NAME)
-          console.log(data.values())
-          const res = await cloudUploadApi.uploadImage(data)
-          console.log(res)
+          const response = await adminApi.addType(file, type)
+          enqueueSnackbar("Tạo loại thành công", { variant: "success" })
         }
       } catch (error) {
         console.log(error)
+        enqueueSnackbar("Tạo loại thất bại", { variant: "error" })
       }
     }
     uploadImage()
@@ -102,86 +94,112 @@ function NewType(props: NewProductProps) {
       </Stack>
       <Box
         sx={{
-          width: "100%",
-          height: "100%",
           background: "rgb(240, 242, 245)",
           p: "10px",
+          height: "calc(100% - 51px)",
         }}
+        className="overflow-x-hidden overflow-y-auto"
       >
-        <p className="font-medium text-lg mb-2">Thêm loại sản phẩm mới</p>
-        <div className="border   bg-white rounded-md border-gray-300 p-[15px]">
-          <div className="flex w-[100%]">
-            <div className="flex-1 mr-[20px]">
-              <label className="font-medium text-md block">
-                Tên loại sản phẩm
-              </label>
-              <Input
-                fullWidth
-                sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                placeholder="VD: Bún, đồ uống..."
-              />
-            </div>
-            <div
-              onClick={handleImageClick}
-              className="w-[150px] relative h-[150px] cursor-pointer border"
+        <Grid sx={{ width: "100%", height: "100%" }} container spacing={2}>
+          <Grid item xs={8}>
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                background: "rgb(240, 242, 245)",
+                p: "10px",
+              }}
             >
-              {imagePreview ? (
-                <>
-                  <Backdrop
-                    sx={{ zIndex: "100" }}
-                    open={openBackDrop}
-                    onClick={() => setOpenBackDrop(false)}
-                  >
-                    <img
-                      className="w-[400px] object-contain"
-                      src={imagePreview}
-                      alt="Preview"
+              <p className="font-medium text-lg mb-2">Thêm loại sản phẩm mới</p>
+              <div className="border   bg-white rounded-md border-gray-300 p-[15px]">
+                <div className="flex w-[100%]">
+                  <div className="flex-1 mr-[20px]">
+                    <label className="font-medium text-md block">
+                      Tên loại sản phẩm
+                    </label>
+                    <Input
+                      fullWidth
+                      sx={{ height: "50px", fontSize: "25px", p: 0 }}
+                      placeholder="VD: Bún, đồ uống..."
+                      onChange={(e) => setType(e.target.value)}
                     />
-                  </Backdrop>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      height: "100%",
-                      "&:hover .tool-img": {
-                        display: "flex !important",
-                      },
-                    }}
+                  </div>
+                  <div
+                    onClick={handleImageClick}
+                    className="w-[150px] relative h-[150px] cursor-pointer border"
                   >
-                    <img
-                      className="w-[100%] h-[100%] object-cover"
-                      src={imagePreview}
-                      alt="Preview"
-                    />
-                    <div className="absolute tool-img top-0 left-0 hidden items-center justify-center w-[100%] h-[100%] bg-[rgba(0,0,0,0.5)] z-10">
-                      <IconButton onClick={() => setOpenBackDrop(true)}>
-                        <Visibility htmlColor="white" />
-                      </IconButton>
-                      <IconButton onClick={() => setImagePreview(null)}>
-                        <Delete htmlColor="white" />
-                      </IconButton>
-                    </div>
-                  </Box>
-                </>
-              ) : (
-                <img
-                  className="w-[100%] h-[100%] object-cover"
-                  src="/assets/camera_add.png"
-                  alt="Add Image"
-                />
-              )}
-              <input
-                ref={imgRef}
-                hidden={true}
-                type="file"
-                id="imageInput"
-                onChange={handleImageChange}
-                name="imageInput"
-                accept="image/png, image/jpeg"
-              ></input>
-            </div>
-          </div>
-          <div></div>
-        </div>
+                    {imagePreview ? (
+                      <>
+                        <Backdrop
+                          sx={{ zIndex: "100" }}
+                          open={openBackDrop}
+                          onClick={() => setOpenBackDrop(false)}
+                        >
+                          <img
+                            className="w-[400px] object-contain"
+                            src={imagePreview}
+                            alt="Preview"
+                          />
+                        </Backdrop>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            "&:hover .tool-img": {
+                              display: "flex !important",
+                            },
+                          }}
+                        >
+                          <img
+                            className="w-[100%] h-[100%] object-cover"
+                            src={imagePreview}
+                            alt="Preview"
+                          />
+                          <div className="absolute tool-img top-0 left-0 hidden items-center justify-center w-[100%] h-[100%] bg-[rgba(0,0,0,0.5)] z-10">
+                            <IconButton onClick={() => setOpenBackDrop(true)}>
+                              <Visibility htmlColor="white" />
+                            </IconButton>
+                            <IconButton onClick={() => setImagePreview(null)}>
+                              <Delete htmlColor="white" />
+                            </IconButton>
+                          </div>
+                        </Box>
+                      </>
+                    ) : (
+                      <img
+                        className="w-[100%] h-[100%] object-cover"
+                        src="/assets/camera_add.png"
+                        alt="Add Image"
+                      />
+                    )}
+                    <input
+                      ref={imgRef}
+                      hidden={true}
+                      type="file"
+                      id="imageInput"
+                      onChange={handleImageChange}
+                      name="imageInput"
+                      accept="image/png, image/jpeg"
+                    ></input>
+                  </div>
+                </div>
+              </div>
+            </Box>
+          </Grid>
+          <Grid item xs={4}>
+            <Paper
+              elevation={1}
+              sx={{
+                width: "100%",
+                height: "95%",
+                borderRadius: "8px",
+                p: "10px",
+              }}
+            >
+              Logcat
+            </Paper>
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   )
