@@ -3,20 +3,15 @@ import { Paper, InputBase, IconButton } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { TypeChatConversationData } from "@/models";
 import Picker from 'emoji-picker-react'
 
 export interface MessageInputProps {
-    setChatBoxsDisplay: React.Dispatch<React.SetStateAction<TypeChatConversationData[]>>
-    chatBox: TypeChatConversationData
-    chatBoxsDisplay: TypeChatConversationData[]
+  
 }
 type ExtendedFile = File & { preview: string };
-const ariaLabel = { 'aria-label': 'description' };
 export function MessageInput(props: MessageInputProps) {
-    const { setChatBoxsDisplay, chatBox, chatBoxsDisplay } = props
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-    const [image, setImage] = useState<ExtendedFile | undefined>(undefined);
+    const [image, setImage] = useState<File | undefined>(undefined);
     const [message, setMessage] = useState('')
     let emojiPickerRef = useRef<HTMLDivElement>(null);
     let imageInputRef = useRef<HTMLInputElement>(null);
@@ -35,18 +30,6 @@ export function MessageInput(props: MessageInputProps) {
     }, [])
 
     const handleSendMessage = () => {
-        let id = new Date().toString()
-        let newChatBox = {
-            ...chatBox, messageList: [...chatBox.messageList, {
-                idMessage: id,
-                message: message,
-                sender: "idSender",
-                type: "text",
-            }]
-        }
-        let newChatBoxsDisplay = chatBoxsDisplay.map((chatBox: TypeChatConversationData) => chatBox.id === newChatBox.id ? newChatBox : chatBox)
-        setChatBoxsDisplay(newChatBoxsDisplay)
-        setMessage('')
     }
 
     const handleEnmojiClick = (e: any) => {
@@ -56,24 +39,12 @@ export function MessageInput(props: MessageInputProps) {
     }
 
     const handleImageChange = (e: any) => {
-        const file = e.target.files[0] as ExtendedFile;
-        if (file) {
-            file.preview = URL.createObjectURL(file);
-            let id = new Date().toString()
-            let newChatBox = {
-                ...chatBox, messageList: [...chatBox.messageList, {
-                    idMessage: id,
-                    message: file.preview,
-                    sender: "idSender",
-                    type: "image",
-                }]
-            }
-            let newChatBoxsDisplay = chatBoxsDisplay.map((chatBox: TypeChatConversationData) => chatBox.id === newChatBox.id ? newChatBox : chatBox)
-            setChatBoxsDisplay(newChatBoxsDisplay)
-        }
+       
 
     }
-
+    const handleTypeInput=(e:React.ChangeEvent<HTMLInputElement>)=>{
+        console.log(e.target.value)
+    }
     return (
         <div className="absolute bottom-0 flex justify-between py-3 ">
             <IconButton type="button" sx={{ p: '5px' }} onClick={() => { imageInputRef.current?.click() }}>
@@ -86,9 +57,8 @@ export function MessageInput(props: MessageInputProps) {
             >
                 <InputBase sx={{ ml: 1, flex: 1, width: "180px" }}
                     placeholder="Aa"
-                    onKeyPress={(e) => { if (e.key == "Enter") { handleSendMessage() } }}
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={handleTypeInput}
                 />
 
                 {showEmojiPicker && <div ref={emojiPickerRef}><Picker onEmojiClick={handleEnmojiClick} /></div>}

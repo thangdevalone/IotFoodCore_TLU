@@ -1,6 +1,7 @@
 export interface User {
   role: Role[]
   token: string
+  id:number
   std: string
   accountName: string
   imgUser: string
@@ -9,5 +10,6 @@ export interface User {
 
 export interface Role {
   id: number
-  authority: string
+  authority: string,
+  status:boolean | null
 }

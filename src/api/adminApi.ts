@@ -19,6 +19,21 @@ const adminApi = {
     const url = `ADMIN/paging-type-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  addFood(name:string,price:number,detail:string,imgFood:File,typeFoodEntityId:number,restaurantEntityId:number){
+    const data=new FormData()
+    data.append("foodName",name)
+    data.append("price",price.toString())
+    data.append("detail",detail)
+    data.append("imgFood",imgFood)
+    data.append("typeFoodEntityId",typeFoodEntityId.toString())
+    data.append("restaurantEntityId",restaurantEntityId.toString())
+    const url="ADMIN/add-food"
+    return axiosClient.post(url,data,{
+      headers: {
+        'Content-Type': 'multipart/form-data', // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
+      },
+    })
+  }
 }
 
 export default adminApi

@@ -61,6 +61,7 @@ code {
   --color-df-3: white;
   --color-tx-1: #0f164c;
   --color-tx-2: #999dc5;
+  --color-bg-chat:rgb(233, 241, 254);
 }
 
 .container-base {

@@ -13,7 +13,8 @@ import GetAllStore from "./features/Store"
 import DetailStore from "./features/DetailStore"
 import DetailFood from "./features/DetailFood"
 import SearchList from "./features/SearchFood/components/SearchList"
-
+import { Box } from "@mui/material"
+import Chat from "./features/Chat"
 
 function App() {
   const theme = useTheme()
@@ -21,7 +22,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Routes>
         <Route element={<LoadServer />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<><Home /><Chat/></>} />
           <Route element={<ProtectAuth />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -30,21 +31,20 @@ function App() {
           <Route element={<ProtectAdmin />}>
             <Route path="/admin/*" element={<Admin />} />
           </Route>
-            <Route path="/" element={<Home />} />
-            <Route path="/store" element={<Store />} >
-                <Route path="get-all-store" element={<GetAllStore />} />
-                <Route path="detail-store/:idStore" element={<DetailStore />} />
-                <Route path="detail-food/:idFood" element={<DetailFood />} />
-            </Route>
-            <Route path="/search" element={<Store />} >
-                <Route path=":searchParams" element={<SearchList />} />
-                
-            </Route>
-            <Route element={<ProtectAuth />}>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/auth/the-sv" element={<AuthCard />} />
-            </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/store" element={<Store />}>
+            <Route path="get-all-store" element={<GetAllStore />} />
+            <Route path="detail-store/:idStore" element={<DetailStore />} />
+            <Route path="detail-food/:idFood" element={<DetailFood />} />
+          </Route>
+          <Route path="/search" element={<Store />}>
+            <Route path=":searchParams" element={<SearchList />} />
+          </Route>
+          <Route element={<ProtectAuth />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/auth/the-sv" element={<AuthCard />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
