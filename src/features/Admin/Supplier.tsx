@@ -13,6 +13,8 @@ import {
 import { useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
 import { formatCurrencyKM } from "@/utils"
+import adminApi from "@/api/adminApi"
+import { useSnackbar } from "notistack"
 
 export function Supplier() {
   const navigate = useNavigate()
@@ -27,6 +29,9 @@ export function Supplier() {
   const [globalFilter, setGlobalFilter] = useState("")
   const [sorting, setSorting] = useState<MRT_SortingState>([])
   const [open, setOpen] = useState(false)
+  const [isDel, setIsDel] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+
   const settingRef = useRef<HTMLButtonElement>(null)
 
   const handleToggle = () => {
@@ -45,12 +50,24 @@ export function Supplier() {
     setIsRefetching(false)
   }
 
+  const handleSelectRows = (row: any) => {
+    const idData = row.map((item: any) => item.original.id)
+    ;(async () => {
+      try {
+        await adminApi.deleteStore(idData)
+        enqueueSnackbar("Xóa thành công", { variant: "success" })
+        setIsDel((item) => !item)
+      } catch (error) {
+        enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
+        console.log(error)
+      }
+    })()
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
-  const handleSelectRows = (row: any) => {
-    console.log(row)
-  }
+
   const columns = useMemo<MRT_ColumnDef<TypeRestaurant>[]>(
     () => [
       { accessorKey: "id", header: "ID" },

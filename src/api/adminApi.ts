@@ -76,6 +76,18 @@ const adminApi = {
       },
     })
   },
+  deleteFood(foodArray: Array<number>) {
+    const url = "ADMIN/delete-food"
+    return axiosClient.post(url, foodArray)
+  },
+  deleteType(typeArray: Array<number>) {
+    const url = "ADMIN/delete-type"
+    return axiosClient.post(url, typeArray)
+  },
+  deleteStore(storeArray: Array<number>) {
+    const url = "ADMIN/delete-res"
+    return axiosClient.post(url, storeArray)
+  },
 }
 
 export default adminApi

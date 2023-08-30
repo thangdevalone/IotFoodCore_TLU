@@ -110,7 +110,7 @@ function NewProduct(props: NewProductProps) {
       try {
         if (file) {
           console.log(nameFood, price, typePick, resPick, detail)
-          const res = await adminApi.addFood(
+          await adminApi.addFood(
             nameFood,
             parseInt(price.replace(/\D/g, "")),
             detail,
@@ -118,7 +118,6 @@ function NewProduct(props: NewProductProps) {
             Number(typePick?.id),
             Number(resPick?.id),
           )
-          console.log(res)
         }
       } catch (error) {
         console.log(error)

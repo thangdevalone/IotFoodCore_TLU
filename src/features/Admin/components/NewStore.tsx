@@ -72,8 +72,7 @@ function NewStore(props: NewProductProps) {
     async function uploadImage() {
       try {
         if (file) {
-          console.log(file)
-          const response = await adminApi.addRestaurant(
+          await adminApi.addRestaurant(
             restaurantName,
             address,
             0,
