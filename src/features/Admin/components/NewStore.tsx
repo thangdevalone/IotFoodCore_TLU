@@ -233,7 +233,7 @@ function NewStore(props: NewProductProps) {
                       <Box sx={{ padding: "20px 15px" }}>
                         <Box className="flex flex-col gap-5">
                           <Grid container spacing={2}>
-                            <Grid item xs={4}>
+                            <Grid item xs={6}>
                               <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                   <label

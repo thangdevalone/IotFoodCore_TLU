@@ -8,6 +8,11 @@ export interface ProductRoot {
   data: ProductItem[]
 }
 
+export interface RestaurantRoot {
+  totalRow: number
+  responList: TypeRestaurant[]
+}
+
 export interface ProductItem {
   id: number
   foodName: string
@@ -47,4 +52,6 @@ export interface TypeRestaurant {
   phoneNumber: string
   address: string
   imgRes: string
+  time: null
+  detail: string
 }
