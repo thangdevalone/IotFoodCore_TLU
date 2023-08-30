@@ -35,7 +35,6 @@ export function Supplier() {
 
   const fetchData = async () => {
     const res = await foodsApis.getRecommendRestaurants()
-    console.log(res)
     if (res.status) {
       setRestaurant(res.data)
     }

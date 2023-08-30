@@ -1,8 +1,4 @@
-import cloudUploadApi from "@/api/cloudUploadApi"
-import { AutoField } from "@/components/Common"
-import { CLOUD_NAME } from "@/constants"
-import { searchRoot } from "@/models"
-import { handlePrice } from "@/utils"
+import adminApi from "@/api/adminApi"
 import {
   ArrowBackIosNew,
   CloudUpload,
@@ -17,12 +13,11 @@ import {
   Grid,
   IconButton,
   Input,
-  Paper,
   Stack,
   Tab,
   Tabs,
-  Typography,
 } from "@mui/material"
+import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 interface TabPanelProps {
@@ -31,25 +26,6 @@ interface TabPanelProps {
   value: number
 }
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -61,8 +37,14 @@ export interface NewProductProps {}
 function NewStore(props: NewProductProps) {
   const [value, setValue] = React.useState(0)
   const [file, setFile] = React.useState<File | null>()
+  const [phone, setPhone] = React.useState<string>("")
+  const [address, setAddress] = React.useState<string>("")
+  const [restaurantName, setRestaurantName] = React.useState<string>("")
+  const [detail, setDetail] = React.useState<string>("")
+  const [distance, setDistance] = React.useState<number>(0)
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
+  const { enqueueSnackbar } = useSnackbar()
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
@@ -85,24 +67,42 @@ function NewStore(props: NewProductProps) {
       reader.readAsDataURL(selectedImage)
     }
   }
-  const handlePushProduct = () => {
+  const handlePushProduct = async () => {
     async function uploadImage() {
       try {
         if (file) {
-          const data = new FormData()
-          data.append("file", file)
-          data.append("upload_preset", "thangdev_food")
-          data.append("cloud_name", CLOUD_NAME)
-          console.log(data.values())
-          const res = await cloudUploadApi.uploadImage(data)
-          console.log(res)
+          console.log(file)
+          const response = await adminApi.addRestaurant(
+            restaurantName,
+            address,
+            0,
+            distance,
+            detail,
+            phone,
+            file,
+          )
+          enqueueSnackbar("Tạo cửa hàng thành công", { variant: "success" })
         }
       } catch (error) {
         console.log(error)
+        enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
       }
     }
     uploadImage()
   }
+
+  const handlePhone = (value: string) => {
+    setPhone(value)
+  }
+
+  const handleAddress = (value: string) => {
+    setAddress(value)
+  }
+
+  const handleDistance = (value: number) => {
+    setDistance(value)
+  }
+
   const navigate = useNavigate()
   return (
     <Box sx={{ height: "100%" }}>
@@ -140,6 +140,7 @@ function NewStore(props: NewProductProps) {
           p: "10px",
           height: "calc(100% - 51px)",
         }}
+        className="overflow-x-hidden overflow-y-auto "
       >
         <Box sx={{ width: "100%", height: "100%" }}>
           <p className="font-medium text-lg mb-2">Thêm cửa hàng mới</p>
@@ -153,6 +154,7 @@ function NewStore(props: NewProductProps) {
                   fullWidth
                   sx={{ height: "50px", fontSize: "25px", p: 0 }}
                   placeholder="VD: Nhà hàng Hải Đăng,..."
+                  onChange={(e) => setRestaurantName(e.target.value)}
                 />
               </div>
               <div
@@ -228,50 +230,75 @@ function NewStore(props: NewProductProps) {
                 {value === 0 && (
                   <Box sx={{ padding: "20px 15px" }}>
                     <Box className="flex flex-col gap-5">
-                      <div className="flex gap-3">
-                        <label className="font-medium flex-1 text-md block">
-                          Tên cửa hàng
-                        </label>
-                        <Input
-                          fullWidth
-                          sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                          placeholder="VD: Nhà hàng Hải Đăng,..."
-                          className="flex-3"
-                        />
-                      </div>
-                      <div className="flex gap-3">
-                        <label className="font-medium flex-1 text-md block">
-                          Địa chỉ quán
-                        </label>
-                        <Input
-                          fullWidth
-                          sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                          placeholder="VD: Lỗ giao việt hùng,..."
-                          className="flex-3"
-                        />
-                      </div>
-                      <div className="flex gap-3">
-                        <label className="font-medium text-md flex-1 block">
-                          Khoảng cách từ trường đến quán
-                        </label>
-                        <Input
-                          fullWidth
-                          sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                          placeholder="VD: 1km, 3km, ..."
-                          className="flex-3"
-                        />
-                      </div>
-                      <div className="flex gap-3">
-                        <label className="font-medium text-md flex-1 block">
-                          Số điện thoại của quá
-                        </label>
-                        <Input
-                          fullWidth
-                          sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                          placeholder="VD: 0335389999,..."
-                          className="flex-3"
-                        />
-                      </div>
+                      <Grid container spacing={2}>
+                        <Grid item xs={4}>
+                          <Grid container spacing={2}>
+                            <Grid item xs={4}>
+                              <label
+                                htmlFor="type-food-select"
+                                className="font-medium "
+                              >
+                                Địa chỉ quán
+                              </label>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <input
+                                id="name-food-select"
+                                value={address}
+                                type="string"
+                                autoComplete="off"
+                                onChange={(e) => handleAddress(e.target.value)}
+                                className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                              />
+                            </Grid>
+                            <Grid item xs={4}>
+                              <label
+                                htmlFor="type-food-select"
+                                className="font-medium "
+                              >
+                                Số điện thoại
+                              </label>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <input
+                                id="name-food-select"
+                                value={phone}
+                                type="string"
+                                autoComplete="off"
+                                onChange={(e) => handlePhone(e.target.value)}
+                                className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Grid container spacing={0}>
+                            <Grid item xs={4}>
+                              <label
+                                htmlFor="type-food-select"
+                                className="font-medium "
+                              >
+                                Khoảng cách
+                              </label>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <div className="flex">
+                                <input
+                                  id="name-food-select"
+                                  value={distance}
+                                  type="string"
+                                  autoComplete="off"
+                                  onChange={(e) =>
+                                    handleDistance(+e.target.value)
+                                  }
+                                  className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                />
+                                <span>km</span>
+                              </div>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
                     </Box>
                     <Box sx={{ mt: "30px" }}>
                       <label
@@ -285,6 +312,7 @@ function NewStore(props: NewProductProps) {
                         rows={4}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Viết mô tả về cửa hàng của Hải Đăng Store..."
+                        onChange={(e) => setDetail(e.target.value)}
                       ></textarea>
                     </Box>
                   </Box>

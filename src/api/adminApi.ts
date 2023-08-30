@@ -19,6 +19,30 @@ const adminApi = {
     const url = `ADMIN/paging-type-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  addRestaurant(
+    restaurantName: string,
+    address: string,
+    quantitySold: number,
+    distance: number,
+    detail: string,
+    phoneNumber: string,
+    imgRes: File,
+  ) {
+    const data = new FormData()
+    data.append("restaurantName", restaurantName)
+    data.append("address", address)
+    data.append("quantitySold", String(quantitySold))
+    data.append("distance", String(distance))
+    data.append("detail", detail)
+    data.append("phoneNumber", phoneNumber)
+    data.append("imgRes", imgRes)
+    const url = "ADMIN/add-res"
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
+      },
+    })
+  },
 }
 
 export default adminApi
