@@ -124,7 +124,7 @@ const TypeProduct = () => {
         manualFiltering
         manualPagination
         muiTableBodyRowProps={({ row }) => ({
-          onClick: () => console.log(row),
+          onClick: () => navigate(`/admin/update?form=type/${row.original.id}`),
           sx: { cursor: "pointer" },
         })}
         manualSorting

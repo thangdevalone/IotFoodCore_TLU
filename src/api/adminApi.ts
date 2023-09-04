@@ -80,6 +80,32 @@ const adminApi = {
       },
     })
   },
+  updateSupplier(
+    id: number,
+    restaurantName: string,
+    address: string,
+    distance: number,
+    detail: string,
+    phoneNumber: string,
+    imgRes: File | null,
+  ) {
+    const data = new FormData()
+    data.append("id", String(id))
+    data.append("restaurantName", restaurantName)
+    data.append("address", address)
+    data.append("distance", String(distance))
+    data.append("detail", detail)
+    data.append("phoneNumber", phoneNumber)
+    if (imgRes !== null) {
+      data.append("imgRes", imgRes)
+    }
+    const url = "ADMIN/update-res"
+    return axiosClient.put(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  },
   deleteFood(foodArray: Array<number>) {
     const url = "ADMIN/delete-food"
     return axiosClient.post(url, foodArray)

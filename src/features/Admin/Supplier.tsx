@@ -126,7 +126,8 @@ export function Supplier() {
         enableRowSelection
         manualFiltering
         muiTableBodyRowProps={({ row }) => ({
-          onClick: () => console.log(row),
+          onClick: () =>
+            navigate(`/admin/update?form=supplier/${row.original.id}`),
           sx: { cursor: "pointer" },
         })}
         manualSorting
