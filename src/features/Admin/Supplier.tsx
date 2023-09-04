@@ -1,6 +1,6 @@
 import foodsApis from "@/api/foodsApi"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { TypeRestaurant } from "@/models"
+import { RestaurantRoot, TypeRestaurant } from "@/models"
 import { Delete, Settings } from "@mui/icons-material"
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material"
 import {
@@ -13,6 +13,9 @@ import {
 import { useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
 import { formatCurrencyKM } from "@/utils"
+import adminApi from "@/api/adminApi"
+import { useSnackbar } from "notistack"
+import History from "@/Router/History"
 
 export function Supplier() {
   const navigate = useNavigate()
@@ -27,30 +30,74 @@ export function Supplier() {
   const [globalFilter, setGlobalFilter] = useState("")
   const [sorting, setSorting] = useState<MRT_SortingState>([])
   const [open, setOpen] = useState(false)
+  const [isDel, setIsDel] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
   const settingRef = useRef<HTMLButtonElement>(null)
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
 
-  const fetchData = async () => {
-    const res = await foodsApis.getRecommendRestaurants()
-    if (res.status) {
-      setRestaurant(res.data)
-    }
-
-    setRowCount(restaurant.length)
-    setIsError(false)
-    setIsLoading(false)
-    setIsRefetching(false)
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
   const handleSelectRows = (row: any) => {
-    console.log(row)
+    const idData = row.map((item: any) => item.original.id)
+    ;(async () => {
+      try {
+        await adminApi.deleteStore(idData)
+        enqueueSnackbar("Xóa thành công", { variant: "success" })
+        setIsDel((item) => !item)
+      } catch (error) {
+        enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
+        console.log(error)
+      }
+    })()
   }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!restaurant.length) {
+        setIsLoading(true)
+      } else {
+        setIsRefetching(true)
+      }
+      const updatedSearchParams = new URLSearchParams(location.search)
+      updatedSearchParams.set("page", `${pagination.pageIndex + 1}`)
+      updatedSearchParams.set("size", `${pagination.pageSize}`)
+      updatedSearchParams.set("filters", JSON.stringify(columnFilters ?? []))
+      updatedSearchParams.set("globalFilter", globalFilter ?? "")
+      updatedSearchParams.set("sorting", JSON.stringify(sorting ?? []))
+
+      // Update the location object with the new search parameters
+      History.push({ search: updatedSearchParams.toString() })
+      try {
+        const res = await adminApi.getAllResFoods(pagination)
+        const myRestaurant = res.data as RestaurantRoot
+        setRestaurant(myRestaurant.responList)
+        setRowCount(myRestaurant.totalRow)
+      } catch (error) {
+        setIsError(true)
+        console.error(error)
+        return
+      }
+
+      setIsError(false)
+      setIsLoading(false)
+      setIsRefetching(false)
+    }
+    fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    columnFilters,
+    globalFilter,
+    isDel,
+    pagination.pageIndex,
+    pagination.pageSize,
+    sorting,
+  ])
+
   const columns = useMemo<MRT_ColumnDef<TypeRestaurant>[]>(
     () => [
       { accessorKey: "id", header: "ID" },

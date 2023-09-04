@@ -1,7 +1,5 @@
 import adminApi from "@/api/adminApi"
-
 import { useEffect, useMemo, useRef, useState } from "react"
-
 import History from "@/Router/History"
 import { ProductItem, ProductRoot } from "@/models"
 import { formatCurrencyVND } from "@/utils"
@@ -17,6 +15,7 @@ import {
 import queryString from "query-string"
 import { useLocation, useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
+import { enqueueSnackbar, useSnackbar } from "notistack"
 
 export function Product() {
   const location = useLocation() // Get the current location object
@@ -27,7 +26,7 @@ export function Product() {
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
   const [rowCount, setRowCount] = useState(0)
-
+  const {enqueueSnackbar} = useSnackbar()
   //table state
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState("")
@@ -36,12 +35,28 @@ export function Product() {
     pageIndex: 0,
     pageSize: 10,
   })
+  const [isDel,setIsDel]=useState(false)  
   const [open, setOpen] = useState(false)
   const settingRef = useRef<HTMLButtonElement>(null)
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
+  const handleSelectRows = (row: any) => {
+    console.log(row);
+    const idData=row.map((item:any)=>item.original.id);
+    (async ()=>{
+      try {
+        await adminApi.deleteFood(idData)
+        enqueueSnackbar("Xóa thành công",{variant:"success"})
+        setIsDel((item)=>!item)
+      } catch (error) {
+        enqueueSnackbar("Có lỗi xảy ra thử lại sau",{variant:"error"})
+        console.log(error)
+      }
+    })()
+  }
+  
   useEffect(() => {
     const fetchData = async () => {
       if (!products.length) {
@@ -60,7 +75,6 @@ export function Product() {
       History.push({ search: updatedSearchParams.toString() })
       try {
         const res = await adminApi.getAllProducts(pagination)
-        console.log(res)
         const myProducts = res.data as ProductRoot
         setProducts(myProducts.data)
         setRowCount(myProducts.totalRow)
@@ -79,13 +93,12 @@ export function Product() {
   }, [
     columnFilters,
     globalFilter,
+    isDel,
     pagination.pageIndex,
     pagination.pageSize,
     sorting,
   ])
-  const handleSelectRows = (row: any) => {
-    console.log(row)
-  }
+  
   const columns = useMemo<MRT_ColumnDef<ProductItem>[]>(
     () => [
       { accessorKey: "id", header: "ID" },

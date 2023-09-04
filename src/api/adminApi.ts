@@ -19,6 +19,10 @@ const adminApi = {
     const url = `ADMIN/paging-type-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  getAllResFoods(page: PageConfig) {
+    const url = `ADMIN/paging-res?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
+    return axiosClient.post(url)
+  },
   addRestaurant(
     restaurantName: string,
     address: string,
@@ -55,7 +59,7 @@ const adminApi = {
     const url="ADMIN/add-food"
     return axiosClient.post(url,data,{
       headers: {
-        'Content-Type': 'multipart/form-data', // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
+        "Content-Type": "multipart/form-data", // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
       },
     })
   },
@@ -84,6 +88,29 @@ const adminApi = {
     })
   },
 
+  addType(imgType: File, nameType: string) {
+    const data = new FormData()
+    data.append("imgType", imgType)
+    data.append("nameType", nameType)
+    const url = "ADMIN/add-type"
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  },
+  deleteFood(foodArray: Array<number>) {
+    const url = "ADMIN/delete-food"
+    return axiosClient.post(url, foodArray)
+  },
+  deleteType(typeArray: Array<number>) {
+    const url = "ADMIN/delete-type"
+    return axiosClient.post(url, typeArray)
+  },
+  deleteStore(storeArray: Array<number>) {
+    const url = "ADMIN/delete-res"
+    return axiosClient.post(url, storeArray)
+  },
 }
 
 export default adminApi
