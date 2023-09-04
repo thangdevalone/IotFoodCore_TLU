@@ -10,6 +10,7 @@ import {
   Backdrop,
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -27,6 +28,7 @@ function NewType(props: NewProductProps) {
   const [type, setType] = React.useState<string>("")
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
+  const [loadding, setLoadding] = React.useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleImageClick = () => {
@@ -49,13 +51,18 @@ function NewType(props: NewProductProps) {
   }
   const handlePushProduct = () => {
     async function uploadImage() {
+      setLoadding(true)
       try {
         if (file) {
-          const response = await adminApi.addType(file, type)
+          await adminApi.addType(file, type)
+          setLoadding(false)
           enqueueSnackbar("Tạo loại thành công", { variant: "success" })
+          setType("")
+          setFile(null)
         }
       } catch (error) {
         console.log(error)
+        setLoadding(false)
         enqueueSnackbar("Tạo loại thất bại", { variant: "error" })
       }
     }
@@ -64,6 +71,12 @@ function NewType(props: NewProductProps) {
   const navigate = useNavigate()
   return (
     <Box sx={{ height: "100%" }}>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loadding}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Stack
         direction="row"
         alignItems="center"
@@ -121,6 +134,7 @@ function NewType(props: NewProductProps) {
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
                       placeholder="VD: Bún, đồ uống..."
+                      value={type}
                       onChange={(e) => setType(e.target.value)}
                     />
                   </div>

@@ -13,6 +13,7 @@ import {
   Backdrop,
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -61,7 +62,7 @@ export interface NewProductProps {}
 function NewProduct(props: NewProductProps) {
   const [tabs, setTabs] = React.useState(0)
   const [price, setPrice] = React.useState<string>("")
-
+  const [loadding, setLoadding] = React.useState(false)
   const [resPick, setResPick] = React.useState<searchRoot | null>(null)
   const [typePick, setTypePick] = React.useState<searchRoot | null>(null)
   const [file, setFile] = React.useState<File | null>()
@@ -76,7 +77,7 @@ function NewProduct(props: NewProductProps) {
 
   const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
- 
+
     const sanitizedValue = rawValue.replace(/[^\d,]/g, "")
 
     // Convert comma-separated string to a numeric value
@@ -107,13 +108,32 @@ function NewProduct(props: NewProductProps) {
   }
   const handlePushProduct = () => {
     async function uploadImage() {
+      setLoadding(true)
       try {
         if (file) {
-          await adminApi.addFood(nameFood,parseInt(price.replace(/\D/g, "")),detail,file,Number(typePick?.id),Number(resPick?.id))
-          enqueueSnackbar("Thêm mới sản phẩm thành công", { variant: "success" })
+          await adminApi.addFood(
+            nameFood,
+            parseInt(price.replace(/\D/g, "")),
+            detail,
+            file,
+            Number(typePick?.id),
+            Number(resPick?.id),
+          )
+          setLoadding(false)
+          enqueueSnackbar("Thêm mới sản phẩm thành công", {
+            variant: "success",
+          })
+          setNameFood("")
+          setDetail("")
+          setPrice("")
+          setFile(null)
+          setTypePick(null)
+          setResPick(null)
         }
       } catch (error) {
         console.log(error)
+        setLoadding(false)
+
         enqueueSnackbar("Có lỗi xảy ra vui lòng thử lại", { variant: "error" })
       }
     }
@@ -128,6 +148,12 @@ function NewProduct(props: NewProductProps) {
   const navigate = useNavigate()
   return (
     <Box sx={{ height: "100%" }}>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loadding}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Stack
         direction="row"
         alignItems="center"

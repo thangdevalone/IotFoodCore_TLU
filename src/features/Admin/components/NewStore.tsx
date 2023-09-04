@@ -10,6 +10,7 @@ import {
   Backdrop,
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -45,6 +46,7 @@ function NewStore(props: NewProductProps) {
   const [distance, setDistance] = React.useState<number>(0)
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
+  const [loadding, setLoadding] = React.useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
@@ -70,6 +72,7 @@ function NewStore(props: NewProductProps) {
   }
   const handlePushProduct = async () => {
     async function uploadImage() {
+      setLoadding(true)
       try {
         if (file) {
           await adminApi.addRestaurant(
@@ -81,10 +84,18 @@ function NewStore(props: NewProductProps) {
             phone,
             file,
           )
+          setLoadding(false)
           enqueueSnackbar("Tạo cửa hàng thành công", { variant: "success" })
+          setAddress("")
+          setDetail("")
+          setDistance(0)
+          setRestaurantName("")
+          setPhone("")
+          setFile(null)
         }
       } catch (error) {
         console.log(error)
+        setLoadding(false)
         enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
       }
     }
@@ -106,6 +117,12 @@ function NewStore(props: NewProductProps) {
   const navigate = useNavigate()
   return (
     <Box sx={{ height: "100%" }}>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loadding}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Stack
         direction="row"
         alignItems="center"
@@ -155,7 +172,8 @@ function NewStore(props: NewProductProps) {
                     <Input
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                      placeholder="VD: Nhà hàng Hải Đăng,..."
+                      placeholder="VD: Nhà hàng abc"
+                      value={restaurantName}
                       onChange={(e) => setRestaurantName(e.target.value)}
                     />
                   </div>
@@ -317,7 +335,8 @@ function NewStore(props: NewProductProps) {
                             id="message"
                             rows={4}
                             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Viết mô tả về cửa hàng của Hải Đăng Store..."
+                            placeholder="Viết mô tả về cửa hàng..."
+                            value={detail}
                             onChange={(e) => setDetail(e.target.value)}
                           ></textarea>
                         </Box>

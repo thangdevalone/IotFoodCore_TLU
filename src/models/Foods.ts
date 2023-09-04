@@ -1,7 +1,7 @@
 export interface TypeFoodsData {
   id: number
   nameType: string
-  imgFood: string
+  imgType: string
 }
 
 export interface RestaurantData {

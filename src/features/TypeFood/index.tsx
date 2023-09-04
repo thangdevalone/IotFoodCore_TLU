@@ -24,11 +24,21 @@ const TypeFood = () => {
       >
         {data?.map((item) => (
           <Grid item xs={12} sm={6} md={3} key={item.id}>
-            <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
-            </Box>
-            <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
+            <Box
+              className="h-[150px] rounded-md relative"
+              sx={{
+                backgroundImage: `url(${item.imgType})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                cursor:"pointer"
+              }}
+            >
+              <div className="bg-[rgba(0,0,0,0.4)] w-[100%] h-[100%]"></div>
+              <span className="text-xl absolute z-10 top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 font-medium text-white block mt-1 ">
               {item.nameType}
             </span>
+            </Box>
+            
           </Grid>
         ))}
       </Grid>

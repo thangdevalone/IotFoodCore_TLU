@@ -58,7 +58,7 @@ const ItemRecommend = (props: propsData) => {
       imgFood,
     }
     dispatch(cartActions.addToCart(data));
-    dispatch(cartActions.setDataStore({nameStore:""}))
+    // dispatch(cartActions.setDataStore())
   }
   
   
