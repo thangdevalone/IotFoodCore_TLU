@@ -1,8 +1,9 @@
 import cloudUploadApi from "@/api/cloudUploadApi"
-import { AutoField } from "@/components/Common"
+
 import { CLOUD_NAME } from "@/constants"
-import { searchRoot } from "@/models"
-import { handlePrice } from "@/utils"
+
+import RemoveRedEyeTwoToneIcon from '@mui/icons-material/RemoveRedEyeTwoTone';
+import VisibilityOffTwoToneIcon from '@mui/icons-material/VisibilityOffTwoTone';
 import {
   ArrowBackIosNew,
   CloudUpload,
@@ -25,6 +26,7 @@ import {
 } from "@mui/material"
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import adminApi from "@/api/adminApi";
 interface TabPanelProps {
   children?: React.ReactNode
   index: number
@@ -33,7 +35,6 @@ interface TabPanelProps {
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
-
   return (
     <div
       role="tabpanel"
@@ -56,31 +57,25 @@ function a11yProps(index: number) {
     "aria-controls": `simple-tabpanel-${index}`,
   }
 }
-export interface NewEmployeeProps {}
+export interface NewEmployeeProps { }
 
 function NewEmployee(props: NewEmployeeProps) {
   const [value, setValue] = React.useState(0)
-  const [price, setPrice] = React.useState<string>("")
-  const [resPick, setResPick] = React.useState<searchRoot | null>(null)
-  const [typePick, setTypePick] = React.useState<searchRoot | null>(null)
+  const [password, setPassword] = React.useState<string>("")
+  const [name, setName] = React.useState<string>("")
+  const [employeeNumber, setEmployeeNumber] = React.useState<string>("")
+  const [phoneNumber, setPhoneNumber] = React.useState<string>("")
   const [file, setFile] = React.useState<File | null>()
   const imgRef = React.useRef<HTMLInputElement | null>(null)
+  const [eyeOpen, setEyeOpen] = React.useState(true)
+
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
 
-  const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value
-    const sanitizedValue = rawValue.replace(/[^\d,]/g, "")
-
-    // Convert comma-separated string to a numeric value
-    const numericValue = parseFloat(sanitizedValue.replace(/,/g, ""))
-    if (!isNaN(numericValue)) {
-      setPrice(handlePrice(numericValue))
-    } else {
-      setPrice("")
-    }
+  const handleChangeInput = (value: string, callback: (newVal: string) => void) => {
+    callback(value)
   }
   const handleImageClick = () => {
     if (imgRef.current !== null && !imagePreview) {
@@ -100,17 +95,17 @@ function NewEmployee(props: NewEmployeeProps) {
       reader.readAsDataURL(selectedImage)
     }
   }
-  const handlePushProduct = () => {
+  const handlePushEmployee = () => {
     async function uploadImage() {
       try {
         if (file) {
           const data = new FormData()
-          data.append("file",file )
+          data.append("file", file)
           data.append("upload_preset", "thangdev_food")
           data.append("cloud_name", CLOUD_NAME)
-          console.log(data.values())
-          const res = await cloudUploadApi.uploadImage(data)
-          console.log(res)
+          console.log("hello3")
+          const res = await adminApi.addEmployee(name, password, phoneNumber, employeeNumber, file)
+          console.log({res})
         }
       } catch (error) {
         console.log(error)
@@ -142,7 +137,7 @@ function NewEmployee(props: NewEmployeeProps) {
         >
           Nhân viên
         </Button>
-        <IconButton onClick={handlePushProduct} size="small" sx={{ mr: "5px" }}>
+        <IconButton onClick={handlePushEmployee} size="small" sx={{ mr: "5px" }}>
           <CloudUpload fontSize="small" />
         </IconButton>
         <IconButton size="small" sx={{ mr: "5px" }}>
@@ -170,21 +165,8 @@ function NewEmployee(props: NewEmployeeProps) {
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
                       placeholder="VD: Nguyễn Văn A"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setName)}
                     />
-                    <div className="flex items-center mb-4 mt-3">
-                      <input
-                        id="state-product"
-                        type="checkbox"
-                        defaultChecked={true}
-                        className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded"
-                      />
-                      <label
-                        htmlFor="state-product"
-                        className="ml-2 text-sm cursor-pointer font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Đang hoạt động 
-                      </label>
-                    </div>
                   </div>
 
                   <div
@@ -264,39 +246,46 @@ function NewEmployee(props: NewEmployeeProps) {
                           <Grid item xs={6}>
                             <Grid container spacing={2}>
                               <Grid item xs={4}>
-                                <label 
+                                <label
                                   htmlFor="name-food-select"
                                   className="font-medium "
                                 >
-                                  Mã sinh viên 
+                                  Mã nhân viên
                                 </label>
                               </Grid>
                               <Grid item xs={8}>
                                 <div className="flex items-end">
                                   <input
                                     id="name-food-select"
-                                    value={price}
+                                    value={employeeNumber}
                                     type="string"
                                     autoComplete="off"
-                                    onChange={handleChangePrice}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setEmployeeNumber)}
                                     className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                 </div>
                               </Grid>
+
                               <Grid item xs={4}>
                                 <label
-                                  htmlFor="type-food-select"
+                                  htmlFor="name-food-select"
                                   className="font-medium "
                                 >
-                                  Thuộc về
+                                  Mật khẩu
                                 </label>
                               </Grid>
                               <Grid item xs={8}>
-                                <AutoField
-                                  apiHandle="res"
-                                  value={resPick}
-                                  setValue={setResPick}
-                                />
+                                <div className="flex items-end">
+
+                                  <input
+                                    id="name-food-select"
+                                    value={password}
+                                    type={eyeOpen ? "string" : "password"}
+                                    autoComplete="off"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setPassword)}
+                                    className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                  />
+                                </div>
                               </Grid>
                             </Grid>
                           </Grid>
@@ -307,17 +296,17 @@ function NewEmployee(props: NewEmployeeProps) {
                                   htmlFor="name-food-select"
                                   className="font-medium "
                                 >
-                                  Số điện thoại 
+                                  Số điện thoại
                                 </label>
                               </Grid>
                               <Grid item xs={8}>
                                 <div className="flex items-end">
                                   <input
                                     id="name-food-select"
-                                    value={price}
+                                    value={phoneNumber}
                                     type="string"
                                     autoComplete="off"
-                                    onChange={handleChangePrice}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setPhoneNumber)}
                                     className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                 </div>
@@ -325,20 +314,7 @@ function NewEmployee(props: NewEmployeeProps) {
                             </Grid>
                           </Grid>
                         </Grid>
-                        <Box sx={{ mt: "30px" }}>
-                          <label
-                            htmlFor="message"
-                            className="block mb-2  font-medium text-gray-900 dark:text-white"
-                          >
-                            Mô tả sản phẩm
-                          </label>
-                          <textarea
-                            id="message"
-                            rows={4}
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Viết mô tả về sản phẩm..."
-                          ></textarea>
-                        </Box>
+
                       </Box>
                     )}
                   </div>

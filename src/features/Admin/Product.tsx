@@ -60,6 +60,7 @@ export function Product() {
       History.push({ search: updatedSearchParams.toString() })
       try {
         const res = await adminApi.getAllProducts(pagination)
+        console.log(res)
         const myProducts = res.data as ProductRoot
         setProducts(myProducts.data)
         setRowCount(myProducts.totalRow)

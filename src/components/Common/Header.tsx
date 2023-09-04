@@ -1,21 +1,21 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
+import { handlePrice } from "@/utils"
 import { Avatar, Box, Stack, Typography } from "@mui/material"
-import { MouseEvent, useEffect, useState, useRef } from "react"
+import classNames from "classnames"
+import { MouseEvent, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { CartDrawer, SwitchLightDark } from "."
 import { CustomButton } from "../Custom/CustomButon"
 import { BagIcon, NotiIcon } from "../Icon"
-import ChatIcon from "@mui/icons-material/Chat"
+import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
-import classNames from "classnames"
-import { cartActions } from "./CartDrawer/CartSlice"
 import { ChatConversationsList } from "../../features/Chat/ChatConversationsList/index"
 export interface HeaderProps {
   isHeaderColorRed: boolean
 }
-import { handlePrice } from "@/utils"
+
 
 export function Header(props: HeaderProps) {
   const { isHeaderColorRed } = props
@@ -23,33 +23,15 @@ export function Header(props: HeaderProps) {
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [chatOpen, setChatOpen] = useState(false)
   const [quantityCart, setQuantityCart] = useState<number>(0)
   const [price, setPrice] = useState<number>(0)
-  let ChatConversationsListRef = useRef<HTMLDivElement>(null)
   const { items } = useAppSelector((state) => state.cart)
-
-  useEffect(() => {
-    // Xử lý sự kiện khi click ra ngoài ChatConversationsList
-    let handleOnclickOutside = (e: any) => {
-      if (!ChatConversationsListRef.current?.contains(e.target)) {
-        setChatOpen(false)
-      }
-    }
-    document.addEventListener("mousedown", handleOnclickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleOnclickOutside)
-    }
-  }, [])
 
   const handleClick = (event: MouseEvent<HTMLImageElement>) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
-  }
-  const handleClickChatIcon = () => {
-    setChatOpen(true)
   }
   const { width } = useWindowDimensions()
   const setterBg = scrollY >= 100 ? true : false
@@ -59,8 +41,8 @@ export function Header(props: HeaderProps) {
   }
 
   useEffect(() => {
-    setQuantityCart(items.reduce((sum:any, item:any) => sum + item.quantity, 0))
-    setPrice(items.reduce((sum:any, item:any) => sum + item.price * item.quantity, 0))
+    setQuantityCart(items.reduce((sum: any, item: any) => sum + item.quantity, 0))
+    setPrice(items.reduce((sum: any, item: any) => sum + item.price * item.quantity, 0))
   }, [items])
 
   return (
@@ -94,73 +76,56 @@ export function Header(props: HeaderProps) {
                 mobile && setterBg
                   ? "/assets/iotfood.png"
                   : mobile
-                  ? "/assets/iotfood_b.png"
-                  : "/assets/iotfood.png"
+                    ? "/assets/iotfood_b.png"
+                    : "/assets/iotfood.png"
               }
               style={{ width: "130px" }}
               alt="logo"
             />
           </Link>
           <Stack direction={"row"} alignItems="center" position={"relative"}>
-            {width > 450 && (
-              <CustomButton
-                onClick={handleOpenCard}
-                sx={{
-                  padding: "10px 12px",
-                  mr: 1,
-                  minWidth: "unset",
-                  position: "relative",
-                  display: "flex",
-                  gap: "3px",
-                  backgroundColor: `${
-                    setterBg || items.length === 0
-                      ? "white"
-                      : "var(--color-layer-2)"
+
+            <CustomButton
+              onClick={handleOpenCard}
+              sx={{
+                padding: "10px 12px",
+                mr: 1,
+                minWidth: "unset",
+                position: "relative",
+                display: "flex",
+                gap: "3px",
+                backgroundColor: `${setterBg || items.length === 0
+                  ? "white"
+                  : "var(--color-layer-2)"
                   }`,
-                }}
-              >
-                <BagIcon
-                  color={`${
-                    setterBg || items.length === 0
-                      ? "black"
-                      : "var(--color-tx-1)"
+              }}
+            >
+              <BagIcon
+                color={`${setterBg || items.length === 0
+                  ? "black"
+                  : "var(--color-tx-1)"
                   }`}
-                />
-                {items.length > 0 && (
-                  <>
-                    <Box className="absolute top-[-10px] left-[-10px] h-6 w-6 bg-white border rounded-full">
-                      <Typography>{quantityCart}</Typography>
-                    </Box>
-                    <Typography
-                      sx={{
-                        transform: "translateY(1px)",
-                        color: `${
-                          setterBg || items.length === 0 ? "black" : "inherit"
+              />
+              {items.length > 0 && (
+                <>
+                  <Box className="absolute top-[-10px] left-[-10px] h-6 w-6 bg-white border rounded-full">
+                    <Typography>{quantityCart}</Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      transform: "translateY(1px)",
+                      color: `${setterBg || items.length === 0 ? "black" : "inherit"
                         }`,
-                      }}
-                    >
-                      {handlePrice(price)} ₫
-                    </Typography>
-                  </>
-                )}
-              </CustomButton>
-            )}
+                    }}
+                  >
+                    {handlePrice(price)} ₫
+                  </Typography>
+                </>
+              )}
+            </CustomButton>
+
             {user ? (
               <>
-                <CustomButton
-                  sx={{ padding: "10px 12px", mr: 1, minWidth: "unset" }}
-                  onClick={handleClickChatIcon}
-                >
-                  <ChatIcon />
-                </CustomButton>
-                <div
-                  className="absolute top-[50px] right-0 z-50"
-                  ref={ChatConversationsListRef}
-                >
-                  {chatOpen && (
-                    <ChatConversationsList setChatOpen={setChatOpen} />
-                  )}
-                </div>
                 <CustomButton
                   sx={{ padding: "10px 12px", mr: 2, minWidth: "unset" }}
                 >

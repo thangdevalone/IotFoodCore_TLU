@@ -1,6 +1,5 @@
-import cloudUploadApi from "@/api/cloudUploadApi"
+import adminApi from "@/api/adminApi"
 import { AutoField } from "@/components/Common"
-import { CLOUD_NAME } from "@/constants"
 import { searchRoot } from "@/models"
 import { handlePrice } from "@/utils"
 import {
@@ -23,6 +22,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material"
+import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 interface TabPanelProps {
@@ -59,19 +59,24 @@ function a11yProps(index: number) {
 export interface NewProductProps {}
 
 function NewProduct(props: NewProductProps) {
-  const [value, setValue] = React.useState(0)
+  const [tabs, setTabs] = React.useState(0)
   const [price, setPrice] = React.useState<string>("")
+  
   const [resPick, setResPick] = React.useState<searchRoot | null>(null)
   const [typePick, setTypePick] = React.useState<searchRoot | null>(null)
   const [file, setFile] = React.useState<File | null>()
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
+  const [nameFood, setNameFood] = React.useState<string>("")
+  const [detail, setDetail] = React.useState<string>("")
+  const {enqueueSnackbar}=useSnackbar()
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue)
+    setTabs(newValue)
   }
 
   const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
+ 
     const sanitizedValue = rawValue.replace(/[^\d,]/g, "")
 
     // Convert comma-separated string to a numeric value
@@ -104,19 +109,19 @@ function NewProduct(props: NewProductProps) {
     async function uploadImage() {
       try {
         if (file) {
-          const data = new FormData()
-          data.append("file",file )
-          data.append("upload_preset", "thangdev_food")
-          data.append("cloud_name", CLOUD_NAME)
-          console.log(data.values())
-          const res = await cloudUploadApi.uploadImage(data)
+          console.log(nameFood,price,typePick,resPick,detail)
+          const res=await adminApi.addFood(nameFood,parseInt(price.replace(/\D/g, "")),detail,file,Number(typePick?.id),Number(resPick?.id))
           console.log(res)
         }
       } catch (error) {
         console.log(error)
+        enqueueSnackbar("Có lỗi xảy ra vui lòng thử lại",{variant:"error"})
       }
     }
     uploadImage()
+  }
+  const handleChangeInput=(value:string,callback:(newVal:string)=>void)=>{
+    callback(value)
   }
   const navigate = useNavigate()
   return (
@@ -170,11 +175,14 @@ function NewProduct(props: NewProductProps) {
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
                       placeholder="VD: Trà sữa trân trâu đường đen"
+                      value={nameFood}
+                      onChange={(e:React.ChangeEvent<HTMLInputElement>)=>handleChangeInput(e.target.value,setNameFood)}
                     />
                     <div className="flex items-center mb-4 mt-3">
                       <input
                         id="state-product"
                         type="checkbox"
+                       
                         defaultChecked={true}
                         className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded"
                       />
@@ -249,7 +257,7 @@ function NewProduct(props: NewProductProps) {
                 <div>
                   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs
-                      value={value}
+                      value={tabs}
                       onChange={handleChange}
                       aria-label="basic tabs example"
                     >
@@ -258,8 +266,8 @@ function NewProduct(props: NewProductProps) {
                       <Tab label="Mua hàng" {...a11yProps(2)} />
                     </Tabs>
                   </Box>
-                  <div hidden={value !== 0}>
-                    {value === 0 && (
+                  <div hidden={tabs !== 0}>
+                    {tabs === 0 && (
                       <Box sx={{ padding: "20px 15px" }}>
                         <Grid container spacing={2}>
                           <Grid item xs={6}>
@@ -332,6 +340,8 @@ function NewProduct(props: NewProductProps) {
                           <textarea
                             id="message"
                             rows={4}
+                            value={detail}
+                            onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>handleChangeInput(e.target.value,setDetail)}
                             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Viết mô tả về sản phẩm..."
                           ></textarea>
@@ -339,11 +349,11 @@ function NewProduct(props: NewProductProps) {
                       </Box>
                     )}
                   </div>
-                  <div hidden={value !== 1}>
-                    {value === 1 && <Box sx={{ p: 2 }}>Bán hàng</Box>}
+                  <div hidden={tabs !== 1}>
+                    {tabs === 1 && <Box sx={{ p: 2 }}>Bán hàng</Box>}
                   </div>
-                  <div hidden={value !== 2}>
-                    {value === 2 && <Box sx={{ p: 2 }}>Mua hàng</Box>}
+                  <div hidden={tabs !== 2}>
+                    {tabs === 2 && <Box sx={{ p: 2 }}>Mua hàng</Box>}
                   </div>
                 </div>
               </div>

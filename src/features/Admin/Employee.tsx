@@ -20,8 +20,7 @@ import SettingMenu from "./components/SettingMenu"
 
 const empolyeeFakeApi = [
     {
-        "id": 1,
-        "nameEmployee": "Nguyễn Văn A",
+        "id": 100,
         "employeeNumber": "A11235",
         "password": "11111",
         "position": "Shipper",
@@ -30,7 +29,6 @@ const empolyeeFakeApi = [
     },
     {
         "id": 2,
-        "nameEmployee": "Nguyễn Văn B",
         "employeeNumber": "B22456",
         "password": "22222",
         "position": "Thu Ngân",
@@ -39,7 +37,6 @@ const empolyeeFakeApi = [
     },
     {
         "id": 3,
-        "nameEmployee": "Trần Thị C",
         "employeeNumber": "C33333",
         "password": "33333",
         "position": "Shipper",
@@ -48,7 +45,6 @@ const empolyeeFakeApi = [
     },
     {
         "id": 4,
-        "nameEmployee": "Lê Văn D",
         "employeeNumber": "D44444",
         "password": "44444",
         "position": "Shipper",
@@ -57,7 +53,6 @@ const empolyeeFakeApi = [
     },
     {
         "id": 5,
-        "nameEmployee": "Trần Thị E",
         "employeeNumber": "E55555",
         "password": "55555",
         "position": "Thu Ngân",
@@ -66,7 +61,6 @@ const empolyeeFakeApi = [
     },
     {
         "id": 6,
-        "nameEmployee": "Lê Văn F",
         "employeeNumber": "F66666",
         "password": "66666",
         "position": "Quản Lý",
@@ -75,7 +69,6 @@ const empolyeeFakeApi = [
     },
     {
         "id": 7,
-        "nameEmployee": "Nguyễn Thị G",
         "employeeNumber": "G77777",
         "password": "77777",
         "position": "Shipper",
@@ -89,7 +82,7 @@ export function Employee() {
     const location = useLocation() // Get the current location object
     const queryParams = queryString.parse(location.search) // Parse query parameters from the location
     const navigate = useNavigate()
-    const [employee, setEmployee] = useState<EmployeeItem[]>([])
+    const [employee, setEmployee] = useState<EmployeeItem[]>(empolyeeFakeApi)
     const [isError, setIsError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isRefetching, setIsRefetching] = useState(false)
@@ -108,6 +101,16 @@ export function Employee() {
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen)
+    }
+    const handleChangeAction = (cell:any) => {
+        let idRow = cell.row._valuesCache.id
+        if(idRow){
+            let newEmployeeUpadate = employee.map(emp => emp.id == idRow ? {
+                ...emp, "action":!emp.action
+            } : emp)
+            console.log({employee, newEmployeeUpadate})
+            setEmployee(newEmployeeUpadate)
+        }
     }
     useEffect(() => {
         const fetchData = async () => {
@@ -163,38 +166,10 @@ export function Employee() {
     const columns = useMemo<MRT_ColumnDef<EmployeeItem>[]>(
         () => [
             { accessorKey: "id", header: "ID" },
-            { accessorKey: "nameEmployee", header: "Tên nhân viên" },
             { accessorKey: "employeeNumber", header: "Mã nhân viên" },
-            {
-                accessorKey: "password",
-                header: "Mật khẩu",
-                Cell: ({ cell }) => <Input
-                    id="standard-adornment-password"
-                    type={showPassword ? 'text' : 'password'}
-                    disableUnderline = {true}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                />
-            },
-            { accessorKey: "position", header: "Chức vụ" },
+            { accessorKey: "password", header: "Mật khẩu" },
             { accessorKey: "phoneNumber", header: "Số điện thoại" },
-            {
-                accessorKey: "action",
-                header: "Hoạt động",
-                Cell: ({ cell }) => <Switch
-                    checked={cell.getValue<boolean>()}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                />,
-            },
+
         ],
         [],
     )
@@ -236,7 +211,7 @@ export function Employee() {
                             sx={{ mr: "10px" }}
                             variant="contained"
                             onClick={() => {
-                                navigate("/admin/new-employee?form=employee")
+                                navigate("/admin/new?form=employee")
                             }}
                         >
                             Tạo

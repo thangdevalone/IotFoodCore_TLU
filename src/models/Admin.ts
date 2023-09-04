@@ -1,7 +1,6 @@
-
-export interface searchRoot{
-  id:number,
-  title:string
+export interface searchRoot {
+  id: number
+  title: string
 }
 
 export interface ProductRoot {
@@ -24,14 +23,35 @@ export interface ProductItem {
   createAt: string | null
   quantityPurchased: number
   typeFoodEntityId: number
-  restaurantEntityId: number,
-  status:boolean|null
+  restaurantEntityId: number
+  status: boolean | null
+}
+
+export interface TypeRoot {
+  data: TypeItem[]
+  totalRow: number
+}
+export interface TypeItem {
+  id: number
+  imgType: string | null
+  nameType: string
+  status: string | null
+}
+
+export interface TypeRestaurant {
+  id: number
+  restaurantName: string
+  quantitySold: any
+  businessHours: any
+  distance: number
+  phoneNumber: string
+  address: string
+  imgRes: string
 }
 export interface EmployeeItem {
   id: number
   nameEmployee: string
   password: string
-  position: string // Chức vụ
   // avatar: string
   action:boolean|null
   phoneNumber:string 

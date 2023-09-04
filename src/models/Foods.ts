@@ -19,7 +19,7 @@ export interface RestaurantData {
 }
 
 export interface StoreDetailData {
-  id: 1,
+  id: number,
   restaurantName: string,
   address?: string,
   quantitySold: number,

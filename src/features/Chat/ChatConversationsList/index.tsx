@@ -1,38 +1,39 @@
+import { Room } from "@/models"
+import { Grid, Stack } from "@mui/material"
 import { useEffect, useState } from "react"
-import { ItemMessage } from "./ItemMessage"
-import { Box, Paper, Stack, Typography } from "@mui/material"
-import { MessageSearch } from "./MessageSearch"
-import { TypeChatConversationData } from "@/models"
-import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { ChatHeader } from "./ChatHeader"
-export interface ContainerChatProps {
-    setChatOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
+import { ItemMessage } from "./ItemMessage"
+import chatApi from "@/api/chatApi"
+export interface ContainerChatProps {}
 
 export function ChatConversationsList(props: ContainerChatProps) {
-    const { setChatOpen } = props
-    const [isSearch, setIsSearch] = useState(false)
-    const [ArrChatSearched, setArrChatSearched] = useState<TypeChatConversationData[]>([])
-    const chatApi: TypeChatConversationData[] = useAppSelector((state) => state.chatBox.AllUserApi!)
-    return (
-        <Stack direction="column" className=" w-[310px] bg-[#fff] rounded-md shadow-2xl overflow-hidden">
-            <ChatHeader />
-            <MessageSearch isSearch={isSearch} setIsSearch={setIsSearch} setArrChatSearched={setArrChatSearched} />
-            <div className="h-[340px] overflow-y-auto">
-
-                {isSearch ? <div>
-                    {ArrChatSearched.map(messageRoom => {
-                        return <ItemMessage messageRoomData={messageRoom} key={messageRoom.id} setChatOpen={setChatOpen} />
-                    })}
-                </div> :
-                    <div>
-                        {chatApi.map(messageRoom => {
-                            return <ItemMessage messageRoomData={messageRoom} key={messageRoom.id} setChatOpen={setChatOpen} />
-                        })}
-                    </div>
-                }
-            </div>
-        </Stack>
-    )
+  const [room, setRoom] = useState<Room[] | []>([])
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const res = await chatApi.getRooms()
+        setRoom(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [])
+  return (
+    <Stack
+      direction="column"
+      className=" w-[650px] bg-[#fff] rounded-t-md border border-gray-300"
+    >
+      <ChatHeader />
+      <Grid container className="h-[420px]">
+        <Grid item xs={4.5}>
+          {room.map((messageRoom) => {
+            return <ItemMessage data={messageRoom} key={messageRoom.roomId} />
+          })}
+        </Grid>
+        <Grid item xs={7.5}>
+          
+        </Grid>
+      </Grid>
+    </Stack>
+  )
 }

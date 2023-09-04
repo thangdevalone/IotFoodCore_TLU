@@ -1,14 +1,11 @@
-import { Box, IconButton, Stack, Typography, Grid } from "@mui/material"
-import * as React from "react"
-import { handlePrice } from "@/utils"
-import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useAppDispatch } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
-import { foodData } from '@/models/Foods';
+import { handlePrice } from "@/utils"
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
+import { Box, Stack, Typography } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 
 interface propsData {
   idFood:number
@@ -61,6 +58,7 @@ const ItemRecommend = (props: propsData) => {
       imgFood,
     }
     dispatch(cartActions.addToCart(data));
+    dispatch(cartActions.setDataStore({nameStore:""}))
   }
   
   

@@ -7,7 +7,6 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import NavigateSetter from "./Router/NavigateSetter"
 import { store } from "./app/store"
-import { ChatBoxs } from "@/features/Chat/ChatBoxs"
 import { io, Socket } from "socket.io-client";
 import "./index.css"
 const Container = () => {
@@ -24,7 +23,6 @@ const Container = () => {
         >
           <NavigateSetter />
           <CssBaseline />
-          <ChatBoxs />
           <App />
         </SnackbarProvider>
       </BrowserRouter>

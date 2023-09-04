@@ -1,13 +1,15 @@
 import { createSlice ,PayloadAction } from "@reduxjs/toolkit"
-import { CartItemData } from "@/models";
+import { CartItemData, StoreDetailData } from "@/models";
 
 export interface CardState{
     items: CartItemData[],
     open: boolean,
+    dataStore:{name:string,}
 }
 const initialState:CardState={
     items: [],
     open: false,
+    dataStore:null,
 }
 
 const cartSlice = createSlice({
@@ -16,6 +18,9 @@ const cartSlice = createSlice({
     reducers:{
         toggleCart(state){
             state.open=!state.open
+        },
+        setDataStore(state,action:PayloadAction<StoreDetailData>){
+            state.dataStore=action.payload
         },
         addToCart(state, action: PayloadAction<CartItemData>) {
             const { idFood, name, quantity, type} = action.payload;
