@@ -11,6 +11,7 @@ const rootReducer = combineReducers({
   chat:chatReducer,
   admin:adminReducer
   // ...other reducers
+  
 });
 
 export default rootReducer;
