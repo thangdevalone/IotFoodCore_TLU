@@ -14,7 +14,7 @@ interface propsData {
   price: number
   star?: number
   time?: number
-  distance: string
+  distance?: string
   imgFood: string
   width: number
   idStore: number
@@ -35,7 +35,6 @@ const ItemRecommend = (props: propsData) => {
     time = 10,
     distance,
     imgFood,
-    width,
     storeCheck = false,
     idStore,
   } = props

@@ -119,6 +119,7 @@ const DetailStore = (props: DetailProps) => {
                     imgFood={item.imgFood}
                     key={item.id}
                     foodName={item.foodName}
+                    distance={item.distance}
                     star={4}
                     price={item.price}
                     idStore={item.restaurantEntityId}
