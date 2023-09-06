@@ -2,19 +2,17 @@ import { ThemeProvider, useTheme } from "@emotion/react"
 import { Route, Routes } from "react-router-dom"
 import "./App.css"
 import { LoadServer, NotFound } from "./components/Common"
+import Admin from "./components/Layouts/Admin"
 import { Home } from "./components/Layouts/Home"
+import { Store } from "./components/Layouts/Store"
+import { ProtectAdmin, ProtectAuth } from "./components/ProtectRouter"
+import Chat from "./features/Chat"
+import DetailStore from "./features/DetailStore"
+import SearchList from "./features/SearchFood/components/SearchList"
+import GetAllStore from "./features/Store"
 import { AuthCard } from "./features/auth/pages/AuthCard"
 import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
-import { ProtectAdmin, ProtectAuth } from "./components/ProtectRouter"
-import Admin from "./components/Layouts/Admin"
-import { Store } from "./components/Layouts/Store"
-import GetAllStore from "./features/Store"
-import DetailStore from "./features/DetailStore"
-import DetailFood from "./features/DetailFood"
-import SearchList from "./features/SearchFood/components/SearchList"
-import { Box } from "@mui/material"
-import Chat from "./features/Chat"
 
 function App() {
   const theme = useTheme()
@@ -27,7 +25,7 @@ function App() {
             element={
               <>
                 <Home />
-                <Chat />
+                {/* <Chat /> */}
               </>
             }
           />

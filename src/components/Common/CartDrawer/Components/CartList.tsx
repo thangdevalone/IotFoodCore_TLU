@@ -12,9 +12,8 @@ const CartList = (props: propsData) => {
   const { items } = props;
 
   return (
-    <Stack spacing={3} className='w-full p-[20px] overflow-y-scroll pr-2 custom-scroll-y'>
-    
-      <Stack alignItems="center" spacing={5} className='w-full'>
+    <Stack  className='w-full'>
+      <Stack alignItems="center" className='w-full'>
         {items.map((item,index) => <CartItem key={index} item={item } />)}
       </Stack>
     </Stack>

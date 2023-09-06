@@ -8,19 +8,20 @@ import {
   Typography,
 } from "@mui/material"
 
-import "./style_drawer.css"
-import { ArrowBackIosNew } from "@mui/icons-material"
-import { cartActions } from "./CartSlice"
-import CartList from "./Components/CartList"
-import { handlePrice } from "@/utils"
-import * as React from "react"
-import { useInforUser } from "@/hooks"
 import { CustomButton } from "@/components/Custom/CustomButon"
+import { useInforUser } from "@/hooks"
+import { handlePrice } from "@/utils"
+import { ArrowBackIosNew } from "@mui/icons-material"
+import * as React from "react"
+import { cartActions, iDataStore } from "./CartSlice"
+import CartList from "./Components/CartList"
+import "./style_drawer.css"
+import { CartItemData } from "@/models"
 
 export interface CardDrawerProps {}
 
 export function CartDrawer(props: CardDrawerProps) {
-  const { open, items } = useAppSelector((state) => state.cart)
+  const { open, dataStore, timeDeliver } = useAppSelector((state) => state.cart)
   const user = useInforUser()
   const [price, setPrice] = React.useState<number>(0)
   const iOS =
@@ -32,12 +33,12 @@ export function CartDrawer(props: CardDrawerProps) {
   }
 
   React.useEffect(() => {
-    setPrice(
-      items.reduce((sum, item) => (sum += item.price * item.quantity), 0),
-    )
-  }, [items])
-
-  // console.log(items);
+    const itemFoods:CartItemData[] = []
+    dataStore.forEach(store => store.items.forEach( item => itemFoods.push(item)))
+    const total=itemFoods.reduce((sum,item)=> sum + item.price * item.quantity ,0)
+    setPrice(total)
+    dispatch(cartActions.setTotalPrice(total))
+  }, [dataStore])
 
   return (
     <div>
@@ -48,7 +49,7 @@ export function CartDrawer(props: CardDrawerProps) {
             "@media (min-width:600px)": {
               width: "516px",
             },
-            overflow:"hidden"
+            overflow: "hidden",
           },
         }}
         disableBackdropTransition={!iOS}
@@ -61,44 +62,102 @@ export function CartDrawer(props: CardDrawerProps) {
         <Box sx={{ height: "100%" }}>
           <Stack
             direction="column"
-            sx={{ position: "relative",padding:"15px 20px 10px 20px",height:"75px" }}
+            sx={{
+              position: "relative",
+              padding: "15px 20px 10px 20px",
+              height: "75px",
+            }}
             alignItems="center"
             className="border-b"
           >
             <IconButton
               onClick={toggleDrawer}
-              sx={{ position: "absolute" ,left:"20px",top:"50%",transform:"translateY(-50%)"}}
+              sx={{
+                position: "absolute",
+                left: "20px",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
               aria-label="delete"
             >
               <ArrowBackIosNew />
             </IconButton>
 
             <span className="font-medium text-[18px]">Giỏ đồ ăn</span>
-            <span className="text-[13px]  text-neutral-500">Giỏ đồ ăn</span>
+            <span className="text-[13px]  text-neutral-500">
+              Giờ nhận hàng: {timeDeliver}
+            </span>
           </Stack>
-          <Stack
-            direction={"column"}
-            justifyContent={`${!items.length && "center"}`}
-            alignItems="center"
-            sx={{ height: "calc(100% - 75px)" }}
-          >
-            {items.length ? (
+          <Stack direction={"column"} alignItems={dataStore.length===0?"center":"flex-start"} justifyContent={dataStore.length===0?"center":""} sx={{ height: "calc(100% - 75px)" }}>
+            {dataStore.length ? (
               <>
-                <Typography></Typography>
-                <CartList items={items} />
-                <Box sx={{padding:"10px 20px 5px 20px"}} className="absolute bottom-3 border-t w-[100%] bg-white">
-                  <Box className="flex justify-between items-center text-xl">
-                    <span className="font-semibold">Tổng tiền :</span>
-                    <span>{handlePrice(price)} VND</span>
+                <Stack
+                className="custom-scroll-y"
+                  style={{ padding: "24px", overflow: "hidden auto", height: "calc(100% - 200px)" }}
+                  spacing={3}
+                >
+                  {dataStore.map((data: iDataStore) => (
+                    <div key={data.id}>
+                      <div className="font-medium text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
+                        {data.name}
+                      </div>
+                      <CartList items={data.items} />
+                    </div>
+                  ))}
+                </Stack>
+                <Box
+                  sx={{ padding: "10px 20px 5px 20px" }}
+                  className="absolute bottom-3 border-t-2 border-gray-300 w-[100%] bg-white"
+                >
+                  <div className="mb-4">
+                    <label
+                      htmlFor="timeDeliver"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Chọn giờ nhận hàng
+                    </label>
+                    <select
+                      id="timeDeliver"
+                      defaultValue={timeDeliver}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        dispatch(
+                          cartActions.setTimeDeliver(
+                            e.target.value as
+                              | "10:00 AM"
+                              | "11:15 AM"
+                              | "12:15 AM",
+                          ),
+                        )
+                      }}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option value="10:00 AM">10:00 AM</option>
+                      <option value="11:15 AM">11:15 AM</option>
+                      <option value="12:15 AM">12:15 AM</option>
+                    </select>
+                  </div>
+                  <Box className="flex justify-between items-center text-xl mb-3">
+                    <span className="">Tổng tiền :</span>
+                    <span className="font-medium">
+                      {handlePrice(price)} VND
+                    </span>
                   </Box>
                   <Box className="w-full">
                     <CustomButton
+                      fullWidth
                       sx={{
-                        padding: "10px 12px",
-                        mr: 1,
-                        minWidth: "unset",
-                        width: "100%",
-                        bgcolor: "#00b14f",
+                        background: "var(--color-df-1)",
+                        color: "white",
+                        borderRadius: "6px",
+                        fontSize: "15px",
+                        height: "50px",
+                        fontWeight: "600",
+                        textTransform: "unset",
+
+                        "&:hover": {
+                          background: "var(--color-df-1)",
+                          color: "white",
+                        },
                       }}
                     >
                       {user ? "Đặt hàng" : "Đăng nhập để đặt hàng"}

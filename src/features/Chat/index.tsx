@@ -1,10 +1,8 @@
+import { useAppSelector } from "@/app/hooks"
 import { Box } from "@mui/material"
-import React from "react"
-import { ChatConversationsList } from "./ChatConversationsList"
-import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { chatActions } from "./ChatSlice"
 import { useSnackbar } from "notistack"
-
+import { ChatConversationsList } from "./ChatConversationsList"
+import "./index.css"
 
 
 const Chat = () => {

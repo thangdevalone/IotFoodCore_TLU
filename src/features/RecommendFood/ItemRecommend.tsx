@@ -60,7 +60,7 @@ const ItemRecommend = (props: propsData) => {
       imgFood,
     }
     dispatch(cartActions.addToCart(data))
-    // dispatch(cartActions.setDataStore())
+
   }
 
   return (
@@ -75,11 +75,11 @@ const ItemRecommend = (props: propsData) => {
         }}
       ></Box>
       <Stack className="mt-[8px]">
-        <span className="text-lg font-semibold capitalize">{nameStore}</span>
+        <span className="text-lg font-semibold capitalize whitespace-nowrap overflow-hidden overflow-ellipsis">{nameStore}</span>
         {price && (
           <Box className="flex gap-5 capitalize items-center ">
             {foodName && (
-              <Typography sx={{ fontSize: !nameStore ? "16px" : "14px" }}>
+              <Typography  sx={{ fontSize: !nameStore ? "16px" : "14px" }}>
                 {foodName}
               </Typography>
             )}

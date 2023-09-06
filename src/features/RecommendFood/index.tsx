@@ -113,7 +113,6 @@ export function RecommendFood(props: RecommendFoodProps) {
           {seeAll ? (
             <Box className="flex items-center justify-center">
               <Grid
-                className=""
                 container
                 spacing={4}
                 columnSpacing={{ xs: 1, sm: 3, md: 4 }}

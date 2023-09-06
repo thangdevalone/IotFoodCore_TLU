@@ -20,6 +20,7 @@
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.5",
     "@reduxjs/toolkit": "^1.9.5",
+    "@smakss/react-scroll-direction": "^2.1.1",
     "@types/react-router-dom": "^5.3.3",
     "@zxing/library": "^0.20.0",
     "axios": "^1.4.0",
