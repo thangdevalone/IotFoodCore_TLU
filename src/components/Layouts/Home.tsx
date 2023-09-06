@@ -11,14 +11,13 @@ import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 import React from "react"
 export interface HomeProps {}
 
-
-export interface HomeProps { }
-const chatAPI = [
-
-]
+export interface HomeProps {}
+const chatAPI = []
 export function Home(props: HomeProps) {
-  const { width } = useWindowDimensions();
-  React.useEffect(()=>{window.scrollTo(0, 0);},[])
+  const { width } = useWindowDimensions()
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <Box className="relative tx-df-sz">
@@ -63,7 +62,6 @@ export function Home(props: HomeProps) {
         <Question />
       </section>
       <Footer />
-      
     </Box>
   )
 }

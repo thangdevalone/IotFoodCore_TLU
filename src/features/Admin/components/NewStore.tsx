@@ -43,7 +43,7 @@ function NewStore(props: NewProductProps) {
   const [address, setAddress] = React.useState<string>("")
   const [restaurantName, setRestaurantName] = React.useState<string>("")
   const [detail, setDetail] = React.useState<string>("")
-  const [distance, setDistance] = React.useState<number>(0)
+  const [distance, setDistance] = React.useState<string>("")
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const [loadding, setLoadding] = React.useState(false)
@@ -88,18 +88,16 @@ function NewStore(props: NewProductProps) {
           enqueueSnackbar("Tạo cửa hàng thành công", { variant: "success" })
           setAddress("")
           setDetail("")
-          setDistance(0)
+          setDistance("0")
           setRestaurantName("")
           setPhone("")
           setImagePreview(null)
           setFile(null)
-        }
-        else {
+        } else {
           setLoadding(false)
           enqueueSnackbar("Bắt buộc phải có ảnh", { variant: "error" })
         }
       } catch (error) {
-    
         setLoadding(false)
         enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
       }
@@ -115,7 +113,7 @@ function NewStore(props: NewProductProps) {
     setAddress(value)
   }
 
-  const handleDistance = (value: number) => {
+  const handleDistance = (value: string) => {
     setDistance(value)
   }
 
@@ -323,7 +321,7 @@ function NewStore(props: NewProductProps) {
                                       type="string"
                                       autoComplete="off"
                                       onChange={(e) =>
-                                        handleDistance(+e.target.value)
+                                        handleDistance(e.target.value)
                                       }
                                       className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                     />

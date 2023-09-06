@@ -63,8 +63,8 @@ export function RecommendFood(props: RecommendFoodProps) {
           )}
           <Swiper
             modules={[]}
-            className="slide-base"
-            style={{ width: "100%" }}
+            className="slide-base "
+            style={{ width: "100%", height: "100%" }}
             slidesPerView={
               width <= 450
                 ? 1.2
@@ -82,7 +82,7 @@ export function RecommendFood(props: RecommendFoodProps) {
             allowTouchMove={true}
             ref={swiperRef}
           >
-            {data?.map((item, index) => ( 
+            {data?.map((item, index) => (
               <SwiperSlide key={index + item?.id}>
                 <ItemRecommend
                   idFood={item.id}
@@ -110,49 +110,52 @@ export function RecommendFood(props: RecommendFoodProps) {
         </Box>
       ) : (
         <>
-          {seeAll ? <Box className="flex items-center justify-center">
-            <Grid
-              className=""
-              container
-              spacing={4}
-              columnSpacing={{ xs: 1, sm: 3, md: 4 }}
-            >
-              {data?.slice(0, 2).map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={item.id}>
-                  <ItemRecommend
-                    idFood={item.id}
-                    width={width}
-                    imgFood={item.imgFood}
-                    foodName={item.foodName}
-                    price={item.price}
-                    star={item.star}
-                    time={item.time}
-                    distance={item.distance}
-                    storeCheck={false}
-                    nameStore={item.nameRestaurantFood}
-                    idStore={item.restaurantEntityId}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Box> : <Box className="flex items-center justify-center">
-            <Grid
-              className=""
-              container
-              spacing={4}
-              columnSpacing={{ xs: 1, sm: 3, md: 4 }}
-            >
-              {data?.map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={item.id}>
-                  <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
-                  </Box>
-                  <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
-                    a
-                  </span>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>}
+          {seeAll ? (
+            <Box className="flex items-center justify-center">
+              <Grid
+                className=""
+                container
+                spacing={4}
+                columnSpacing={{ xs: 1, sm: 3, md: 4 }}
+              >
+                {data?.slice(0, 2).map((item) => (
+                  <Grid item xs={12} sm={6} md={3} key={item.id}>
+                    <ItemRecommend
+                      idFood={item.id}
+                      width={width}
+                      imgFood={item.imgFood}
+                      foodName={item.foodName}
+                      price={item.price}
+                      star={item.star}
+                      time={item.time}
+                      distance={item.distance}
+                      storeCheck={false}
+                      nameStore={item.nameRestaurantFood}
+                      idStore={item.restaurantEntityId}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          ) : (
+            <Box className="flex items-center justify-center">
+              <Grid
+                className=""
+                container
+                spacing={4}
+                columnSpacing={{ xs: 1, sm: 3, md: 4 }}
+              >
+                {data?.map((item) => (
+                  <Grid item xs={12} sm={6} md={3} key={item.id}>
+                    <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center"></Box>
+                    <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
+                      a
+                    </span>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          )}
           <Stack alignItems="center">
             <Box className="container-base">
               <CustomButton
