@@ -1,3 +1,4 @@
+import { ToppingAdd } from './../features/Admin/components/NewProduct';
 import { PageConfig } from "./../models/Config"
 import axiosClient from "./axiosClient"
 const adminApi = {
@@ -54,6 +55,7 @@ const adminApi = {
     imgFood: File,
     typeFoodEntityId: number,
     restaurantEntityId: number,
+    toppingList:ToppingAdd[]|[]
   ) {
     const data = new FormData()
     data.append("foodName", name)
@@ -62,6 +64,7 @@ const adminApi = {
     data.append("imgFood", imgFood)
     data.append("typeFoodEntityId", typeFoodEntityId.toString())
     data.append("restaurantEntityId", restaurantEntityId.toString())
+    data.append("toppingRequest",JSON.stringify(toppingList.map((item:ToppingAdd)=>({name:item.name,price:item.price}))))
     const url = "ADMIN/add-food"
     return axiosClient.post(url, data, {
       headers: {
@@ -75,6 +78,32 @@ const adminApi = {
     data.append("nameType", nameType)
     const url = "ADMIN/add-type"
     return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  },
+  updateSupplier(
+    id: number,
+    restaurantName: string,
+    address: string,
+    distance: number,
+    detail: string,
+    phoneNumber: string,
+    imgRes: File | null,
+  ) {
+    const data = new FormData()
+    data.append("id", String(id))
+    data.append("restaurantName", restaurantName)
+    data.append("address", address)
+    data.append("distance", String(distance))
+    data.append("detail", detail)
+    data.append("phoneNumber", phoneNumber)
+    if (imgRes !== null) {
+      data.append("imgRes", imgRes)
+    }
+    const url = "ADMIN/update-res"
+    return axiosClient.put(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

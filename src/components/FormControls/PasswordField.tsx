@@ -40,13 +40,12 @@ export function PasswordField(props: PasswordFieldProps) {
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange } }) => (
+        defaultValue=""
+        render={({ field }) => (
           <OutlinedInput
             autoComplete="true"
             label={label}
-            onChange={onChange}
-            fullWidth
-            defaultValue=""
+           {...field}
             type={showPassword ? "text" : "password"}
             endAdornment={
               <InputAdornment position="end">

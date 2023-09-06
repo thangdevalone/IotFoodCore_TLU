@@ -9,6 +9,8 @@ import NewType from "@/features/Admin/components/NewType"
 import TypeProduct from "@/features/Admin/TypeProduct"
 import queryString from "query-string"
 import NewStore from "@/features/Admin/components/NewStore"
+import UpdateSupplier from "@/features/Admin/components/UpdateSupplier"
+import UpdateType from "@/features/Admin/components/UpdateType"
 
 const WelComeAdmin = () => {
   return (
@@ -24,6 +26,20 @@ const WelComeAdmin = () => {
   )
 }
 
+interface data {
+  type: string
+  id: string
+}
+
+function extractTypeAndId(inputString: string) {
+  const parts = inputString.split("/")
+  if (parts.length === 2) {
+    const [type, id] = parts
+    return { type, id }
+  }
+  return null
+}
+
 const FormRouter = () => {
   const location = useLocation()
   const queryParams = queryString.parse(location.search)
@@ -37,6 +53,26 @@ const FormRouter = () => {
       return <NewStore />
     default:
       return null
+  }
+}
+
+const FormUpdate = () => {
+  const location = useLocation()
+  const queryParams = queryString.parse(location.search)
+  const form = queryParams.form
+  if (typeof form === "string") {
+    const result = extractTypeAndId(form) as data
+    const { type, id } = result
+    switch (type) {
+      case "supplier":
+        return <UpdateSupplier id={id} />
+      case "type":
+        return <UpdateType id={id} />
+      case "product":
+        return <UpdateType id={id} />
+      default:
+        return null
+    }
   }
 }
 
@@ -59,6 +95,7 @@ export default function Admin() {
           <Route path="/type" element={<TypeProduct />} />
           <Route path="/supplier" element={<Supplier />} />
           <Route path="/new" element={<FormRouter />} />
+          <Route path="/update" element={<FormUpdate />} />
         </Routes>
       </Box>
     </Box>

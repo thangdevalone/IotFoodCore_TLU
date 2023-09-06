@@ -2,14 +2,14 @@ import { FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/mat
 
 import { Controller, useFormContext } from 'react-hook-form';
 
-export interface InputFieldProps {
+export interface NumberFieldProps {
     label: string;
     name: string;
     disabled?:boolean;
  
 }
 
-export function InputField(props: InputFieldProps) {
+export function NumberField(props: NumberFieldProps) {
     const { name, label ,disabled=false } = props;
     const form = useFormContext();
     const {
@@ -23,9 +23,9 @@ export function InputField(props: InputFieldProps) {
             <Controller
                 name={name}
                 control={control}
-                defaultValue=""
+                defaultValue={0}
                 render={({ field}) => (
-                    <OutlinedInput  disabled={disabled} {...field} type='text'  label={label} />
+                    <OutlinedInput  disabled={disabled} {...field} type='number'  label={label} />
                 )}
             />
 
