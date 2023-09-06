@@ -117,6 +117,20 @@ const adminApi = {
       },
     })
   },
+  updateType(id: number, nameType: string, imgRes: File | null) {
+    const data = new FormData()
+    data.append("id", String(id))
+    data.append("nameType", nameType)
+    if (imgRes !== null) {
+      data.append("imgType", imgRes)
+    }
+    const url = "ADMIN/update-type"
+    return axiosClient.put(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  },
   deleteFood(foodArray: Array<number>) {
     const url = "ADMIN/delete-food"
     return axiosClient.post(url, foodArray)

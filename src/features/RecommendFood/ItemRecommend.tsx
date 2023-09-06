@@ -14,7 +14,7 @@ interface propsData {
   price: number
   star?: number
   time?: number
-  distance?: number
+  distance: string
   imgFood: string
   width: number
   idStore: number

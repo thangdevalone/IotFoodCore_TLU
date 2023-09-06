@@ -28,12 +28,6 @@ const UpdateType = ({ id }: { id: string }) => {
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      // const response = await foodsApis.getTypeFoods(+id)
-    }
-  }, [])
-
   const handleImageClick = () => {
     if (imgRef.current !== null && !imagePreview) {
       imgRef.current.click()
@@ -56,16 +50,30 @@ const UpdateType = ({ id }: { id: string }) => {
     async function uploadImage() {
       try {
         if (file) {
-          // const response = await adminApi.addType(file, type)
-          enqueueSnackbar("Tạo loại thành công", { variant: "success" })
+          await adminApi.updateType(+id, type, file)
+        } else {
+          await adminApi.updateType(+id, type, null)
         }
+        enqueueSnackbar("Sửa loại thành công", { variant: "success" })
       } catch (error) {
         console.log(error)
-        enqueueSnackbar("Tạo loại thất bại", { variant: "error" })
+        enqueueSnackbar("Sửa loại thất bại", { variant: "error" })
       }
     }
     uploadImage()
   }
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const response = await foodsApis.getDetailType(+id)
+      if (response?.status) {
+        setType(response?.data?.nameType)
+        setImagePreview(response?.data?.imgType)
+      }
+    }
+    fetchData()
+  }, [])
+
   const navigate = useNavigate()
 
   return (

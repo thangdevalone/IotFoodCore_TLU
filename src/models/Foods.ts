@@ -24,7 +24,7 @@ export interface StoreDetailData {
   address: string
   quantitySold: number
   businessHours: number
-  distance: number
+  distance: string
   detail: string
   phoneNumber: string
   imgRes: string
@@ -38,7 +38,7 @@ export interface foodData {
   detail: string
   nameRestaurantFood: string
   imgFood: string
-  distance: number
+  distance: string
   time: number
   star: number
   quantity: number
