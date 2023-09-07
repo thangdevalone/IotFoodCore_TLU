@@ -25,16 +25,16 @@ export function Header(props: HeaderProps) {
   const handleClick = (event: MouseEvent<HTMLImageElement>) => {
     setAnchorEl(event.currentTarget)
   }
-  const cartRef=useRef<HTMLDivElement>(null)
-  const scrollDir = useDetectScroll({});
-  useEffect(()=>{
-    if(scrollDir==="up" && cartRef.current){
-      cartRef.current.style.transform = 'translate(-50%,0px)';
+  const cartRef = useRef<HTMLDivElement>(null)
+  const scrollDir = useDetectScroll({})
+  useEffect(() => {
+    if (scrollDir === "up" && cartRef.current) {
+      cartRef.current.style.transform = "translate(-50%,0px)"
     }
-    if(scrollDir=="down" && cartRef.current){
-      cartRef.current.style.transform = 'translate(-50%,80px)';
+    if (scrollDir == "down" && cartRef.current) {
+      cartRef.current.style.transform = "translate(-50%,80px)"
     }
-  },[scrollDir])
+  }, [scrollDir])
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -103,7 +103,7 @@ export function Header(props: HeaderProps) {
                     display: "flex",
                     gap: "3px",
                     backgroundColor: `${
-                      setterBg || dataStore.length === 0
+                      setterBg || lengthFood === 0
                         ? "white"
                         : "var(--color-layer-2)"
                     }`,
@@ -111,18 +111,16 @@ export function Header(props: HeaderProps) {
                 >
                   <BagIcon
                     color={`${
-                      setterBg || dataStore.length === 0 ? "black" : "white"
+                      setterBg || lengthFood === 0 ? "black" : "white"
                     }`}
                   />
-                  {dataStore.length > 0 && (
+                  {lengthFood > 0 && (
                     <>
                       <Typography
                         sx={{
                           transform: "translateY(1px)",
                           color: `${
-                            setterBg || dataStore.length === 0
-                              ? "black"
-                              : "white"
+                            setterBg || lengthFood === 0 ? "black" : "white"
                           }`,
                         }}
                       >
@@ -133,14 +131,18 @@ export function Header(props: HeaderProps) {
                 </CustomButton>
               </Badge>
             ) : (
-              <div ref={cartRef} style={{transition:"all 0.3s"}} className="left-[50%] -translate-x-1/2 bottom-[20px] fixed w-[100vw] px-[20px]">
+              <div
+                ref={cartRef}
+                style={{ transition: "all 0.3s" }}
+                className="left-[50%] -translate-x-1/2 bottom-[20px] fixed w-[100vw] px-[20px]"
+              >
                 <CustomButton
                   onClick={handleOpenCard}
                   sx={{
                     padding: "12px 12px",
                     width: "100%",
                     minWidth: "unset",
-                    borderRadius:"6px",
+                    borderRadius: "6px",
                     display: "flex",
                     backgroundColor: "var(--color-layer-2)",
                     "&:hover": {
@@ -149,29 +151,28 @@ export function Header(props: HeaderProps) {
                     },
                   }}
                 >
-                  <BagIcon
-                    color={`${dataStore.length === 0 ? "black" : "white"}`}
-                  />
-                  {lengthFood>0 && <Typography
-                        sx={{
-                          ml:"10px",
-                          transform: "translateY(1px)",
-                          fontWeight: "600",
-                          textTransform:"initial",
-                          color: `${
-                            dataStore.length === 0 ? "black" : "white"
-                          }`,
-                        }}
-                      > - <span className="mr-[10px]">{lengthFood} món</span></Typography>}
-                  {dataStore.length > 0 && (
+                  <BagIcon color={`${lengthFood === 0 ? "black" : "white"}`} />
+                  {lengthFood > 0 && (
+                    <Typography
+                      sx={{
+                        ml: "10px",
+                        transform: "translateY(1px)",
+                        fontWeight: "600",
+                        textTransform: "initial",
+                        color: `${lengthFood === 0 ? "black" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      - <span className="mr-[10px]">{lengthFood} món</span>
+                    </Typography>
+                  )}
+                  {lengthFood > 0 && (
                     <>
                       <Typography
                         sx={{
                           transform: "translateY(1px)",
                           fontWeight: "600",
-                          color: `${
-                            dataStore.length === 0 ? "black" : "white"
-                          }`,
+                          color: `${lengthFood === 0 ? "black" : "white"}`,
                         }}
                       >
                         {handlePrice(totalPrice)} ₫
