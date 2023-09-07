@@ -7,7 +7,7 @@ import { MouseEvent, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { CartDrawer, SwitchLightDark } from "."
 import { CustomButton } from "../Custom/CustomButon"
-import { BagIcon, NotiIcon } from "../Icon"
+import { BagBoldIcon, BagIcon, NotiIcon } from "../Icon"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
@@ -25,21 +25,22 @@ export function Header(props: HeaderProps) {
   const handleClick = (event: MouseEvent<HTMLImageElement>) => {
     setAnchorEl(event.currentTarget)
   }
-  const cartRef=useRef<HTMLDivElement>(null)
-  const scrollDir = useDetectScroll({});
-  useEffect(()=>{
-    if(scrollDir==="up" && cartRef.current){
-      cartRef.current.style.transform = 'translate(-50%,0px)';
+  const cartRef = useRef<HTMLDivElement>(null)
+  const scrollDir = useDetectScroll({})
+  useEffect(() => {
+    if (scrollDir === "up" && cartRef.current) {
+      cartRef.current.style.transform = "translate(-50%,0px)"
     }
-    if(scrollDir=="down" && cartRef.current){
-      cartRef.current.style.transform = 'translate(-50%,80px)';
+    if (scrollDir == "down" && cartRef.current) {
+      cartRef.current.style.transform = "translate(-50%,80px)"
     }
-  },[scrollDir])
+  }, [scrollDir])
   const handleClose = () => {
     setAnchorEl(null)
   }
   const { width } = useWindowDimensions()
-  const setterBg = scrollY >= 100 ? true : false
+  const setterBg =
+    scrollY >= 100 || (scrollY >= 80 && width < 500) ? true : false
   const mobile = width <= 750 ? true : false
   const handleOpenCard = () => {
     dispatch(cartActions.toggleCart())
@@ -57,7 +58,12 @@ export function Header(props: HeaderProps) {
           "ani-bg",
           { "header-sd": !setterBg && !mobile, "header-color": setterBg },
         )}
-        sx={{ height: "80px", position: "fixed", zIndex: 20, top: 0 }}
+        sx={{
+          height: `${width <= 500 ? "60px" : "80px"}`,
+          position: "fixed",
+          zIndex: 20,
+          top: 0,
+        }}
       >
         <Stack
           flexDirection={"row"}
@@ -79,7 +85,7 @@ export function Header(props: HeaderProps) {
                   ? "/assets/iotfood_b.png"
                   : "/assets/iotfood.png"
               }
-              style={{ width: "130px" }}
+              style={{ width: `${width <= 500 ? "100px" : "130px"}` }}
               alt="logo"
             />
           </Link>
@@ -89,6 +95,11 @@ export function Header(props: HeaderProps) {
                 color="secondary"
                 badgeContent={lengthFood}
                 max={99}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    backgroundColor: "var(--color-df-1)",
+                  },
+                }}
                 anchorOrigin={{
                   vertical: "top",
                   horizontal: "left",
@@ -111,7 +122,9 @@ export function Header(props: HeaderProps) {
                 >
                   <BagIcon
                     color={`${
-                      setterBg || dataStore.length === 0 ? "black" : "white"
+                      setterBg || dataStore.length === 0
+                        ? "var(--color-df-1)"
+                        : "white"
                     }`}
                   />
                   {dataStore.length > 0 && (
@@ -133,68 +146,116 @@ export function Header(props: HeaderProps) {
                 </CustomButton>
               </Badge>
             ) : (
-              <div ref={cartRef} style={{transition:"all 0.3s"}} className="left-[50%] -translate-x-1/2 bottom-[20px] fixed w-[100vw] px-[20px]">
-                <CustomButton
-                  onClick={handleOpenCard}
-                  sx={{
-                    padding: "12px 12px",
-                    width: "100%",
-                    minWidth: "unset",
-                    borderRadius:"6px",
-                    display: "flex",
-                    backgroundColor: "var(--color-layer-2)",
-                    "&:hover": {
+              <div
+                ref={cartRef}
+                style={{ transition: "all 0.3s" }}
+                className={classNames(
+                  "max-w-[400px]",
+                  "bottom-[10px]",
+                  "fixed",
+                  "w-[100vw]",
+                  "px-[20px]",
+                  {
+                    "left-[50%] -translate-x-1/2": lengthFood > 0,
+                    "left-[123%]": lengthFood === 0,
+                  },
+                )}
+              >
+                {lengthFood > 0 ? (
+                  <CustomButton
+                    onClick={handleOpenCard}
+                    sx={{
+                      padding: "10px 20px",
+                      width: "100%",
+                      minWidth: "unset",
+                      borderRadius: "30px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      border: "none",
+                      textTransform: "unset",
                       backgroundColor: "var(--color-layer-2)",
-                      border: "1px solid #c8c8c8",
-                    },
-                  }}
-                >
-                  <BagIcon
-                    color={`${dataStore.length === 0 ? "black" : "white"}`}
-                  />
-                  {lengthFood>0 && <Typography
-                        sx={{
-                          ml:"10px",
-                          transform: "translateY(1px)",
-                          fontWeight: "600",
-                          textTransform:"initial",
-                          color: `${
-                            dataStore.length === 0 ? "black" : "white"
-                          }`,
-                        }}
-                      > - <span className="mr-[10px]">{lengthFood} món</span></Typography>}
-                  {dataStore.length > 0 && (
-                    <>
-                      <Typography
-                        sx={{
-                          transform: "translateY(1px)",
-                          fontWeight: "600",
-                          color: `${
-                            dataStore.length === 0 ? "black" : "white"
-                          }`,
-                        }}
+                      "&:hover": {
+                        backgroundColor: "var(--color-layer-2)",
+                        border: "none",
+                      },
+                    }}
+                  >
+                    {lengthFood > 0 && (
+                      <Stack
+                        direction="column"
+                        sx={{ "& > *": { color: "white" } }}
+                        alignItems="flex-start"
                       >
-                        {handlePrice(totalPrice)} ₫
-                      </Typography>
-                    </>
-                  )}
-                </CustomButton>
+                        <span className="font-semibold text-sm">
+                          {lengthFood} món
+                        </span>
+                        <span className="font-light text-sx">
+                          Đại học Thăng Long
+                        </span>
+                      </Stack>
+                    )}
+                    <Stack direction="row" alignItems="center">
+                      {dataStore.length > 0 && (
+                        <>
+                          <Typography
+                            sx={{
+                              fontSize: "17px",
+                              fontWeight: "600",
+                              color: `${
+                                dataStore.length === 0 ? "black" : "white"
+                              }`,
+                              mr: "5px",
+                            }}
+                          >
+                            {handlePrice(totalPrice)} ₫
+                          </Typography>
+                        </>
+                      )}
+                      <BagBoldIcon color="white" fontSize="large" />
+                    </Stack>
+                  </CustomButton>
+                ) : (
+                  <CustomButton
+                    onClick={handleOpenCard}
+                    sx={{
+                      padding: "10px 12px",
+                      mr: 1,
+                      minWidth: "unset",
+                      display: "flex",
+                      gap: "3px",
+                      border: "1px solid var(--color-df-1)",
+                      backgroundColor: `${
+                        setterBg || dataStore.length === 0
+                          ? "white"
+                          : "var(--color-layer-2)"
+                      }`,
+                      "&:hover": {
+                        border: "1px solid var(--color-df-1)",
+                        backgroundColor: "white",
+                      },
+                    }}
+                  >
+                    <BagIcon color="var(--color-df-1)" />
+                  </CustomButton>
+                )}
               </div>
             )}
 
             {user ? (
               <>
                 <CustomButton
-                  sx={{ padding: "10px 12px", mr: 2, minWidth: "unset" }}
+                  sx={{ padding: width<=500?"7px 10px":"10px 12px", mr: 2, minWidth: "unset" }}
+                  
                 >
                   <NotiIcon />
                 </CustomButton>
 
                 <Avatar
+                  
                   sx={{
                     cursor: "pointer",
-                    width: 45,
-                    height: 45,
+                    width: width<=500?35:45,
+                    height: width<=500?35:45,
                     border: "1px solid #f0efef",
                   }}
                   onClick={handleClick}
@@ -205,7 +266,7 @@ export function Header(props: HeaderProps) {
               </>
             ) : (
               <Link to={"/login"}>
-                <CustomButton sx={{ padding: "10px 15px" }}>
+                <CustomButton  sx={{ padding: "10px 15px" ,fontSize:`${width<=500?"10px":"12px"}`}}>
                   Đăng nhập/Đăng ký
                 </CustomButton>
               </Link>
