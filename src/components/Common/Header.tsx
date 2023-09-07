@@ -7,7 +7,7 @@ import { MouseEvent, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { CartDrawer, SwitchLightDark } from "."
 import { CustomButton } from "../Custom/CustomButon"
-import { BagIcon, NotiIcon } from "../Icon"
+import { BagBoldIcon, BagIcon, NotiIcon } from "../Icon"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
@@ -39,7 +39,8 @@ export function Header(props: HeaderProps) {
     setAnchorEl(null)
   }
   const { width } = useWindowDimensions()
-  const setterBg = scrollY >= 100 ? true : false
+  const setterBg =
+    scrollY >= 100 || (scrollY >= 80 && width < 500) ? true : false
   const mobile = width <= 750 ? true : false
   const handleOpenCard = () => {
     dispatch(cartActions.toggleCart())
@@ -57,7 +58,12 @@ export function Header(props: HeaderProps) {
           "ani-bg",
           { "header-sd": !setterBg && !mobile, "header-color": setterBg },
         )}
-        sx={{ height: "80px", position: "fixed", zIndex: 20, top: 0 }}
+        sx={{
+          height: `${width <= 500 ? "60px" : "80px"}`,
+          position: "fixed",
+          zIndex: 20,
+          top: 0,
+        }}
       >
         <Stack
           flexDirection={"row"}
@@ -79,7 +85,7 @@ export function Header(props: HeaderProps) {
                   ? "/assets/iotfood_b.png"
                   : "/assets/iotfood.png"
               }
-              style={{ width: "130px" }}
+              style={{ width: `${width <= 500 ? "100px" : "130px"}` }}
               alt="logo"
             />
           </Link>
@@ -89,6 +95,11 @@ export function Header(props: HeaderProps) {
                 color="secondary"
                 badgeContent={lengthFood}
                 max={99}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    backgroundColor: "var(--color-df-1)",
+                  },
+                }}
                 anchorOrigin={{
                   vertical: "top",
                   horizontal: "left",
@@ -111,7 +122,7 @@ export function Header(props: HeaderProps) {
                 >
                   <BagIcon
                     color={`${
-                      setterBg || lengthFood === 0 ? "black" : "white"
+                      setterBg || dataStore?.length === 0 ? "black" : "white"
                     }`}
                   />
                   {lengthFood > 0 && (
@@ -151,7 +162,9 @@ export function Header(props: HeaderProps) {
                     },
                   }}
                 >
-                  <BagIcon color={`${lengthFood === 0 ? "black" : "white"}`} />
+                  <BagIcon
+                    color={`${dataStore?.length === 0 ? "black" : "white"}`}
+                  />
                   {lengthFood > 0 && (
                     <Typography
                       sx={{
@@ -159,20 +172,22 @@ export function Header(props: HeaderProps) {
                         transform: "translateY(1px)",
                         fontWeight: "600",
                         textTransform: "initial",
-                        color: `${lengthFood === 0 ? "black" : "white"}`,
+                        color: `${dataStore?.length === 0 ? "black" : "white"}`,
                       }}
                     >
                       {" "}
                       - <span className="mr-[10px]">{lengthFood} món</span>
                     </Typography>
                   )}
-                  {lengthFood > 0 && (
+                  {dataStore?.length > 0 && (
                     <>
                       <Typography
                         sx={{
                           transform: "translateY(1px)",
                           fontWeight: "600",
-                          color: `${lengthFood === 0 ? "black" : "white"}`,
+                          color: `${
+                            dataStore?.length === 0 ? "black" : "white"
+                          }`,
                         }}
                       >
                         {handlePrice(totalPrice)} ₫
@@ -186,7 +201,11 @@ export function Header(props: HeaderProps) {
             {user ? (
               <>
                 <CustomButton
-                  sx={{ padding: "10px 12px", mr: 2, minWidth: "unset" }}
+                  sx={{
+                    padding: width <= 500 ? "7px 10px" : "10px 12px",
+                    mr: 2,
+                    minWidth: "unset",
+                  }}
                 >
                   <NotiIcon />
                 </CustomButton>
@@ -194,8 +213,8 @@ export function Header(props: HeaderProps) {
                 <Avatar
                   sx={{
                     cursor: "pointer",
-                    width: 45,
-                    height: 45,
+                    width: width <= 500 ? 35 : 45,
+                    height: width <= 500 ? 35 : 45,
                     border: "1px solid #f0efef",
                   }}
                   onClick={handleClick}
@@ -206,7 +225,12 @@ export function Header(props: HeaderProps) {
               </>
             ) : (
               <Link to={"/login"}>
-                <CustomButton sx={{ padding: "10px 15px" }}>
+                <CustomButton
+                  sx={{
+                    padding: "10px 15px",
+                    fontSize: `${width <= 500 ? "10px" : "12px"}`,
+                  }}
+                >
                   Đăng nhập/Đăng ký
                 </CustomButton>
               </Link>

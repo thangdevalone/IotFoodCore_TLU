@@ -12,7 +12,7 @@ import React from "react"
 export interface HomeProps {}
 
 export interface HomeProps {}
-const chatAPI = []
+
 export function Home(props: HomeProps) {
   const { width } = useWindowDimensions()
   React.useEffect(() => {
