@@ -30,7 +30,7 @@
 @media screen and (max-width: 992px) {
   .base-tx {
     font-size: 1.8rem;
-    margin-bottom: 26px !important;
+    margin-bottom: 24px !important;
     line-height: unset;
   }
 }
@@ -46,7 +46,7 @@
   .base-tx {
     font-size: 1.6rem;
     line-height: unset;
-    margin-bottom: 15px !important;
+    margin-bottom: 14px !important;
   }
  
 }

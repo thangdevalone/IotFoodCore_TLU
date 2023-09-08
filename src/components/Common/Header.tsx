@@ -40,7 +40,7 @@ export function Header(props: HeaderProps) {
   }
   const { width } = useWindowDimensions()
   const setterBg =
-    scrollY >= 100 || (scrollY >= 80 && width < 500) ? true : false
+    scrollY >= 40 || (scrollY >= 50 && width < 500) ? true : false
   const mobile = width <= 750 ? true : false
   const handleOpenCard = () => {
     dispatch(cartActions.toggleCart())

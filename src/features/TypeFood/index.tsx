@@ -15,7 +15,7 @@ const TypeFood = () => {
   }, [])
 
   return (
-    <Box className="flex items-center justify-center">
+    <Box className="flex items-center justify-center" sx={{mb:"24px"}}>
       <Grid
         className=""
         container

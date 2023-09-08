@@ -53,13 +53,13 @@ export function Home(props: HomeProps) {
           <section className="container-base base-pd type-food">
             <TypeFood />
           </section>
-          <p className="base-tx  base-pd  mb-[32px]">
-            Vì sao bạn nên đặt đồ ăn tại IotFood?
+          <p className="base-tx base-pd mb-[16px]">
+            IotFood có gì nổi bật?
           </p>
           <section className="container-base base-pd why-choose">
             <WhyChoose />
           </section>
-          <p className="base-tx base-pd mb-[32px]">Các câu hỏi thường gặp?</p>
+          <p className="base-tx base-pd mb-[16px]">Câu hỏi về chúng tôi</p>
           <section className="container-base base-pd why-choose">
             <Question />
           </section>

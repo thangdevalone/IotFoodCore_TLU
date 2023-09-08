@@ -5,7 +5,7 @@ export interface  FooterProps {
 
 export function Footer (props:  FooterProps) {
   return (
-    <div>
+    <div className='h-[300px] bg-[var(--color-df-1)]'>
       
     </div>
   );
