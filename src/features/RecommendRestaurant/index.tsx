@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 import * as React from "react"
 import foodsApis from "@/api/foodsApi"
 import { useWindowDimensions } from "@/hooks"
-import ItemRecommend from "../RecommendFood/ItemRecommend"
+import ItemRecommend from "./ItemRecommend"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { RestaurantData } from "@/models/Foods"
 import { useNavigate } from "react-router-dom"
@@ -15,7 +15,7 @@ export interface RecommendRestaurantProps {}
 export function RecommendRestaurant(props: RecommendRestaurantProps) {
   const [data, setData] = React.useState<RestaurantData[]>([])
   const swiperRef = React.useRef<any>(null)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const slidePrev = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slidePrev()
@@ -40,8 +40,8 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
   const { width } = useWindowDimensions()
 
   const handleStore = () => {
-    navigate('/store/get-all-store');
-  };
+    navigate("/store/get-all-store")
+  }
 
   //
   // console.log(data);
@@ -85,20 +85,18 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           ref={swiperRef}
         >
           {data?.map((item, index) => (
-              <SwiperSlide key={index + item?.id}>
+            <SwiperSlide key={index + item?.id}>
               <ItemRecommend
-                  idFood={item.id}
-                  width={width}
-                  imgFood={item.imgRes}
-                  nameStore={item.restaurantName}
-                  distance={String(item.distance)}
-                  storeCheck={true}
-                  price={item.price}
-                  idStore = {item.id}
-                />
-                    
-              </SwiperSlide>
-            ))}
+                idFood={item.id}
+                width={width}
+                imgFood={item.imgRes}
+                nameStore={item.restaurantName}
+                distance={String(item.distance)}
+                price={item.price}
+                idStore={item.id}
+              />
+            </SwiperSlide>
+          ))}
         </Swiper>
         {width > 900 && (
           <Box className="flex items-center justify-center ml-[5px]">
@@ -108,8 +106,8 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           </Box>
         )}
       </Box>
-      <Stack alignItems="center" onClick={()=> handleStore()}>
-        <Box  className="container-base base-pd">
+      <Stack alignItems="center" onClick={() => handleStore()}>
+        <Box className="container-base base-pd">
           <CustomButton
             fullWidth
             sx={{

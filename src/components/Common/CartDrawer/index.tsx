@@ -21,7 +21,9 @@ import { CartItemData } from "@/models"
 export interface CardDrawerProps {}
 
 export function CartDrawer(props: CardDrawerProps) {
-  const { open, dataStore, timeDeliver } = useAppSelector((state) => state.cart)
+  const { open, dataStore, timeDeliver, lengthFood } = useAppSelector(
+    (state) => state.cart,
+  )
   const user = useInforUser()
   const [price, setPrice] = React.useState<number>(0)
   const iOS =
@@ -33,9 +35,14 @@ export function CartDrawer(props: CardDrawerProps) {
   }
 
   React.useEffect(() => {
-    const itemFoods:CartItemData[] = []
-    dataStore.forEach(store => store.items.forEach( item => itemFoods.push(item)))
-    const total=itemFoods.reduce((sum,item)=> sum + item.price * item.quantity ,0)
+    const itemFoods: CartItemData[] = []
+    dataStore?.forEach((store) =>
+      store.items.forEach((item) => itemFoods.push(item)),
+    )
+    const total = itemFoods.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    )
     setPrice(total)
     dispatch(cartActions.setTotalPrice(total))
   }, [dataStore])
@@ -88,12 +95,21 @@ export function CartDrawer(props: CardDrawerProps) {
               Giờ nhận hàng: {timeDeliver}
             </span>
           </Stack>
-          <Stack direction={"column"} alignItems={dataStore.length===0?"center":"flex-start"} justifyContent={dataStore.length===0?"center":""} sx={{ height: "calc(100% - 75px)" }}>
-            {dataStore.length ? (
+          <Stack
+            direction={"column"}
+            alignItems={lengthFood === 0 ? "center" : "flex-start"}
+            justifyContent={lengthFood === 0 ? "center" : ""}
+            sx={{ height: "calc(100% - 75px)" }}
+          >
+            {lengthFood ? (
               <>
                 <Stack
-                className="custom-scroll-y"
-                  style={{ padding: "24px", overflow: "hidden auto", height: "calc(100% - 200px)" }}
+                  className="custom-scroll-y"
+                  style={{
+                    padding: "24px",
+                    overflow: "hidden auto",
+                    height: "calc(100% - 200px)",
+                  }}
                   spacing={3}
                 >
                   {dataStore.map((data: iDataStore) => (

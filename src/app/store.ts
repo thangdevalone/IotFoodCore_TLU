@@ -13,6 +13,7 @@ const persistConfig = {
   key: 'root', 
   storage,
   whitelist: ['auth','cart'],
+  timeout: 60 ,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
