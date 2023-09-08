@@ -47,46 +47,44 @@ const adminApi = {
       },
     })
   },
-  addFood(name:string,price:number,detail:string,imgFood:File,typeFoodEntityId:number,restaurantEntityId:number){
-    const data=new FormData()
-    data.append("foodName",name)
-    data.append("price",price.toString())
-    data.append("detail",detail)
-    data.append("imgFood",imgFood)
-    data.append("typeFoodEntityId",typeFoodEntityId.toString())
-    data.append("restaurantEntityId",restaurantEntityId.toString())
-    console.log({imgFood})
-    const url="ADMIN/add-food"
-    return axiosClient.post(url,data,{
+  addFood(name: string, price: number, detail: string, imgFood: File, typeFoodEntityId: number, restaurantEntityId: number) {
+    const data = new FormData()
+    data.append("foodName", name)
+    data.append("price", price.toString())
+    data.append("detail", detail)
+    data.append("imgFood", imgFood)
+    data.append("typeFoodEntityId", typeFoodEntityId.toString())
+    data.append("restaurantEntityId", restaurantEntityId.toString())
+    console.log({ data })
+    const url = "ADMIN/add-food"
+    return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "multipart/form-data", // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
       },
     })
   },
   addEmployee(
-  username: string,
-  password: string,
-  sdt: string,
-  accountName: string,
-  imgUser: File){
-    const data=new FormData()
-    console.log({username,
-      password,
-      sdt,
-      accountName,
-      imgUser})
-    data.append("username",username)
-    data.append("password",password)
-    data.append("sdt",sdt)
-    data.append("accountName",accountName)
-    data.append("imgUser",imgUser)
-    const url="ADMIN/MANAGER/add-employee"
-    return axiosClient.post(url,data,{
-      headers: {
-        'Content-Type': 'multipart/form-data', // Thêm đoạn này để đảm bảo dữ liệu được gửi dưới dạng FormData
-      },
-    })
-  },
+    username: string,
+    password: string,
+    sdt: string,
+    accountName: string,
+    imgUser: File) {
+    console.log({ username, password, sdt, accountName })
+    const data = new FormData()
+    data.append("username", accountName)
+    data.append("id", "0")
+    data.append("password", password)
+    data.append("sdt", sdt)
+    data.append("accountName", username)
+    data.append("imgUser", "https://tse4.mm.bing.net/th?id=OIP.tS4o_QzG25ntuI90jWWWXQHaHa&pid=Api&P=0&h=180")
+    const url = "ADMIN/MANAGER/add-employee"
+    return axiosClient.post(url, {
+      "username": "Nguyễn Ngọc Huyền",
+      "password": "Huyen1234.",
+      "sdt": "0962319014",
+      "accountName": "A419662",
+      "imgUser": "string"
+    })},
 
   addType(imgType: File, nameType: string) {
     const data = new FormData()

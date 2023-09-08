@@ -95,23 +95,20 @@ function NewEmployee(props: NewEmployeeProps) {
       reader.readAsDataURL(selectedImage)
     }
   }
-  const handlePushEmployee = () => {
-    async function uploadImage() {
+  const handlePushEmployee = async() => {
       try {
         if (file) {
           const data = new FormData()
           data.append("file", file)
           data.append("upload_preset", "thangdev_food")
           data.append("cloud_name", CLOUD_NAME)
-          console.log("hello3")
           const res = await adminApi.addEmployee(name, password, phoneNumber, employeeNumber, file)
           console.log({res})
         }
-      } catch (error) {
+      } catch (error:any) {
         console.log(error)
       }
-    }
-    uploadImage()
+
   }
   const navigate = useNavigate()
   return (
