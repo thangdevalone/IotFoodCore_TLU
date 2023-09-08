@@ -11,12 +11,11 @@ import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 import React from "react"
 export interface HomeProps {}
 
-
-export interface HomeProps { }
-
 export function Home(props: HomeProps) {
-  const { width } = useWindowDimensions();
-  React.useEffect(()=>{window.scrollTo(0, 0);},[])
+  const { width } = useWindowDimensions()
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <Box className="relative tx-df-sz">
@@ -44,24 +43,27 @@ export function Home(props: HomeProps) {
       >
         <RecommendFood />
       </section>
-      <p className="base-tx  base-pd  mb-[32px]">
-        Các loại đồ ăn có sẵn để lựa chọn
-      </p>
-      <section className="container-base base-pd type-food">
-        <TypeFood />
-      </section>
-      <p className="base-tx  base-pd  mb-[32px]">
-        Vì sao bạn nên đặt đồ ăn tại IotFood?
-      </p>
-      <section className="container-base base-pd why-choose">
-        <WhyChoose />
-      </section>
-      <p className="base-tx base-pd mb-[32px]">Các câu hỏi thường gặp?</p>
-      <section className="container-base base-pd why-choose">
-        <Question />
-      </section>
-      <Footer />
-      
+      {width >= 600 && (
+        <>
+          <p className="base-tx  base-pd  mb-[32px]">
+            Các loại đồ ăn có sẵn để lựa chọn
+          </p>
+          <section className="container-base base-pd type-food">
+            <TypeFood />
+          </section>
+          <p className="base-tx  base-pd  mb-[32px]">
+            Vì sao bạn nên đặt đồ ăn tại IotFood?
+          </p>
+          <section className="container-base base-pd why-choose">
+            <WhyChoose />
+          </section>
+          <p className="base-tx base-pd mb-[32px]">Các câu hỏi thường gặp?</p>
+          <section className="container-base base-pd why-choose">
+            <Question />
+          </section>
+          <Footer />
+        </>
+      )}
     </Box>
   )
 }

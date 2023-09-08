@@ -9,3 +9,18 @@
 .ani-bg{
     transition: all 0.2s;
 }
+.mobile-cart{
+    position: fixed;
+    z-index: 10;
+    width: max-content;
+    bottom:20px;
+    right:20px;
+    
+}
+.mobile-cart button{
+    background-color: var(--color-layer-2) !important;
+}
+.cart{
+    position: relative;
+    width: max-content;
+}

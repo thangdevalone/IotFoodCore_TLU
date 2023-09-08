@@ -1,29 +1,25 @@
 import { useAppDispatch } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
+import { useWindowDimensions } from "@/hooks"
 import { handlePrice } from "@/utils"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import AddCircleIcon from '@mui/icons-material/AddCircle'
+import AddCircleIcon from "@mui/icons-material/AddCircle"
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
 import { Box, Stack, Typography } from "@mui/material"
-import { useNavigate } from "react-router-dom"
 
 interface propsData {
-  idFood:number
+  idFood: number
   nameStore: string
   foodName?: any | string
   price: number
   star?: number
   time?: number
-  distance?: number
+  distance?: string
   imgFood: string
-  width: number,
-  idStore : number
-  storeCheck ?: boolean, // cua hang hay foods
+  width: number
+  idStore: number
+  detail: string
 }
-
-// width: `${width < 601 ? '38vh' : '45vh'}`,
-//                     maxHeight: `${width < 601 ? '150px' : '200px'}`,
-//                     minHeight: `${width < 601 ? '150px' : '200px'}`,
 
 const ItemRecommend = (props: propsData) => {
   const {
@@ -35,17 +31,12 @@ const ItemRecommend = (props: propsData) => {
     time = 10,
     distance,
     imgFood,
-    width,
-    storeCheck = false,
-    idStore
+    idStore,
+    detail,
   } = props
-  
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
-  const handleRouter = (id:number) => {
-    navigate(storeCheck ?  `/store/detail-store/${id}` : `/store/detail-food/${id}`);
-  }
+  const { width } = useWindowDimensions()
+  const dispatch = useAppDispatch()
 
   const handleAddToCart = () => {
     const data = {
@@ -57,53 +48,109 @@ const ItemRecommend = (props: propsData) => {
       nameStore,
       imgFood,
     }
-    dispatch(cartActions.addToCart(data));
-    dispatch(cartActions.setDataStore({nameStore:""}))
+    dispatch(cartActions.addToCart(data))
   }
-  
-  
+
   return (
-    <Box className="w-[100%] h-[100%]">
+    <Box className={`w-full h-full  ${width < 600 && "flex gap-2"}`}>
+      <Box className="w-full">
+        <Box
+          className={`${
+            width < 600
+              ? "h-[12vh] w-[26vw] object-contain border"
+              : "h-[18vh] w-[100%] object-cover"
+          } rounded-md  `}
+          sx={{
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            backgroundImage: `url(${imgFood})`,
+          }}
+        ></Box>
+      </Box>
       <Box
-        onClick={()=>handleRouter(idFood)}
-        className="w-[100%] h-[60%] rounded-md cursor-pointer object-cover"
-        sx={{
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundImage: `url(${imgFood})`,
-        }}
-      ></Box>
-      <Stack className="mt-[8px]">
-        <span className="text-lg font-semibold capitalize">
-          {nameStore}
+        className={`flex flex-col w-full ${
+          width < 600 && "relative justify-between"
+        }`}
+      >
+        <span className="text-lg font-semibold capitalize whitespace-nowrap overflow-hidden overflow-ellipsis">
+          {foodName.length > 20 && width < 600
+            ? `${foodName.slice(0, 23)} ...`
+            : foodName}
         </span>
-        {price && <Box className="flex gap-5 capitalize items-center ">
-          {foodName && <Typography sx={{ fontSize: !nameStore ? '16px' : "14px" }}>{foodName}</Typography>}
-          <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
-            {handlePrice(price)} VND
-          </Typography>
-        </Box>}
-        <Box className="flex gap-10 items-center mt-2">
-          {star && <Box className=" flex  justify-center items-center ">
-            <StarRateRoundedIcon style={{ color: "orange" }} />
-            <Typography sx={{ fontSize: "14px" }}>{star}</Typography>
-          </Box>}
-          <Box className="flex gap-2">
-            <Box className="flex items-center justify-center gap-2">
-              <AccessTimeRoundedIcon />
-              <Typography sx={{ fontSize: "14px" }}>{time} phút</Typography>
-            </Box>
-            •
-            <Typography
-              sx={{ fontSize: "14px" }}
-              className="flex items-center justify-center"
-            >
-              {distance} km
+        {width < 600 ? (
+          <>
+            <Typography className="whitespace-nowrap overflow-hidden overflow-ellipsis">
+              {detail.length > 20 && detail
+                ? `${detail.slice(0, 25)} ...`
+                : "detail"}
             </Typography>
-          </Box>
-          { !storeCheck && <Box className="cursor-pointer hover:opacity-90" onClick={()=>handleAddToCart()}><AddCircleIcon style={{ color: "green", fontSize :"29px" }}/></Box>}
-        </Box>
-      </Stack>
+            <Typography
+              className="whitespace-nowrap overflow-hidden overflow-ellipsis"
+              sx={{ fontSize: "12px" }}
+            >
+              {nameStore}
+            </Typography>
+            <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
+              {handlePrice(price)} VND
+            </Typography>
+            <Box
+              className="cursor-pointer hover:opacity-90 absolute bottom-[-5px] right-2"
+              onClick={() => handleAddToCart()}
+            >
+              <AddCircleIcon style={{ color: "green", fontSize: "28px" }} />
+            </Box>
+          </>
+        ) : (
+          <>
+            <Box className="flex capitalize gap-5 items-center">
+              <Typography
+                className="whitespace-nowrap flex-1 overflow-hidden overflow-ellipsis"
+                sx={{ fontSize: "12px" }}
+              >
+                {nameStore}
+              </Typography>
+              <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
+                {handlePrice(price)} VND
+              </Typography>
+              {width < 600 && (
+                <Box
+                  className="cursor-pointer hover:opacity-90 absolute bottom-[-5px] right-2"
+                  onClick={() => handleAddToCart()}
+                >
+                  <AddCircleIcon style={{ color: "green", fontSize: "28px" }} />
+                </Box>
+              )}
+            </Box>
+            <Box className="flex gap-5 items-center mt-2 ">
+              <Box className=" flex justify-center items-center ">
+                <StarRateRoundedIcon style={{ color: "orange" }} />
+                <Typography sx={{ fontSize: "14px" }} className="">
+                  {star || 5}
+                </Typography>
+              </Box>
+              <Box className="flex gap-2">
+                <Box className="flex items-center justify-center gap-2">
+                  <AccessTimeRoundedIcon />
+                  <Typography sx={{ fontSize: "14px" }}>{time} phút</Typography>
+                </Box>
+                •
+                <Typography
+                  sx={{ fontSize: "14px" }}
+                  className="flex items-center justify-center"
+                >
+                  {distance || 1} km
+                </Typography>
+              </Box>
+              <Box
+                className="cursor-pointer absolute right-5 hover:opacity-90"
+                onClick={() => handleAddToCart()}
+              >
+                <AddCircleIcon style={{ color: "green", fontSize: "29px" }} />
+              </Box>
+            </Box>
+          </>
+        )}
+      </Box>
     </Box>
   )
 }

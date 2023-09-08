@@ -1,4 +1,5 @@
 import adminApi from "@/api/adminApi"
+import foodsApis from "@/api/foodsApi"
 import {
   ArrowBackIosNew,
   CloudUpload,
@@ -10,7 +11,6 @@ import {
   Backdrop,
   Box,
   Button,
-  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -21,14 +21,11 @@ import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 
-export interface NewProductProps {}
-
-function NewType(props: NewProductProps) {
+const UpdateType = ({ id }: { id: string }) => {
   const [file, setFile] = React.useState<File | null>()
   const [type, setType] = React.useState<string>("")
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
-  const [loadding, setLoadding] = React.useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleImageClick = () => {
@@ -51,36 +48,36 @@ function NewType(props: NewProductProps) {
   }
   const handlePushProduct = () => {
     async function uploadImage() {
-      setLoadding(true)
       try {
         if (file) {
-          await adminApi.addType(file, type)
-          setLoadding(false)
-          enqueueSnackbar("Tạo loại thành công", { variant: "success" })
-          setType("")
-          setImagePreview(null);
-          setFile(null)
+          await adminApi.updateType(+id, type, file)
+        } else {
+          await adminApi.updateType(+id, type, null)
         }
-        else {
-          setLoadding(false)
-          enqueueSnackbar("Bắt buộc phải có ảnh", { variant: "error" })
-        }
+        enqueueSnackbar("Sửa loại thành công", { variant: "success" })
       } catch (error) {
-        setLoadding(false)
-        enqueueSnackbar("Tạo loại thất bại", { variant: "error" })
+        console.log(error)
+        enqueueSnackbar("Sửa loại thất bại", { variant: "error" })
       }
     }
     uploadImage()
   }
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const response = await foodsApis.getDetailType(+id)
+      if (response?.status) {
+        setType(response?.data?.nameType)
+        setImagePreview(response?.data?.imgType)
+      }
+    }
+    fetchData()
+  }, [])
+
   const navigate = useNavigate()
+
   return (
     <Box sx={{ height: "100%" }}>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loadding}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <Stack
         direction="row"
         alignItems="center"
@@ -127,7 +124,7 @@ function NewType(props: NewProductProps) {
                 p: "10px",
               }}
             >
-              <p className="font-medium text-lg mb-2">Thêm loại sản phẩm mới</p>
+              <p className="font-medium text-lg mb-2">Sửa loại sản phẩm mới</p>
               <div className="border   bg-white rounded-md border-gray-300 p-[15px]">
                 <div className="flex w-[100%]">
                   <div className="flex-1 mr-[20px]">
@@ -138,8 +135,8 @@ function NewType(props: NewProductProps) {
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
                       placeholder="VD: Bún, đồ uống..."
-                      value={type}
                       onChange={(e) => setType(e.target.value)}
+                      value={type}
                     />
                   </div>
                   <div
@@ -177,7 +174,7 @@ function NewType(props: NewProductProps) {
                             <IconButton onClick={() => setOpenBackDrop(true)}>
                               <Visibility htmlColor="white" />
                             </IconButton>
-                            <IconButton onClick={() => {setImagePreview(null);setFile(null)}}>
+                            <IconButton onClick={() => setImagePreview(null)}>
                               <Delete htmlColor="white" />
                             </IconButton>
                           </div>
@@ -223,4 +220,4 @@ function NewType(props: NewProductProps) {
   )
 }
 
-export default NewType
+export default UpdateType

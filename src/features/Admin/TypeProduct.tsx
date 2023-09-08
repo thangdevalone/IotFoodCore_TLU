@@ -1,8 +1,6 @@
-import adminApi from "@/api/adminApi"
-import { useEffect, useMemo, useRef, useState } from "react"
 import History from "@/Router/History"
+import adminApi from "@/api/adminApi"
 import { TypeItem, TypeRoot } from "@/models"
-import { formatCurrencyVND } from "@/utils"
 import { Delete, Settings } from "@mui/icons-material"
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material"
 import {
@@ -12,10 +10,11 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
 } from "material-react-table"
+import { useSnackbar } from "notistack"
 import queryString from "query-string"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
-import { useSnackbar } from "notistack"
 
 const TypeProduct = () => {
   const location = useLocation() // Get the current location object
@@ -124,7 +123,7 @@ const TypeProduct = () => {
         manualFiltering
         manualPagination
         muiTableBodyRowProps={({ row }) => ({
-          onClick: () => console.log(row),
+          onClick: () => navigate(`/admin/update?form=type/${row.original.id}`),
           sx: { cursor: "pointer" },
         })}
         manualSorting
@@ -155,7 +154,7 @@ const TypeProduct = () => {
               Tạo
             </Button>
             <Typography sx={{ fontSize: "18px", fontWeight: 500, mr: "10px" }}>
-              Tạo Loại Sản Phẩm
+              Loại Sản Phẩm
             </Typography>
 
             <IconButton

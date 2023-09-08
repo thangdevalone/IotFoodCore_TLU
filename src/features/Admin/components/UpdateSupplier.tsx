@@ -1,3 +1,6 @@
+import foodsApis from "@/api/foodsApi"
+import { StoreDetailData } from "@/models"
+import React, { useEffect, memo } from "react"
 import adminApi from "@/api/adminApi"
 import {
   ArrowBackIosNew,
@@ -10,7 +13,6 @@ import {
   Backdrop,
   Box,
   Button,
-  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -20,47 +22,51 @@ import {
   Tabs,
 } from "@mui/material"
 import { useSnackbar } from "notistack"
-import React from "react"
 import { useNavigate } from "react-router-dom"
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  }
-}
-export interface NewProductProps {}
-
-function NewStore(props: NewProductProps) {
-  const [value, setValue] = React.useState(0)
+const UpdateSupplier = ({ id }: { id: string }) => {
   const [file, setFile] = React.useState<File | null>()
+  const [value, setValue] = React.useState(0)
   const [phone, setPhone] = React.useState<string>("")
   const [address, setAddress] = React.useState<string>("")
   const [restaurantName, setRestaurantName] = React.useState<string>("")
   const [detail, setDetail] = React.useState<string>("")
-  const [distance, setDistance] = React.useState<string>("")
+  const [imagePreview, setImagePreview] = React.useState<string | null>(null)
+  const [distance, setDistance] = React.useState<number>(0)
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
-  const [loadding, setLoadding] = React.useState(false)
   const { enqueueSnackbar } = useSnackbar()
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await foodsApis.getDetailStore(+id)
+      if (response?.status) {
+        setPhone(response?.data?.phoneNumber)
+        setAddress(response?.data?.address)
+        setDetail(response?.data?.detail)
+        setRestaurantName(response?.data?.restaurantName)
+        setDistance(response?.data?.distance)
+        setImagePreview(response?.data?.imgRes)
+      }
+    }
+    fetchData()
+  }, [])
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
 
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    }
+  }
   const handleImageClick = () => {
     if (imgRef.current !== null && !imagePreview) {
       imgRef.current.click()
     }
   }
-  const [imagePreview, setImagePreview] = React.useState<string | null>(null)
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = event.target.files && event.target.files[0]
-
     if (selectedImage && event.target.files) {
       setFile(event.target.files[0])
       const reader = new FileReader()
@@ -72,60 +78,51 @@ function NewStore(props: NewProductProps) {
   }
   const handlePushProduct = async () => {
     async function uploadImage() {
-      setLoadding(true)
       try {
         if (file) {
-          await adminApi.addRestaurant(
+          await adminApi.updateSupplier(
+            +id,
             restaurantName,
             address,
-            0,
             distance,
             detail,
             phone,
             file,
           )
-          setLoadding(false)
-          enqueueSnackbar("Tạo cửa hàng thành công", { variant: "success" })
-          setAddress("")
-          setDetail("")
-          setDistance("0")
-          setRestaurantName("")
-          setPhone("")
-          setImagePreview(null)
-          setFile(null)
         } else {
-          setLoadding(false)
-          enqueueSnackbar("Bắt buộc phải có ảnh", { variant: "error" })
+          await adminApi.updateSupplier(
+            +id,
+            restaurantName,
+            address,
+            distance,
+            detail,
+            phone,
+            null,
+          )
         }
+        enqueueSnackbar("Sửa cửa hàng thành công", { variant: "success" })
       } catch (error) {
-        setLoadding(false)
+        console.log(error)
         enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
       }
     }
+    console.log(file)
     uploadImage()
   }
 
   const handlePhone = (value: string) => {
     setPhone(value)
   }
-
   const handleAddress = (value: string) => {
     setAddress(value)
   }
-
-  const handleDistance = (value: string) => {
+  const handleDistance = (value: number) => {
     setDistance(value)
   }
-
   const navigate = useNavigate()
+
   return (
     <Box sx={{ height: "100%" }}>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loadding}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <Stack
         direction="row"
         alignItems="center"
@@ -145,7 +142,7 @@ function NewStore(props: NewProductProps) {
           variant="contained"
           sx={{ mr: "10px", textTransform: "revert" }}
         >
-          Cửa hàng
+          Danh sách cửa hàng
         </Button>
         <IconButton onClick={handlePushProduct} size="small" sx={{ mr: "5px" }}>
           <CloudUpload fontSize="small" />
@@ -165,7 +162,7 @@ function NewStore(props: NewProductProps) {
         <Grid sx={{ width: "100%", height: "100%" }} container spacing={2}>
           <Grid item xs={8}>
             <Box sx={{ width: "100%", height: "100%" }} className="mb-4">
-              <p className="font-medium text-lg mb-2">Thêm cửa hàng mới</p>
+              <p className="font-medium text-lg mb-2">Sửa cửa hàng</p>
               <div className="border   bg-white rounded-md border-gray-300 p-[15px]">
                 <div className="flex w-[100%]">
                   <div className="flex-1 mr-[20px]">
@@ -175,9 +172,9 @@ function NewStore(props: NewProductProps) {
                     <Input
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                      placeholder="VD: Nhà hàng abc"
-                      value={restaurantName}
+                      placeholder="VD: Nhà hàng Hải Đăng,..."
                       onChange={(e) => setRestaurantName(e.target.value)}
+                      value={restaurantName}
                     />
                   </div>
                   <div
@@ -215,12 +212,7 @@ function NewStore(props: NewProductProps) {
                             <IconButton onClick={() => setOpenBackDrop(true)}>
                               <Visibility htmlColor="white" />
                             </IconButton>
-                            <IconButton
-                              onClick={() => {
-                                setImagePreview(null)
-                                setFile(null)
-                              }}
-                            >
+                            <IconButton onClick={() => setImagePreview(null)}>
                               <Delete htmlColor="white" />
                             </IconButton>
                           </div>
@@ -247,115 +239,105 @@ function NewStore(props: NewProductProps) {
                 <div>
                   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs
-                      value={value}
                       onChange={handleChange}
+                      value={value}
                       aria-label="basic tabs example"
                     >
                       <Tab label="Thông tin cửa hàng" {...a11yProps(0)} />
                     </Tabs>
                   </Box>
-                  <div hidden={value !== 0}>
-                    {value === 0 && (
-                      <Box sx={{ padding: "20px 15px" }}>
-                        <Box className="flex flex-col gap-5">
-                          <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                              <Grid container spacing={2}>
-                                <Grid item xs={4}>
-                                  <label
-                                    htmlFor="type-food-select"
-                                    className="font-medium "
-                                  >
-                                    Địa chỉ quán
-                                  </label>
-                                </Grid>
-                                <Grid item xs={8}>
-                                  <input
-                                    id="name-food-select"
-                                    value={address}
-                                    type="string"
-                                    autoComplete="off"
-                                    onChange={(e) =>
-                                      handleAddress(e.target.value)
-                                    }
-                                    className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
-                                  />
-                                </Grid>
-                                <Grid item xs={4}>
-                                  <label
-                                    htmlFor="type-food-select"
-                                    className="font-medium "
-                                  >
-                                    Số điện thoại
-                                  </label>
-                                </Grid>
-                                <Grid item xs={8}>
-                                  <input
-                                    id="name-food-select"
-                                    value={phone}
-                                    type="string"
-                                    autoComplete="off"
-                                    onChange={(e) =>
-                                      handlePhone(e.target.value)
-                                    }
-                                    className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
-                                  />
-                                </Grid>
+                  <div>
+                    <Box sx={{ padding: "20px 15px" }}>
+                      <Box className="flex flex-col gap-5">
+                        <Grid container spacing={2}>
+                          <Grid item xs={6}>
+                            <Grid container spacing={2}>
+                              <Grid item xs={4}>
+                                <label
+                                  htmlFor="type-food-select"
+                                  className="font-medium "
+                                >
+                                  Địa chỉ quán
+                                </label>
                               </Grid>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Grid container spacing={0}>
-                                <Grid item xs={4}>
-                                  <label
-                                    htmlFor="type-food-select"
-                                    className="font-medium "
-                                  >
-                                    Khoảng cách
-                                  </label>
-                                </Grid>
-                                <Grid item xs={8}>
-                                  <div className="flex">
-                                    <input
-                                      id="name-food-select"
-                                      value={distance}
-                                      type="string"
-                                      autoComplete="off"
-                                      onChange={(e) =>
-                                        handleDistance(e.target.value)
-                                      }
-                                      className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
-                                    />
-                                    <span>km</span>
-                                  </div>
-                                </Grid>
+                              <Grid item xs={8}>
+                                <input
+                                  id="name-food-select"
+                                  value={address}
+                                  type="string"
+                                  autoComplete="off"
+                                  onChange={(e) =>
+                                    handleAddress(e.target.value)
+                                  }
+                                  className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                />
+                              </Grid>
+                              <Grid item xs={4}>
+                                <label
+                                  htmlFor="type-food-select"
+                                  className="font-medium "
+                                >
+                                  Số điện thoại
+                                </label>
+                              </Grid>
+                              <Grid item xs={8}>
+                                <input
+                                  id="name-food-select"
+                                  value={phone}
+                                  type="string"
+                                  autoComplete="off"
+                                  onChange={(e) => handlePhone(e.target.value)}
+                                  className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                />
                               </Grid>
                             </Grid>
                           </Grid>
-                        </Box>
-                        <Box sx={{ mt: "30px" }}>
-                          <label
-                            htmlFor="message"
-                            className="block mb-2  font-medium text-gray-900 dark:text-white"
-                          >
-                            Mô tả cửa hàng
-                          </label>
-                          <textarea
-                            id="message"
-                            rows={4}
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Viết mô tả về cửa hàng..."
-                            value={detail}
-                            onChange={(e) => setDetail(e.target.value)}
-                          ></textarea>
-                        </Box>
+                          <Grid item xs={6}>
+                            <Grid container spacing={0}>
+                              <Grid item xs={4}>
+                                <label
+                                  htmlFor="type-food-select"
+                                  className="font-medium "
+                                >
+                                  Khoảng cách
+                                </label>
+                              </Grid>
+                              <Grid item xs={8}>
+                                <div className="flex">
+                                  <input
+                                    id="name-food-select"
+                                    value={distance}
+                                    type="string"
+                                    autoComplete="off"
+                                    onChange={(e) =>
+                                      handleDistance(+e.target.value)
+                                    }
+                                    className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                  />
+                                  <span>km</span>
+                                </div>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
                       </Box>
-                    )}
-                  </div>
-                  <div hidden={value !== 1}>
-                    {value === 1 && <Box sx={{ p: 2 }}>Bán hàng</Box>}
-                  </div>
-                  <div hidden={value !== 2}>
-                    {value === 2 && <Box sx={{ p: 2 }}>Mua hàng</Box>}
+                      <Box sx={{ mt: "30px" }}>
+                        <label
+                          htmlFor="message"
+                          className="block mb-2  font-medium text-gray-900 dark:text-white"
+                        >
+                          Mô tả cửa hàng
+                        </label>
+                        <textarea
+                          id="message"
+                          rows={4}
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Viết mô tả về cửa hàng của Hải Đăng Store..."
+                          onChange={(e) => setDetail(e.target.value)}
+                          value={detail}
+                        ></textarea>
+                      </Box>
+                    </Box>
                   </div>
                 </div>
               </div>
@@ -380,4 +362,4 @@ function NewStore(props: NewProductProps) {
   )
 }
 
-export default NewStore
+export default memo(UpdateSupplier)

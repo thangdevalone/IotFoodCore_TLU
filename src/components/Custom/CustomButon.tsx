@@ -8,6 +8,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   children,
   sx,
   variant = "outlined",
+
   ...rest
 }) => {
   return (

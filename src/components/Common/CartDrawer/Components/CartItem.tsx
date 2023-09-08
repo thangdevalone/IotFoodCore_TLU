@@ -51,17 +51,17 @@ const CartItem = (props: propsData) => {
     },[item])
 
     return (
-        <Stack direction="row" spacing={2} className="border-b w-full pb-5">
+        <Stack direction="row" spacing={2} className="border-b w-full py-5" alignItems="center">
             <Box className="flex items-center gap-2 flex-1">
                 <Box onClick={()=>handleRemove()} className="cursor-pointer rounded-full flex items-center justify-center bg-gray-200 hover:opacity-70">
                     <RemoveIcon fontSize="small"/>
                 </Box>
-                <input type="number" onBlur={(e)=>handleSetQuantity(+e.target.value)} onChange={(e) =>handleOnChangeInput(+e.target.value)} value={quantity} className='w-6 text-center text-xl' />
+                <input type="number" onBlur={(e)=>handleSetQuantity(+e.target.value)} onChange={(e) =>handleOnChangeInput(+e.target.value)} value={quantity} className='w-6 text-center text-base' />
                  <Box onClick={()=>handleAdd()} className="cursor-pointer rounded-full flex items-center justify-center bg-gray-200 hover:opacity-70">
                     <AddIcon fontSize="small"/>
                 </Box>
             </Box>
-            <Stack direction="row" spacing={2} className='flex-5'>
+            <Stack direction="row" spacing={2} className='flex-5' alignItems="center">
                 <Box
                     className="h-14 w-14 rounded-md cursor-pointer object-cover"
                     sx={{

@@ -41,7 +41,6 @@ export function RecommendFood(props: RecommendFoodProps) {
   const { width } = useWindowDimensions()
 
   //
-  // console.log(data);
 
   return (
     <>
@@ -54,17 +53,15 @@ export function RecommendFood(props: RecommendFoodProps) {
             }`,
           }}
         >
-          {width > 900 && (
-            <Box className="flex items-center justify-center mr-[5px]">
-              <IconButton onClick={slidePrev}>
-                <ChevronLeft sx={{ width: "40px", height: "40px" }} />
-              </IconButton>
-            </Box>
-          )}
+          <Box className="flex items-center justify-center mr-[5px]">
+            <IconButton onClick={slidePrev}>
+              <ChevronLeft sx={{ width: "40px", height: "40px" }} />
+            </IconButton>
+          </Box>
           <Swiper
             modules={[]}
-            className="slide-base"
-            style={{ width: "100%" }}
+            className="slide-base "
+            style={{ width: "100%", height: "100%" }}
             slidesPerView={
               width <= 450
                 ? 1.2
@@ -82,10 +79,11 @@ export function RecommendFood(props: RecommendFoodProps) {
             allowTouchMove={true}
             ref={swiperRef}
           >
-            {data?.map((item, index) => ( 
+            {data?.map((item, index) => (
               <SwiperSlide key={index + item?.id}>
                 <ItemRecommend
                   idFood={item.id}
+                  detail={item.detail}
                   width={width}
                   imgFood={item.imgFood}
                   foodName={item.foodName}
@@ -93,34 +91,29 @@ export function RecommendFood(props: RecommendFoodProps) {
                   star={item.star}
                   time={item.time}
                   distance={item.distance}
-                  storeCheck={false}
                   idStore={item.restaurantEntityId}
                   nameStore={item.nameRestaurantFood}
                 />
               </SwiperSlide>
             ))}
           </Swiper>
-          {width > 900 && (
-            <Box className="flex items-center justify-center ml-[5px]">
-              <IconButton onClick={slideNext}>
-                <ChevronRight sx={{ width: "40px", height: "40px" }} />
-              </IconButton>
-            </Box>
-          )}
+          <Box className="flex items-center justify-center ml-[5px]">
+            <IconButton onClick={slideNext}>
+              <ChevronRight sx={{ width: "40px", height: "40px" }} />
+            </IconButton>
+          </Box>
         </Box>
       ) : (
         <>
-          {seeAll ? <Box className="flex items-center justify-center">
-            <Grid
-              className=""
-              container
-              spacing={4}
-              columnSpacing={{ xs: 1, sm: 3, md: 4 }}
-            >
-              {data?.slice(0, 2).map((item) => (
+          <Box
+            className={`flex items-center justify-center ${width < 601 && ""}`}
+          >
+            <Grid container spacing={4} columnSpacing={{ xs: 1, sm: 3, md: 4 }}>
+              {data?.map((item) => (
                 <Grid item xs={12} sm={6} md={3} key={item.id}>
                   <ItemRecommend
                     idFood={item.id}
+                    detail={item.detail}
                     width={width}
                     imgFood={item.imgFood}
                     foodName={item.foodName}
@@ -128,31 +121,13 @@ export function RecommendFood(props: RecommendFoodProps) {
                     star={item.star}
                     time={item.time}
                     distance={item.distance}
-                    storeCheck={false}
                     nameStore={item.nameRestaurantFood}
                     idStore={item.restaurantEntityId}
                   />
                 </Grid>
               ))}
             </Grid>
-          </Box> : <Box className="flex items-center justify-center">
-            <Grid
-              className=""
-              container
-              spacing={4}
-              columnSpacing={{ xs: 1, sm: 3, md: 4 }}
-            >
-              {data?.map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={item.id}>
-                  <Box className="h-[150px] bg-gray-300 flex flex-col items-center justify-center">
-                  </Box>
-                  <span className="text-xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
-                    a
-                  </span>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>}
+          </Box>
           <Stack alignItems="center">
             <Box className="container-base">
               <CustomButton

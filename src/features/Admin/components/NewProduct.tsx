@@ -13,6 +13,7 @@ import {
   Backdrop,
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -20,48 +21,29 @@ import {
   Stack,
   Tab,
   Tabs,
-  Typography,
 } from "@mui/material"
 import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
+import ToppingTable from "./ToppingTable"
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   }
 }
+export interface ToppingAdd {
+  idTemp?: number
+  name: string
+  price: number
+}
 export interface NewProductProps {}
 
 function NewProduct(props: NewProductProps) {
   const [tabs, setTabs] = React.useState(0)
   const [price, setPrice] = React.useState<string>("")
-
+  const [loadding, setLoadding] = React.useState(false)
   const [resPick, setResPick] = React.useState<searchRoot | null>(null)
   const [typePick, setTypePick] = React.useState<searchRoot | null>(null)
   const [file, setFile] = React.useState<File | null>()
@@ -69,7 +51,10 @@ function NewProduct(props: NewProductProps) {
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const [nameFood, setNameFood] = React.useState<string>("")
   const [detail, setDetail] = React.useState<string>("")
+
   const { enqueueSnackbar } = useSnackbar()
+  const [toppingList, setToppingList] = React.useState<ToppingAdd[] | []>([])
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue)
   }
@@ -107,9 +92,9 @@ function NewProduct(props: NewProductProps) {
   }
   const handlePushProduct = () => {
     async function uploadImage() {
+      setLoadding(true)
       try {
         if (file) {
-          console.log(nameFood, price, typePick, resPick, detail)
           await adminApi.addFood(
             nameFood,
             parseInt(price.replace(/\D/g, "")),
@@ -117,10 +102,27 @@ function NewProduct(props: NewProductProps) {
             file,
             Number(typePick?.id),
             Number(resPick?.id),
+            toppingList,
           )
+          setLoadding(false)
+          enqueueSnackbar("Thêm mới sản phẩm thành công", {
+            variant: "success",
+          })
+          setNameFood("")
+          setDetail("")
+          setPrice("")
+          setImagePreview(null)
+          setFile(null)
+          setTypePick(null)
+          setResPick(null)
+          setToppingList([])
+        } else {
+          setLoadding(false)
+          enqueueSnackbar("Bắt buộc phải có ảnh", { variant: "error" })
         }
       } catch (error) {
-        console.log(error)
+        setLoadding(false)
+
         enqueueSnackbar("Có lỗi xảy ra vui lòng thử lại", { variant: "error" })
       }
     }
@@ -135,6 +137,12 @@ function NewProduct(props: NewProductProps) {
   const navigate = useNavigate()
   return (
     <Box sx={{ height: "100%" }}>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loadding}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Stack
         direction="row"
         alignItems="center"
@@ -241,7 +249,12 @@ function NewProduct(props: NewProductProps) {
                             <IconButton onClick={() => setOpenBackDrop(true)}>
                               <Visibility htmlColor="white" />
                             </IconButton>
-                            <IconButton onClick={() => setImagePreview(null)}>
+                            <IconButton
+                              onClick={() => {
+                                setImagePreview(null)
+                                setFile(null)
+                              }}
+                            >
                               <Delete htmlColor="white" />
                             </IconButton>
                           </div>
@@ -273,8 +286,7 @@ function NewProduct(props: NewProductProps) {
                       aria-label="basic tabs example"
                     >
                       <Tab label="Thông tin sản phẩm" {...a11yProps(0)} />
-                      <Tab label="Bán hàng" {...a11yProps(1)} />
-                      <Tab label="Mua hàng" {...a11yProps(2)} />
+                      <Tab label="Topping" {...a11yProps(2)} />
                     </Tabs>
                   </Box>
                   <div hidden={tabs !== 0}>
@@ -363,10 +375,12 @@ function NewProduct(props: NewProductProps) {
                     )}
                   </div>
                   <div hidden={tabs !== 1}>
-                    {tabs === 1 && <Box sx={{ p: 2 }}>Bán hàng</Box>}
-                  </div>
-                  <div hidden={tabs !== 2}>
-                    {tabs === 2 && <Box sx={{ p: 2 }}>Mua hàng</Box>}
+                    <Stack alignItems="flex-end" sx={{ m: "10px 0px" }}>
+                      <ToppingTable
+                        toppingList={toppingList}
+                        setToppingList={setToppingList}
+                      />
+                    </Stack>
                   </div>
                 </div>
               </div>

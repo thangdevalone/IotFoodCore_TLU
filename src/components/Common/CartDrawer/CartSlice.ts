@@ -1,15 +1,24 @@
+import { CartItemData } from "@/models"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CartItemData, StoreDetailData } from "@/models"
 
-export interface CardState {
+export interface iDataStore {
   items: CartItemData[]
+  name: string
+  id: number
+}
+export interface CardState {
+  totalPrice: number
   open: boolean
-  dataStore: { name: string }
+  lengthFood: number
+  dataStore: iDataStore[] | []
+  timeDeliver: "10:00 AM" | "11:15 AM" | "12:15 AM"
 }
 const initialState: CardState = {
-  items: [],
+  totalPrice: 0,
   open: false,
-  dataStore: { name: "" },
+  lengthFood: 0,
+  dataStore: [],
+  timeDeliver: "11:15 AM",
 }
 
 const cartSlice = createSlice({
@@ -19,49 +28,105 @@ const cartSlice = createSlice({
     toggleCart(state) {
       state.open = !state.open
     },
-    setDataStore(state, action: PayloadAction<StoreDetailData>) {
-      state.dataStore.name = action.payload.restaurantName
+    setTotalPrice(state, action: PayloadAction<number>) {
+      state.totalPrice = action.payload
     },
+    setTimeDeliver(
+      state,
+      action: PayloadAction<"10:00 AM" | "11:15 AM" | "12:15 AM">,
+    ) {
+      state.timeDeliver = action.payload
+    },
+
     addToCart(state, action: PayloadAction<CartItemData>) {
-      const { idFood, name, quantity, type } = action.payload
-      if (state.items.length) {
-        const existingItem = state.items.find(
-          (item) => item.idFood === idFood && item.name === name,
+      const { idFood, name, quantity, type, nameStore, idStore } =
+        action.payload
+      if (state.dataStore.length) {
+        const existingStore = state.dataStore.find(
+          (item) => item.name === nameStore && item.id === idStore,
         )
-        if (existingItem) {
-          if (type === true) {
-            // update quantity theo input
-            state.items.map((item) =>
-              item.idFood === idFood && item.name === name
-                ? (item.quantity = quantity)
-                : item.quantity,
-            )
+        if (existingStore) {
+          const existingFood = existingStore.items.find(
+            (item) => item.name === name,
+          )
+          if (existingFood) {
+            if (type === true) {
+              state.dataStore
+                .find((item) => item.name === nameStore && item.id === idStore)
+                ?.items.map((food) => {
+                  if (food.idFood === idFood && food.name === name) {
+                    state.lengthFood =
+                      state.lengthFood - food.quantity + quantity
+                    return (food.quantity = quantity)
+                  } else {
+                    return food.quantity
+                  }
+                })
+            } else {
+              state.lengthFood += 1
+
+              state.dataStore
+                .find((item) => item.name === nameStore && item.id === idStore)
+                ?.items.map((food) =>
+                  food.idFood === idFood
+                    ? (food.quantity = food.quantity + 1)
+                    : food.quantity,
+                )
+            }
           } else {
-            // neu add them vao cart bang +
-            state.items.map((item) =>
-              item.idFood === idFood && item.name === name
-                ? (item.quantity = item.quantity + 1)
-                : item.quantity,
-            )
+            state.lengthFood += 1
+            existingStore.items = [...existingStore.items, action.payload]
           }
         } else {
-          state.items = [...state.items, action.payload]
+          state.lengthFood += 1
+          state.dataStore = [
+            ...state.dataStore,
+            {
+              id: idStore,
+              name: nameStore,
+              items: [action.payload],
+            },
+          ]
         }
       } else {
-        state.items = [...state.items, action.payload]
+        state.lengthFood = 1
+        state.dataStore = [
+          {
+            id: idStore,
+            name: nameStore,
+            items: [action.payload],
+          },
+        ]
       }
     },
     deleteToCart(state, action: PayloadAction<CartItemData>) {
-      const { idFood, name } = action.payload
-      state.items.map((item) =>
-        item.idFood === idFood && item.name === name
-          ? (item.quantity = item.quantity - 1)
-          : item.quantity,
-      )
+      const { idFood, name, nameStore, idStore } = action.payload
+      state.lengthFood -= 1
+      state.dataStore
+        .find((store) => store.name === nameStore && store.id === idStore)
+        ?.items.map((item) =>
+          item.name === name && item.idFood === idFood
+            ? (item.quantity = item.quantity - 1)
+            : item.quantity,
+        )
     },
     removerCart(state, action: PayloadAction<CartItemData>) {
-      const { idFood } = action.payload
-      state.items = state.items.filter((item) => item.idFood !== idFood)
+      const { idFood, nameStore, idStore } = action.payload
+      state.lengthFood -= 1
+      const storeIndex = state.dataStore.findIndex(
+        (store) => store.name === nameStore && store.id === idStore,
+      )
+      if (storeIndex !== -1) {
+        const store = state.dataStore[storeIndex].items
+        const updatedItems = store.filter((food) => food.idFood !== idFood)
+        state.dataStore[storeIndex].items = updatedItems
+        if (updatedItems.length === 0) {
+          state.dataStore = state.dataStore.filter((item, index) => {
+            console.log(index, storeIndex)
+            return index !== storeIndex
+          })
+        }
+      }
     },
   },
 })
