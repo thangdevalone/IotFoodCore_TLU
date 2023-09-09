@@ -102,15 +102,17 @@ export function Supplier() {
     () => [
       { accessorKey: "id", header: "ID" },
       { accessorKey: "restaurantName", header: "Tên cửa hàng" },
-      { accessorKey: "businessHours", header: "Giờ kinh doanh" },
+      { accessorKey: "timeStart", header: "Giờ mở cửa" },
+      { accessorKey: "timeClose", header: "Giờ đóng cửa" },
+      { accessorKey: "star", header: "Đánh giá" },
+
       {
         accessorKey: "distance",
         header: "Khoảng cách",
         Cell: ({ cell }) => formatCurrencyKM(cell.getValue<string>()),
       },
       { accessorKey: "phoneNumber", header: "Số điện thoại" },
-      { accessorKey: "address", header: "Địa chỉ" },
-      { accessorKey: "imgRes", header: "Ảnh" },
+      { accessorKey: "address", header: "Địa chỉ" }
     ],
     [],
   )

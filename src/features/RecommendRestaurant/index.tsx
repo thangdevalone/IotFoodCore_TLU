@@ -49,7 +49,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
   return (
     <>
       <Box
-        className="flex h-[280px]"
+        className="flex"
         sx={{
           margin: `${
             width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px"

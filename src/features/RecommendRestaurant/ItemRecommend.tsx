@@ -2,7 +2,6 @@ import { useAppDispatch } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
 import { handlePrice } from "@/utils"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import AddCircleIcon from "@mui/icons-material/AddCircle"
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
 import { Box, Stack, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
@@ -20,9 +19,6 @@ interface propsData {
   idStore: number
 }
 
-// width: `${width < 601 ? '38vh' : '45vh'}`,
-//                     maxHeight: `${width < 601 ? '150px' : '200px'}`,
-//                     minHeight: `${width < 601 ? '150px' : '200px'}`,
 
 const ItemRecommend = (props: propsData) => {
   const {
@@ -58,10 +54,10 @@ const ItemRecommend = (props: propsData) => {
   }
 
   return (
-    <Box className="w-[100%] h-[100%]">
+    <Box className="w-[100%] ">
       <Box
         onClick={() => handleRouter(idFood)}
-        className="w-[100%] h-[55%] rounded-md cursor-pointer object-cover"
+        className="w-[100%] h-[20vh] rounded-md cursor-pointer object-cover"
         sx={{
           backgroundPosition: "center",
           backgroundSize: "cover",
@@ -84,7 +80,7 @@ const ItemRecommend = (props: propsData) => {
             </Typography>
           </Box>
         )}
-        <Box className="flex gap-10 items-center mt-2 ">
+        <Box className="flex gap-10 items-center mt-1 ">
           {star && (
             <Box className=" flex  justify-center items-center ">
               <StarRateRoundedIcon style={{ color: "orange" }} />

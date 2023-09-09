@@ -1,6 +1,5 @@
 export * from "./Header"
 export * from "./NotFound"
-export * from "./SwitchLightDark"
 export * from "./LoadServer"
 export * from "./Header"
 export * from "./Footer"

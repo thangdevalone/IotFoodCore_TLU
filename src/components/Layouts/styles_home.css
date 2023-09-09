@@ -30,7 +30,7 @@
 @media screen and (max-width: 992px) {
   .base-tx {
     font-size: 1.8rem;
-    margin-bottom: 24px !important;
+    margin-bottom: 18px !important;
     line-height: unset;
   }
 }

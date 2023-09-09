@@ -8,5 +8,5 @@ export const formatCurrencyVND = (amount: string): string => {
 }
 
 export const formatCurrencyKM = (KM: string): string => {
-  return `${KM} KM`
+  return `${KM} km`
 }

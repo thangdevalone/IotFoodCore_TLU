@@ -2,16 +2,16 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
 import { handlePrice } from "@/utils"
 import { Avatar, Badge, Box, Stack, Typography } from "@mui/material"
+import useDetectScroll from "@smakss/react-scroll-direction"
 import classNames from "classnames"
 import { MouseEvent, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
-import { CartDrawer, SwitchLightDark } from "."
+import { CartDrawer } from "."
 import { CustomButton } from "../Custom/CustomButon"
-import { BagBoldIcon, BagIcon, NotiIcon } from "../Icon"
+import { BagIcon, NotiIcon } from "../Icon"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
-import useDetectScroll from "@smakss/react-scroll-direction"
 export interface HeaderProps {}
 
 export interface HeaderProps {}
@@ -235,7 +235,6 @@ export function Header(props: HeaderProps) {
                 </CustomButton>
               </Link>
             )}
-            {width > 750 && <SwitchLightDark />}
           </Stack>
         </Stack>
       </Box>

@@ -42,6 +42,8 @@ function NewStore(props: NewProductProps) {
   const [phone, setPhone] = React.useState<string>("")
   const [address, setAddress] = React.useState<string>("")
   const [restaurantName, setRestaurantName] = React.useState<string>("")
+  const [supOpen, setSupOpen] = React.useState<string>("")
+  const [supClose, setSupClose] = React.useState<string>("")
   const [detail, setDetail] = React.useState<string>("")
   const [distance, setDistance] = React.useState<string>("")
   const imgRef = React.useRef<HTMLInputElement | null>(null)
@@ -82,15 +84,19 @@ function NewStore(props: NewProductProps) {
             distance,
             detail,
             phone,
+            supOpen,
+            supClose,
             file,
           )
           setLoadding(false)
           enqueueSnackbar("Tạo cửa hàng thành công", { variant: "success" })
           setAddress("")
           setDetail("")
-          setDistance("0")
+          setDistance("")
           setRestaurantName("")
           setPhone("")
+          setSupClose("")
+          setSupOpen("")
           setImagePreview(null)
           setFile(null)
         } else {
@@ -116,7 +122,12 @@ function NewStore(props: NewProductProps) {
   const handleDistance = (value: string) => {
     setDistance(value)
   }
-
+  const handleSupClose = (value: string) => {
+    setSupClose(value)
+  }
+  const handleSupOpen = (value: string) => {
+    setSupOpen(value)
+  }
   const navigate = useNavigate()
   return (
     <Box sx={{ height: "100%" }}>
@@ -304,7 +315,7 @@ function NewStore(props: NewProductProps) {
                               </Grid>
                             </Grid>
                             <Grid item xs={6}>
-                              <Grid container spacing={0}>
+                              <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                   <label
                                     htmlFor="type-food-select"
@@ -327,6 +338,48 @@ function NewStore(props: NewProductProps) {
                                     />
                                     <span>km</span>
                                   </div>
+                                </Grid>
+                                <Grid item xs={4}>
+                                  <label
+                                    htmlFor="type-food-select"
+                                    className="font-medium "
+                                  >
+                                    Giờ mở cửa
+                                  </label>
+                                </Grid>
+                                <Grid item xs={8}>
+                                  <input
+                                    id="name-food-select"
+                                    placeholder="8:00 AM"
+                                    value={supOpen}
+                                    type="string"
+                                    autoComplete="off"
+                                    onChange={(e) =>
+                                      handleSupOpen(e.target.value)
+                                    }
+                                    className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                  />
+                                </Grid>
+                                <Grid item xs={4}>
+                                  <label
+                                    htmlFor="type-food-select"
+                                    className="font-medium "
+                                  >
+                                    Giờ đóng cửa
+                                  </label>
+                                </Grid>
+                                <Grid item xs={8}>
+                                  <input
+                                    id="name-food-select"
+                                    placeholder="3:00 PM"
+                                    value={supClose}
+                                    type="string"
+                                    autoComplete="off"
+                                    onChange={(e) =>
+                                      handleSupClose(e.target.value)
+                                    }
+                                    className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                  />
                                 </Grid>
                               </Grid>
                             </Grid>

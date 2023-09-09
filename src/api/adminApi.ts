@@ -31,6 +31,8 @@ const adminApi = {
     distance: string,
     detail: string,
     phoneNumber: string,
+    supOpen:string,
+    supClose:string,
     imgRes: File,
   ) {
     const data = new FormData()
@@ -40,6 +42,8 @@ const adminApi = {
     data.append("distance", distance)
     data.append("detail", detail)
     data.append("phoneNumber", phoneNumber)
+    data.append("timeStart",supOpen)
+    data.append("timeClose",supClose)
     data.append("imgRes", imgRes)
     const url = "ADMIN/add-res"
     return axiosClient.post(url, data, {

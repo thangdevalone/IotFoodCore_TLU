@@ -46,10 +46,10 @@ export function RecommendFood(props: RecommendFoodProps) {
     <>
       {width > 900 ? (
         <Box
-          className="flex h-[280px]"
+          className="flex "
           sx={{
             margin: `${
-              width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px"
+              width <= 750 ? "0 20px 24px 20px" : width <= 900 ? "0 40px 24px 40px" : "0px 0px 24px 0px"
             }`,
           }}
         >
@@ -88,9 +88,7 @@ export function RecommendFood(props: RecommendFoodProps) {
                   imgFood={item.imgFood}
                   foodName={item.foodName}
                   price={item.price}
-                  star={item.star}
-                  time={item.time}
-                  distance={item.distance}
+                  qSold={item.quantityPurchased || 0}
                   idStore={item.restaurantEntityId}
                   nameStore={item.nameRestaurantFood}
                 />
@@ -118,9 +116,7 @@ export function RecommendFood(props: RecommendFoodProps) {
                     imgFood={item.imgFood}
                     foodName={item.foodName}
                     price={item.price}
-                    star={item.star}
-                    time={item.time}
-                    distance={item.distance}
+                    qSold={item.quantityPurchased || 0}
                     nameStore={item.nameRestaurantFood}
                     idStore={item.restaurantEntityId}
                   />

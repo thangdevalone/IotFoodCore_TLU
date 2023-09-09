@@ -27,14 +27,14 @@ export function Home(props: HomeProps) {
         <SearchFood />
       </section>
       <div className="line-1"></div>
-      <p className="base-tx base-pd mb-[32px]">
+      <p className="base-tx base-pd mb-[24px]">
         Cửa hàng bán chạy nhất tại{" "}
         <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
       </p>
       <section className="recommend-store">
         <RecommendRestaurant />
       </section>
-      <p className="base-tx base-pd mb-[32px]">
+      <p className="base-tx base-pd mb-[24px]">
         Các món bán chạy nhất tại{" "}
         <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
       </p>
@@ -47,7 +47,7 @@ export function Home(props: HomeProps) {
       </section>
       {width >= 600 && (
         <>
-          <p className="base-tx  base-pd  mb-[32px]">
+          <p className="base-tx  base-pd  mb-[24px]">
             Các loại đồ ăn có sẵn để lựa chọn
           </p>
           <section className="container-base base-pd type-food">

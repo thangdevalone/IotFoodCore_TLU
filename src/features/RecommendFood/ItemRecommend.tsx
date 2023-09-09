@@ -1,12 +1,10 @@
 import { useAppDispatch } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
+import { VoucherIcon } from "@/components/Icon/VoucherIcon"
 import { useWindowDimensions } from "@/hooks"
 import { handlePrice } from "@/utils"
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
-import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
-import { Box, Stack, Typography } from "@mui/material"
-
+import { Box, Tooltip, Typography } from "@mui/material"
 interface propsData {
   idFood: number
   nameStore: string
@@ -19,6 +17,7 @@ interface propsData {
   width: number
   idStore: number
   detail: string
+  qSold: number
 }
 
 const ItemRecommend = (props: propsData) => {
@@ -27,17 +26,15 @@ const ItemRecommend = (props: propsData) => {
     nameStore,
     foodName,
     price,
-    star,
-    time = 10,
-    distance,
     imgFood,
+    qSold,
     idStore,
     detail,
   } = props
 
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
-
+ 
   const handleAddToCart = () => {
     const data = {
       idFood,
@@ -52,23 +49,34 @@ const ItemRecommend = (props: propsData) => {
   }
 
   return (
-    <Box className={`w-full h-full  ${width < 600 && "flex gap-2"}`}>
+    <Tooltip title="Bấm để thêm vào giỏ hàng">
+    <Box
+      className={`w-full h-full rounded-md relative cursor-pointer ${width < 600 && "flex gap-2"}`} sx={{"&:hover .img-res":{
+        transform:"scale(1.05)",
+        
+      }}}
+      onClick={handleAddToCart}
+    >
+     
       <Box className="w-full">
+        <Box className="overflow-hidden rounded-md">
         <Box
-          className={`${
+          className={` img-res ${
             width < 600
               ? "h-[12vh] w-[26vw] object-contain border"
               : "h-[18vh] w-[100%] object-cover"
           } rounded-md  `}
           sx={{
+            transition:"all 0.3s",
             backgroundPosition: "center",
             backgroundSize: "cover",
             backgroundImage: `url(${imgFood})`,
           }}
         ></Box>
+        </Box>
       </Box>
       <Box
-        className={`flex flex-col w-full ${
+        className={`flex flex-col w-full mt-[8px]  ${
           width < 600 && "relative justify-between"
         }`}
       >
@@ -86,7 +94,7 @@ const ItemRecommend = (props: propsData) => {
             </Typography>
             <Typography
               className="whitespace-nowrap overflow-hidden overflow-ellipsis"
-              sx={{ fontSize: "12px" }}
+              sx={{ fontSize: "14px" }}
             >
               {nameStore}
             </Typography>
@@ -102,56 +110,38 @@ const ItemRecommend = (props: propsData) => {
           </>
         ) : (
           <>
-            <Box className="flex capitalize gap-5 items-center">
+            <Box className="flex mt-[1px] capitalize gap-5 items-center">
               <Typography
                 className="whitespace-nowrap flex-1 overflow-hidden overflow-ellipsis"
-                sx={{ fontSize: "12px" }}
+                sx={{ fontSize: "14px" }}
               >
                 {nameStore}
               </Typography>
               <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
                 {handlePrice(price)} VND
               </Typography>
-              {width < 600 && (
-                <Box
-                  className="cursor-pointer hover:opacity-90 absolute bottom-[-5px] right-2"
-                  onClick={() => handleAddToCart()}
-                >
-                  <AddCircleIcon style={{ color: "green", fontSize: "28px" }} />
-                </Box>
-              )}
             </Box>
-            <Box className="flex gap-5 items-center mt-2 ">
-              <Box className=" flex justify-center items-center ">
-                <StarRateRoundedIcon style={{ color: "orange" }} />
-                <Typography sx={{ fontSize: "14px" }} className="">
-                  {star || 5}
-                </Typography>
-              </Box>
-              <Box className="flex gap-2">
-                <Box className="flex items-center justify-center gap-2">
-                  <AccessTimeRoundedIcon />
-                  <Typography sx={{ fontSize: "14px" }}>{time} phút</Typography>
-                </Box>
-                •
-                <Typography
-                  sx={{ fontSize: "14px" }}
-                  className="flex items-center justify-center"
-                >
-                  {distance || 1} km
-                </Typography>
-              </Box>
-              <Box
-                className="cursor-pointer absolute right-5 hover:opacity-90"
-                onClick={() => handleAddToCart()}
-              >
-                <AddCircleIcon style={{ color: "green", fontSize: "29px" }} />
-              </Box>
+            <Box
+              sx={{
+                "& *": {
+                  fontSize: "14px",
+                },
+              }}
+              className="flex mt-1 justify-between items-center"
+            >
+              <span>Đã bán: {qSold}</span>
+              <div>
+                <VoucherIcon />
+                <span className="ml-1">
+                  {Math.floor(Math.random() * (5 - 2 + 1)) + 2} Ưu đãi
+                </span>
+              </div>
             </Box>
           </>
         )}
       </Box>
     </Box>
+    </Tooltip>
   )
 }
 

@@ -2,6 +2,7 @@ import { Box, Grid } from "@mui/material"
 import * as React from "react"
 import foodsApis from "@/api/foodsApi"
 import { TypeFoodsData } from "@/models"
+import { useWindowDimensions } from "@/hooks"
 
 const TypeFood = () => {
   const [data, setData] = React.useState<TypeFoodsData[]>([])
@@ -13,9 +14,9 @@ const TypeFood = () => {
     }
     fetchData()
   }, [])
-
+  const {width}=useWindowDimensions()
   return (
-    <Box className="flex items-center justify-center" sx={{mb:"24px"}}>
+    <Box className="flex items-center justify-center" sx={{mb:"24px",p:`${width>=1280?"0px":"0 24px"}`}}>
       <Grid
         className=""
         container
@@ -23,7 +24,7 @@ const TypeFood = () => {
         columnSpacing={{ xs: 1, sm: 3, md: 4 }}
       >
         {data?.map((item) => (
-          <Grid item xs={12} sm={6} md={3} key={item.id}>
+          <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <Box
               className="h-[150px] rounded-md relative"
               sx={{

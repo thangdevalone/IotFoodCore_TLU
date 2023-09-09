@@ -29,7 +29,7 @@ function LinearProgressWithLabel(
 }
 export function LoadServer(props: LoadServerProps) {
   const [progress, setProgress] = useState(0)
-  const [done, setDone] = useState(true)
+  const [done, setDone] = useState(false)
   useEffect(() => {
     const timer = setInterval(() => {
       const random = Math.floor(Math.random() * 4) + 1

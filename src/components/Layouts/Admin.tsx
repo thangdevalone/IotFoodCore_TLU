@@ -8,7 +8,7 @@ import NewProduct from "@/features/Admin/components/NewProduct"
 import NewType from "@/features/Admin/components/NewType"
 import TypeProduct from "@/features/Admin/TypeProduct"
 import queryString from "query-string"
-import NewStore from "@/features/Admin/components/NewStore"
+import NewStore from "@/features/Admin/components/NewSupplier"
 import UpdateSupplier from "@/features/Admin/components/UpdateSupplier"
 import UpdateType from "@/features/Admin/components/UpdateType"
 

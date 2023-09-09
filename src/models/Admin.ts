@@ -46,12 +46,14 @@ export interface TypeItem {
 export interface TypeRestaurant {
   id: number
   restaurantName: string
-  quantitySold: any
-  businessHours: any
+  quantitySold: number
+  timeStart:string
+  timeClose:string
   distance: number
   phoneNumber: string
   address: string
   imgRes: string
   time: null
   detail: string
+  star:number
 }
