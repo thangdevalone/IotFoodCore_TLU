@@ -5,7 +5,7 @@ import { StoreDetailData } from "@/models"
 import { Box, Typography, Grid } from "@mui/material"
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import ItemRecommend from "../RecommendFood/ItemRecommend"
+import ItemRecommend from "../RecommendRestaurant/ItemRecommend"
 import { useWindowDimensions } from "@/hooks"
 import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
 
