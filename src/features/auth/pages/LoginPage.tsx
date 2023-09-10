@@ -158,10 +158,7 @@ useEffect(() => {
                 >
                   <InputField label="Mã sinh viên" name="username" />
                   <PasswordField label="Mật khẩu" name="password" />
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Tự động đăng nhập lần sau"
-                  />
+                
 
                   <Button
                     size="large"

@@ -106,9 +106,9 @@ export function RecommendFood(props: RecommendFoodProps) {
           <Box
             className={`flex items-center justify-center ${width < 601 && ""}`}
           >
-            <Grid container spacing={4} columnSpacing={{ xs: 1, sm: 3, md: 4 }}>
+            <Grid container spacing={width<500?3:4} columnSpacing={{ xs: 1, sm: 3, md: 4 }}>
               {data?.map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={item.id}>
+                <Grid item xs={width<500 ?12:6} sm={6} md={3} key={item.id}>
                   <ItemRecommend
                     idFood={item.id}
                     detail={item.detail}

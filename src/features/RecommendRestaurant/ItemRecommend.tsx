@@ -1,5 +1,3 @@
-import { useAppDispatch } from "@/app/hooks"
-import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
 import { handlePrice } from "@/utils"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
@@ -34,25 +32,10 @@ const ItemRecommend = (props: propsData) => {
   } = props
 
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
 
   const handleRouter = (id: number) => {
     navigate(`/store/detail-store/${id}`)
   }
-
-  const handleAddToCart = () => {
-    const data = {
-      idFood,
-      name: foodName,
-      price,
-      quantity: 1,
-      idStore,
-      nameStore,
-      imgFood,
-    }
-    dispatch(cartActions.addToCart(data))
-  }
-
   return (
     <Box className="w-[100%] ">
       <Box

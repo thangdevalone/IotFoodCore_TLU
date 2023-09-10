@@ -50,6 +50,14 @@
   }
  
 }
+@media screen and (max-width: 400px) {
+  .base-tx {
+    font-size: 1.4rem;
+    line-height: unset;
+    margin-bottom: 10px !important;
+  }
+ 
+}
 .recommend-store {
   width: 100%;
   max-width: 1320px;

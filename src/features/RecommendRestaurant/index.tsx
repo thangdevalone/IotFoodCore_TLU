@@ -43,16 +43,13 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
     navigate("/store/get-all-store")
   }
 
-  //
-  // console.log(data);
-
   return (
     <>
       <Box
         className="flex"
         sx={{
           margin: `${
-            width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px"
+            width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px 0px 20px 0px"
           }`,
         }}
       >

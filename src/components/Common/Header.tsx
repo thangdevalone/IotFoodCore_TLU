@@ -118,6 +118,15 @@ export function Header(props: HeaderProps) {
                         ? "white"
                         : "var(--color-layer-2)"
                     }`,
+                    "&:hover":{
+                      backgroundColor: `${
+                        setterBg || lengthFood === 0
+                          ? "white"
+                          : "var(--color-layer-2)"
+                      }`,
+                      border: "1px solid #c8c8c8",
+
+                    }
                   }}
                 >
                   <BagIcon
@@ -131,6 +140,8 @@ export function Header(props: HeaderProps) {
                     <>
                       <Typography
                         sx={{
+                          fontSize: "16x",
+                              fontWeight: "500",
                           transform: "translateY(1px)",
                           color: `${
                             setterBg || lengthFood === 0 ? "black" : "white"
@@ -149,7 +160,7 @@ export function Header(props: HeaderProps) {
                 style={{ transition: "all 0.3s" }}
                 className={classNames(
                   "max-w-[400px]",
-                  "bottom-[10px]",
+                  "bottom-[15px]",
                   "fixed",
                   "w-[100vw]",
                   "px-[20px]",
@@ -216,24 +227,21 @@ export function Header(props: HeaderProps) {
                   <CustomButton
                     onClick={handleOpenCard}
                     sx={{
-                      padding: "10px 12px",
+                      padding: "13px 15px",
                       mr: 1,
                       minWidth: "unset",
                       display: "flex",
                       gap: "3px",
-                      border: "1px solid var(--color-df-1)",
-                      backgroundColor: `${
-                        setterBg || dataStore.length === 0
-                          ? "white"
-                          : "var(--color-layer-2)"
-                      }`,
+                   
+                      backgroundColor: "var(--color-df-1)",
+                      
                       "&:hover": {
-                        border: "1px solid var(--color-df-1)",
-                        backgroundColor: "white",
+                       
+                        backgroundColor: "var(--color-df-1)",
                       },
                     }}
                   >
-                    <BagIcon color="var(--color-df-1)" />
+                    <BagIcon color="white" />
                   </CustomButton>
                 )}
               </div>

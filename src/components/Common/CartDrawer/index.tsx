@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 
 import { CustomButton } from "@/components/Custom/CustomButon"
-import { useInforUser } from "@/hooks"
+import { useInforUser, useWindowDimensions } from "@/hooks"
 import { handlePrice } from "@/utils"
 import { ArrowBackIosNew } from "@mui/icons-material"
 import * as React from "react"
@@ -46,7 +46,7 @@ export function CartDrawer(props: CardDrawerProps) {
     setPrice(total)
     dispatch(cartActions.setTotalPrice(total))
   }, [dataStore])
-
+  const {width}=useWindowDimensions()
   return (
     <div>
       <SwipeableDrawer
@@ -92,7 +92,7 @@ export function CartDrawer(props: CardDrawerProps) {
 
             <span className="font-medium text-[18px]">Giỏ đồ ăn</span>
             <span className="text-[13px]  text-neutral-500">
-              Giờ nhận hàng: {timeDeliver}
+              Giờ nhận hàng: {timeDeliver} (hôm nay)
             </span>
           </Stack>
           <Stack
@@ -114,7 +114,7 @@ export function CartDrawer(props: CardDrawerProps) {
                 >
                   {dataStore.map((data: iDataStore) => (
                     <div key={data.id}>
-                      <div className="font-medium text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
+                      <div className="font-medium text-xl">
                         {data.name}
                       </div>
                       <CartList items={data.items} />
@@ -125,12 +125,12 @@ export function CartDrawer(props: CardDrawerProps) {
                   sx={{ padding: "10px 20px 5px 20px" }}
                   className="absolute bottom-3 border-t-2 border-gray-300 w-[100%] bg-white"
                 >
-                  <div className="mb-4">
+                  <div className={`mb-4 ${width<400&& "flex flex-row items-center"}`}>
                     <label
                       htmlFor="timeDeliver"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Chọn giờ nhận hàng
+                      {`Chọn giờ nhận hàng ${width<400? " :":""}`}
                     </label>
                     <select
                       id="timeDeliver"
@@ -145,7 +145,7 @@ export function CartDrawer(props: CardDrawerProps) {
                           ),
                         )
                       }}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className={`bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${width<400 ?"max-w-[150px] ml-2  p-2":"p-2.5"}`}
                     >
                       <option value="10:00 AM">10:00 AM</option>
                       <option value="11:15 AM">11:15 AM</option>
