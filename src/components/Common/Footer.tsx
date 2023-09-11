@@ -42,6 +42,11 @@ export function Footer(props: FooterProps) {
                     thangdevalone (lead)
                   </Link>
                 </Typography>
+                <Typography sx={{ "&:hover": { textDecoration: "underline" } }}>
+                  <Link to={"https://github.com/haidaqn"} target="_blank">
+                    haidaqn (lead)
+                  </Link>
+                </Typography>
               </Stack>
             </Box>
           </Grid>
@@ -118,7 +123,7 @@ export function Footer(props: FooterProps) {
         <Divider
           sx={{ backgroundColor: "white", width: "100%", m: "20px 0px" }}
         />
-        <Grid sx={{mb:"20px"}} container spacing={2}>
+        <Grid sx={{ mb: "20px" }} container spacing={2}>
           <Grid item xs={8}>
             <button
               type="button"
@@ -152,11 +157,7 @@ export function Footer(props: FooterProps) {
             <Divider
               sx={{ backgroundColor: "white", width: "100%", m: "10px 0px" }}
             />
-            <Typography
-              variant="body2"
-              color="white"
-              
-            >
+            <Typography variant="body2" color="white">
               {"Copyright © "}
               <Link color="inherit" to="#">
                 Iot soup

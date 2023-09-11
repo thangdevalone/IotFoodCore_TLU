@@ -9,16 +9,13 @@ import { useSnackbar } from "notistack"
 interface propsData {
   idFood: number
   nameStore: string
-  foodName?: any | string
+  foodName: string
   price: number
-  star?: number
-  time?: number
-  distance?: string
   imgFood: string
-  width: number
   idStore: number
   detail: string
   qSold: number
+  typeFoodEntityId: number
 }
 
 const ItemRecommend = (props: propsData) => {
@@ -31,6 +28,7 @@ const ItemRecommend = (props: propsData) => {
     qSold,
     idStore,
     detail,
+    typeFoodEntityId,
   } = props
 
   const { width } = useWindowDimensions()
@@ -53,7 +51,7 @@ const ItemRecommend = (props: propsData) => {
   return (
     <Tooltip title="Bấm để thêm vào giỏ hàng">
       <Box
-        className={`w-full h-full rounded-md relative cursor-pointer ${
+        className={`w-full h-full rounded-md my-2 relative cursor-pointer ${
           width < 500 && "flex gap-2"
         }`}
         sx={{
@@ -105,7 +103,12 @@ const ItemRecommend = (props: propsData) => {
                 </span>
               )}
 
-              <Stack flexDirection='row' sx={{mt:1}} justifyContent="space-between" alignItems='flex-end'>
+              <Stack
+                flexDirection="row"
+                sx={{ mt: 1 }}
+                justifyContent="space-between"
+                alignItems="flex-end"
+              >
                 <span
                   className={`text-[15px] ${
                     width < 500 ? "font-semibold" : "text-gray-400"

@@ -118,15 +118,14 @@ export function Header(props: HeaderProps) {
                         ? "white"
                         : "var(--color-layer-2)"
                     }`,
-                    "&:hover":{
+                    "&:hover": {
                       backgroundColor: `${
                         setterBg || lengthFood === 0
                           ? "white"
                           : "var(--color-layer-2)"
                       }`,
                       border: "1px solid #c8c8c8",
-
-                    }
+                    },
                   }}
                 >
                   <BagIcon
@@ -141,7 +140,7 @@ export function Header(props: HeaderProps) {
                       <Typography
                         sx={{
                           fontSize: "16x",
-                              fontWeight: "500",
+                          fontWeight: "500",
                           transform: "translateY(1px)",
                           color: `${
                             setterBg || lengthFood === 0 ? "black" : "white"
@@ -232,11 +231,10 @@ export function Header(props: HeaderProps) {
                       minWidth: "unset",
                       display: "flex",
                       gap: "3px",
-                   
+
                       backgroundColor: "var(--color-df-1)",
-                      
+
                       "&:hover": {
-                       
                         backgroundColor: "var(--color-df-1)",
                       },
                     }}
@@ -250,18 +248,20 @@ export function Header(props: HeaderProps) {
             {user ? (
               <>
                 <CustomButton
-                  sx={{ padding: width<=500?"7px 10px":"10px 12px", mr: 2, minWidth: "unset" }}
-                  
+                  sx={{
+                    padding: width <= 500 ? "7px 10px" : "10px 12px",
+                    mr: 2,
+                    minWidth: "unset",
+                  }}
                 >
                   <NotiIcon />
                 </CustomButton>
 
                 <Avatar
-                  
                   sx={{
                     cursor: "pointer",
-                    width: width<=500?35:45,
-                    height: width<=500?35:45,
+                    width: width <= 500 ? 35 : 45,
+                    height: width <= 500 ? 35 : 45,
                     border: "1px solid #f0efef",
                   }}
                   onClick={handleClick}
@@ -272,7 +272,12 @@ export function Header(props: HeaderProps) {
               </>
             ) : (
               <Link to={"/login"}>
-                <CustomButton  sx={{ padding: "10px 15px" ,fontSize:`${width<=500?"10px":"12px"}`}}>
+                <CustomButton
+                  sx={{
+                    padding: "10px 15px",
+                    fontSize: `${width <= 500 ? "10px" : "12px"}`,
+                  }}
+                >
                   Đăng nhập/Đăng ký
                 </CustomButton>
               </Link>

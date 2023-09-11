@@ -12,15 +12,13 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material"
-import MaterialReactTable, {
-  MRT_ColumnDef
-} from "material-react-table"
+import MaterialReactTable, { MRT_ColumnDef } from "material-react-table"
 import { useRef, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import * as yup from "yup"
-import { ToppingAdd } from "./NewProduct"
+import { ToppingItem } from "@/models"
 
-const columns: MRT_ColumnDef<ToppingAdd>[] = [
+const columns: MRT_ColumnDef<ToppingItem>[] = [
   {
     accessorKey: "name",
     header: "Tên topping",
@@ -33,8 +31,8 @@ const columns: MRT_ColumnDef<ToppingAdd>[] = [
 ]
 
 export interface ToppingTableProps {
-  toppingList: ToppingAdd[] | []
-  setToppingList: (newToppingList: ToppingAdd[]) => void
+  toppingList: ToppingItem[] | []
+  setToppingList: (newToppingList: ToppingItem[]) => void
 }
 
 export default function ToppingTable(props: ToppingTableProps) {
@@ -48,14 +46,14 @@ export default function ToppingTable(props: ToppingTableProps) {
     price: yup.number().required("Cần có giá"),
   })
 
-  const form = useForm<ToppingAdd>({
-    defaultValues:{
-      name:"",
-      price:0
+  const form = useForm<ToppingItem>({
+    defaultValues: {
+      name: "",
+      price: 0,
     },
     resolver: yupResolver(schema),
   })
-  const handleAddTopping: SubmitHandler<ToppingAdd> = (data) => {
+  const handleAddTopping: SubmitHandler<ToppingItem> = (data) => {
     setToppingList([...toppingList, { ...data, idTemp: toppingList.length }])
     form.reset()
   }
@@ -81,7 +79,7 @@ export default function ToppingTable(props: ToppingTableProps) {
             <DialogTitle>Tạo mới topping</DialogTitle>
             <DialogContent sx={{ pt: "10px !important" }}>
               <InputField label="Tên topping" name="name" />
-              <NumberField label="Giá thành"  name="price" />
+              <NumberField label="Giá thành" name="price" />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseAddTopping}>Hủy</Button>
@@ -99,11 +97,9 @@ export default function ToppingTable(props: ToppingTableProps) {
         enableRowVirtualization //optional, but recommended if it is likely going to be more than 100 rows
         enableTopToolbar={false}
         enableBottomToolbar={false}
-        
         displayColumnDefOptions={{
-          'mrt-row-actions': {
-            header: 'Hành động', //change header text
-          
+          "mrt-row-actions": {
+            header: "Hành động", //change header text
           },
         }}
         renderRowActions={({ row }) => (
@@ -123,10 +119,14 @@ export default function ToppingTable(props: ToppingTableProps) {
         enableRowActions={true}
         muiTableContainerProps={{
           ref: tableContainerRef, //get access to the table container element
-          sx: { minHeight: "150px",maxHeight:"400px",mt:"10px" }, //give the table a max height
+          sx: { minHeight: "150px", maxHeight: "400px", mt: "10px" }, //give the table a max height
         }}
         muiTablePaperProps={{
-          sx: { boxShadow: "none", width: "100%","& .MuiTypography-root":{maxWidth:"none"} },
+          sx: {
+            boxShadow: "none",
+            width: "100%",
+            "& .MuiTypography-root": { maxWidth: "none" },
+          },
         }}
         state={{
           isLoading,

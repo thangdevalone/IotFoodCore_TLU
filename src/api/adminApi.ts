@@ -1,6 +1,6 @@
-import { ToppingAdd } from "./../features/Admin/components/NewProduct"
 import { PageConfig } from "./../models/Config"
 import axiosClient from "./axiosClient"
+import { ToppingItem } from "@/models"
 const adminApi = {
   getAllProducts(page: PageConfig) {
     const url = `ADMIN/paging-food-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
@@ -31,8 +31,8 @@ const adminApi = {
     distance: string,
     detail: string,
     phoneNumber: string,
-    supOpen:string,
-    supClose:string,
+    supOpen: string,
+    supClose: string,
     imgRes: File,
   ) {
     const data = new FormData()
@@ -42,8 +42,8 @@ const adminApi = {
     data.append("distance", distance)
     data.append("detail", detail)
     data.append("phoneNumber", phoneNumber)
-    data.append("timeStart",supOpen)
-    data.append("timeClose",supClose)
+    data.append("timeStart", supOpen)
+    data.append("timeClose", supClose)
     data.append("imgRes", imgRes)
     const url = "ADMIN/add-res"
     return axiosClient.post(url, data, {
@@ -59,7 +59,7 @@ const adminApi = {
     imgFood: File,
     typeFoodEntityId: number,
     restaurantEntityId: number,
-    toppingList: ToppingAdd[] | [],
+    toppingList: ToppingItem[] | [],
   ) {
     const data = new FormData()
     data.append("foodName", name)
@@ -71,7 +71,7 @@ const adminApi = {
     data.append(
       "toppingRequest",
       JSON.stringify(
-        toppingList.map((item: ToppingAdd) => ({
+        toppingList.map((item: ToppingItem) => ({
           name: item.name,
           price: item.price,
         })),
@@ -99,8 +99,11 @@ const adminApi = {
     id: number,
     restaurantName: string,
     address: string,
+    quantitySold: number,
     distance: number,
     detail: string,
+    // timeStart: string,
+    // timeClose: string,
     phoneNumber: string,
     imgRes: File | null,
   ) {
@@ -108,8 +111,11 @@ const adminApi = {
     data.append("id", String(id))
     data.append("restaurantName", restaurantName)
     data.append("address", address)
+    data.append("quantitySold", String(quantitySold))
     data.append("distance", String(distance))
     data.append("detail", detail)
+    // data.append("timeStart", timeStart)
+    // data.append("timeClose", timeClose)
     data.append("phoneNumber", phoneNumber)
     if (imgRes !== null) {
       data.append("imgRes", imgRes)

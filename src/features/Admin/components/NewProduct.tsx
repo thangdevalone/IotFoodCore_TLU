@@ -26,17 +26,13 @@ import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import ToppingTable from "./ToppingTable"
+import { ToppingItem } from "@/models"
 
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   }
-}
-export interface ToppingAdd {
-  idTemp?: number
-  name: string
-  price: number
 }
 export interface NewProductProps {}
 
@@ -53,7 +49,7 @@ function NewProduct(props: NewProductProps) {
   const [detail, setDetail] = React.useState<string>("")
 
   const { enqueueSnackbar } = useSnackbar()
-  const [toppingList, setToppingList] = React.useState<ToppingAdd[] | []>([])
+  const [toppingList, setToppingList] = React.useState<ToppingItem[] | []>([])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue)
