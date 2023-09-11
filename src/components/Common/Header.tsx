@@ -272,7 +272,7 @@ export function Header(props: HeaderProps) {
               </>
             ) : (
               <Link to={"/login"}>
-                <CustomButton  sx={{ padding: "10px 15px" ,fontSize:`${width<=500?"10px":"12px"}`}}>
+                <CustomButton  sx={{ padding: "10px 15px" ,fontSize:`${width<=500?"10px":"13px"}`,height:"100%"}}>
                   Đăng nhập/Đăng ký
                 </CustomButton>
               </Link>

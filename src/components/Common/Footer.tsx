@@ -146,7 +146,7 @@ export function Footer(props: FooterProps) {
           </Grid>
           <Grid item xs={4}>
             <p className="text-white">
-              Đây là dự án trong chuỗi phát triển của sinh viên Đại học Thăng
+              Đây là dự án trong chuỗi phát triển của sinh viên trường Đại học Thăng
               Long chúc bạn có 1 trải nghiệm tốt. Xin cảm ơn!
             </p>
             <Divider

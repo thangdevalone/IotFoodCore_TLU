@@ -187,6 +187,7 @@ export function Supplier() {
         onColumnFiltersChange={setColumnFilters}
         onGlobalFilterChange={setGlobalFilter}
         onSortingChange={setSorting}
+        onPaginationChange={setPagination}
         rowCount={rowCount}
         enableStickyHeader
         state={{
