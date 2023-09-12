@@ -84,17 +84,7 @@ export function RecommendFood(props: RecommendFoodProps) {
       >
         {data?.map((item, index) => (
           <SwiperSlide key={index + item?.id}>
-            <SliderItemRecommend
-              idFood={item.id}
-              detail={item.detail}
-              width={width}
-              imgFood={item.imgFood}
-              foodName={item.foodName}
-              price={item.price}
-              qSold={item.quantityPurchased || 0}
-              idStore={item.restaurantEntityId}
-              nameStore={item.nameRestaurantFood}
-            />
+            <SliderItemRecommend {...item} />
           </SwiperSlide>
         ))}
       </Swiper>

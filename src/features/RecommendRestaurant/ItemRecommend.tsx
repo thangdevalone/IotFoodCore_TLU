@@ -17,7 +17,6 @@ interface propsData {
   idStore: number
 }
 
-
 const ItemRecommend = (props: propsData) => {
   const {
     idFood,

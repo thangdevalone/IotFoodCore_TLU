@@ -16,7 +16,7 @@ const dataQuestion = [
       "Chúng tôi chưa hỗ trợ dịch vụ thanh toán trực tiếp trên bản cập nhật lần này",
   },
   {
-    question: "Tôi có thể đặt đồ ăn trên GrabFood cho người khác không?",
+    question: "Tôi có thể đặt đồ ăn trên IOTFOOD cho người khác không?",
     answer:
       "Tất nhiên rồi, hãy chăm sóc những người thân yêu của mình bằng cách gửi những món ăn mà họ yêu thích đến tận nhà. Bạn chỉ cần cập nhật địa chỉ giao hàng và tên người nhận trước khi đặt đơn hàng của bạn.",
   },

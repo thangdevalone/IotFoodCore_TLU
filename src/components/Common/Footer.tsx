@@ -16,7 +16,6 @@ export interface FooterProps {}
 export function Footer(props: FooterProps) {
   const [rate, setRate] = useState(false)
   const handleRate = () => {
-    console.log("a")
     setRate(!rate)
   }
   return (

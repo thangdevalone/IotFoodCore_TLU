@@ -46,7 +46,7 @@ export function CartDrawer(props: CardDrawerProps) {
     setPrice(total)
     dispatch(cartActions.setTotalPrice(total))
   }, [dataStore])
-  const {width}=useWindowDimensions()
+  const { width } = useWindowDimensions()
   return (
     <div>
       <SwipeableDrawer
@@ -114,9 +114,7 @@ export function CartDrawer(props: CardDrawerProps) {
                 >
                   {dataStore.map((data: iDataStore) => (
                     <div key={data.id}>
-                      <div className="font-medium text-xl">
-                        {data.name}
-                      </div>
+                      <div className="font-medium text-xl">{data.name}</div>
                       <CartList items={data.items} />
                     </div>
                   ))}
@@ -125,12 +123,16 @@ export function CartDrawer(props: CardDrawerProps) {
                   sx={{ padding: "10px 20px 5px 20px" }}
                   className="absolute bottom-3 border-t-2 border-gray-300 w-[100%] bg-white"
                 >
-                  <div className={`mb-4 ${width<400&& "flex flex-row items-center"}`}>
+                  <div
+                    className={`mb-4 ${
+                      width < 400 && "flex flex-row items-center"
+                    }`}
+                  >
                     <label
                       htmlFor="timeDeliver"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      {`Chọn giờ nhận hàng ${width<400? " :":""}`}
+                      {`Chọn giờ nhận hàng ${width < 400 ? " :" : ""}`}
                     </label>
                     <select
                       id="timeDeliver"
@@ -145,7 +147,9 @@ export function CartDrawer(props: CardDrawerProps) {
                           ),
                         )
                       }}
-                      className={`bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${width<400 ?"max-w-[150px] ml-2  p-2":"p-2.5"}`}
+                      className={`bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+                        width < 400 ? "max-w-[150px] ml-2  p-2" : "p-2.5"
+                      }`}
                     >
                       <option value="10:00 AM">10:00 AM</option>
                       <option value="11:15 AM">11:15 AM</option>

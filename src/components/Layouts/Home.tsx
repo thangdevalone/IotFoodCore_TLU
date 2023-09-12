@@ -39,7 +39,7 @@ export function Home(props: HomeProps) {
         Các món bán chạy nhất tại{" "}
         <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
       </p>
-      <section className={"recommend-store"}>
+      <section className="recommend-store">
         <RecommendFood />
       </section>
       {width < 501 && (
