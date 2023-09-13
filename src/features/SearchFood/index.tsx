@@ -18,7 +18,7 @@ export function SearchFood(props: SearchFoodProps) {
   }
 
   const handleSearch = () => {
-    if (search) navigate(`/search/${search}`)
+    if (search) navigate(`/search?key=${search}`)
     else
       enqueueSnackbar("Bạn chưa nhập gì để tìm kiếm !", { variant: "warning" })
   }

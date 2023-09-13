@@ -43,9 +43,7 @@ function App() {
             <Route path="detail-store/:idStore" element={<DetailStore />} />
             {/* <Route path="detail-food/:idFood" element={<DetailFood />} /> */}
           </Route>
-          <Route path="/search" element={<Store />}>
-            <Route path=":searchParams" element={<SearchList />} />
-          </Route>
+          <Route path="/search" element={<SearchList />}></Route>
           <Route element={<ProtectAuth />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
