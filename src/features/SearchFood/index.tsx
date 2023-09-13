@@ -52,7 +52,7 @@ export function SearchFood(props: SearchFoodProps) {
               <img className={classes.chef} src="/assets/cook.gif" />
             )}
             <input
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               onChange={(e) => setSearch(e.target.value)}
               className="appearance-none border-2 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="search-food"

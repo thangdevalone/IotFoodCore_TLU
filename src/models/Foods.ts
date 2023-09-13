@@ -57,6 +57,7 @@ export interface CartItemData {
   price: number
   quantity: number
   idStore: number
+  distanceStore:number
   nameStore: string
   type?: boolean
   imgFood: string

@@ -6,7 +6,6 @@ import Admin from "./components/Layouts/Admin"
 import { Home } from "./components/Layouts/Home"
 import { Store } from "./components/Layouts/Store"
 import { ProtectAdmin, ProtectAuth } from "./components/ProtectRouter"
-import Chat from "./features/Chat"
 import DetailStore from "./features/DetailStore"
 import SearchList from "./features/SearchFood/components/SearchList"
 import GetAllStore from "./features/Store"
@@ -41,7 +40,6 @@ function App() {
           <Route path="/store" element={<Store />}>
             <Route path="get-all-store" element={<GetAllStore />} />
             <Route path="detail-store/:idStore" element={<DetailStore />} />
-            {/* <Route path="detail-food/:idFood" element={<DetailFood />} /> */}
           </Route>
           <Route path="/search" element={<SearchList />}></Route>
           <Route element={<ProtectAuth />}>

@@ -36,14 +36,14 @@ export function Footer(props: FooterProps) {
             >
               <p className="mb-2 font-semibold text-lg">Phát triển bởi</p>
               <Stack direction="column" spacing={1}>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" } }}>
+                <Typography sx={{ "&:hover": { textDecoration: "underline" } ,width:"fit-content"}}>
                   <Link to={"https://github.com/thangdevalone"} target="_blank">
                     thangdevalone (lead)
                   </Link>
                 </Typography>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" } }}>
+                <Typography sx={{ "&:hover": { textDecoration: "underline" },width:"fit-content" }}>
                   <Link to={"https://github.com/haidaqn"} target="_blank">
-                    haidaqn (lead)
+                    haidaqn
                   </Link>
                 </Typography>
               </Stack>
@@ -60,7 +60,7 @@ export function Footer(props: FooterProps) {
             >
               <p className="mb-2 font-semibold text-lg">Dẫn dắt bởi</p>
               <Stack direction="column" spacing={1}>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" } }}>
+                <Typography sx={{ "&:hover": { textDecoration: "underline" } ,width:"fit-content" }}>
                   <Link
                     to={"https://www.facebook.com/giang.bui.3511"}
                     target="_blank"
@@ -150,7 +150,7 @@ export function Footer(props: FooterProps) {
           </Grid>
           <Grid item xs={4}>
             <p className="text-white">
-              Đây là dự án trong chuỗi phát triển của sinh viên Đại học Thăng
+              Đây là dự án trong chuỗi phát triển của sinh viên trường Đại học Thăng
               Long chúc bạn có 1 trải nghiệm tốt. Xin cảm ơn!
             </p>
             <Divider

@@ -99,11 +99,10 @@ const adminApi = {
     id: number,
     restaurantName: string,
     address: string,
-    quantitySold: number,
-    distance: number,
+    distance: string,
     detail: string,
-    // timeStart: string,
-    // timeClose: string,
+    timeStart: string,
+    timeClose: string,
     phoneNumber: string,
     imgRes: File | null,
   ) {
@@ -111,11 +110,10 @@ const adminApi = {
     data.append("id", String(id))
     data.append("restaurantName", restaurantName)
     data.append("address", address)
-    data.append("quantitySold", String(quantitySold))
     data.append("distance", String(distance))
     data.append("detail", detail)
-    // data.append("timeStart", timeStart)
-    // data.append("timeClose", timeClose)
+    data.append("timeStart", timeStart)
+    data.append("timeClose", timeClose)
     data.append("phoneNumber", phoneNumber)
     if (imgRes !== null) {
       data.append("imgRes", imgRes)

@@ -11,24 +11,24 @@ export interface QuestionItemProps {
 const dataQuestion = [
   {
     question:
-      "Tôi có thể thanh toán trực tuyến trên IOTFOOD cho đơn hàng của mình không?",
+      "Tôi có thể thanh toán trực tuyến trên IotFood cho đơn hàng của mình không?",
     answer:
       "Chúng tôi chưa hỗ trợ dịch vụ thanh toán trực tiếp trên bản cập nhật lần này",
   },
   {
-    question: "Tôi có thể đặt đồ ăn trên IOTFOOD cho người khác không?",
+    question: "Tôi có thể đặt đồ ăn trên IotFood cho người khác không?",
     answer:
       "Tất nhiên rồi, hãy chăm sóc những người thân yêu của mình bằng cách gửi những món ăn mà họ yêu thích đến tận nhà. Bạn chỉ cần cập nhật địa chỉ giao hàng và tên người nhận trước khi đặt đơn hàng của bạn.",
   },
   {
-    question: "IOTFOOD tính phí giao đồ ăn như thế nào?",
+    question: "IotFood tính phí giao đồ ăn như thế nào?",
     answer:
-      "Phí giao hàng của chúng tôi phụ thuộc vào nhiều yếu tố hoạt động như khoảng cách từ vị trí của bạn đến nhà hàng. Bạn có thể kiểm tra phí giao hàng chính xác cần phải trả trước khi thanh toán tại mục thanh toán trên ứng dụng Grab. Ngoài ra còn có phần “Free Delivery” (Giao hàng miễn phí) liệt kê các nhà hàng gần chỗ bạn mà không tính phí giao hàng.",
+      "Phí giao hàng của chúng tôi chỉ trong tầm giá từ 3-15 nghìn theo khoảng cách khoảng cách càng xa thì phí giao càng lớn. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn hằng ngày.",
   },
   {
-    question: "IOTFOOD có áp dụng giá trị đơn hàng tối thiểu không?",
+    question: "IotFood hoạt động như nào?",
     answer:
-      "Có! Nhưng bạn có thể trả số tiền chênh lệch nếu giá trị đơn hàng của bạn nhỏ hơn số tiền đặt hàng tối thiểu.",
+      "Chúng tôi hoạt động theo mô hình gom đơn. Để sao cho phí ship của bạn là rẻ nhất kèm với giá của các cửa hàng sẽ không bị tăng lên so với thực tế như các ứng dụng giao hàng khác.",
   },
 ]
 
@@ -36,9 +36,9 @@ const QuestionItem = (props: QuestionItemProps) => {
   const { question, answer } = props
   return (
     <Stack direction="column" className="w-full">
-      <p className="text-xl font-bold">{question}</p>
-      <p className="text-sm mt-2">{answer}</p>
-      <Divider sx={{ margin: "30px 0", borderWidth: "0.1rem" }} />
+      <p className="text-2xl font-bold">{question}</p>
+      <p className="text-base mt-2">{answer}</p>
+      <Divider sx={{ margin: "30px 0 20px 0", borderWidth: "0.09rem" }} />
     </Stack>
   )
 }

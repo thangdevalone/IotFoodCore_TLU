@@ -54,7 +54,7 @@ const CartItem = (props: propsData) => {
       direction="row"
       spacing={2}
       className="border-b w-full py-5"
-      alignItems={width>400?"center":"flex-start"}
+      alignItems={width > 400 ? "center" : "flex-start"}
     >
       {width > 400 ? (
         <>
@@ -86,14 +86,23 @@ const CartItem = (props: propsData) => {
             alignItems="center"
           >
             <Box
-              className="h-14 w-14 rounded-md cursor-pointer object-cover"
+              className="h-14 w-14 min-w-[65px] rounded-md cursor-pointer object-cover"
               sx={{
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 backgroundImage: `url(${item.imgFood})`,
               }}
             ></Box>
-            <Typography variant="h6" sx={{ fontSize: "16px" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: "16px",
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 2, // Số dòng tối đa
+              }}
+            >
               {item.name}
             </Typography>
           </Stack>
@@ -104,7 +113,7 @@ const CartItem = (props: propsData) => {
       ) : (
         <>
           <Box
-            className="h-14 w-14 rounded-md cursor-pointer object-cover "
+            className="h-14 w-14 min-w-[65px] rounded-md cursor-pointer object-cover "
             sx={{
               backgroundPosition: "center",
               backgroundSize: "cover",
@@ -116,11 +125,8 @@ const CartItem = (props: propsData) => {
               {item.name}
             </Typography>
 
-            
-            <Typography  sx={{fontSize:"12px"}}>
-                Topping:
-            </Typography>
-            <Typography className="flex-2" sx={{fontSize:"14px",mt:1}}>
+            <Typography sx={{ fontSize: "12px" }}>Topping:</Typography>
+            <Typography className="flex-2" sx={{ fontSize: "14px", mt: 1 }}>
               {handlePrice(item.price)} VND
             </Typography>
             <Box className="flex items-center gap-2 flex-1 mt-2">

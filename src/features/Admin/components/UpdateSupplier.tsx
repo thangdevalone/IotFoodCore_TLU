@@ -1,6 +1,6 @@
 import foodsApis from "@/api/foodsApi"
 import { StoreDetailData } from "@/models"
-import React, { useEffect, memo } from "react"
+import React, { useEffect, memo, ChangeEvent } from "react"
 import adminApi from "@/api/adminApi"
 import {
   ArrowBackIosNew,
@@ -34,7 +34,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
   const [restaurantName, setRestaurantName] = React.useState<string>("")
   const [detail, setDetail] = React.useState<string>("")
   const [imagePreview, setImagePreview] = React.useState<string | null>(null)
-  const [distance, setDistance] = React.useState<number>(0)
+  const [distance, setDistance] = React.useState<string>("")
   const [quantitySold, setQuantitySold] = React.useState<number>(0)
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
@@ -92,11 +92,11 @@ const UpdateSupplier = ({ id }: { id: string }) => {
             +id,
             restaurantName,
             address,
-            quantitySold,
+        
             distance,
             detail,
-            // supOpen,
-            // supClose,
+            supOpen,
+            supClose,
             phone,
             file,
           )
@@ -105,11 +105,10 @@ const UpdateSupplier = ({ id }: { id: string }) => {
             +id,
             restaurantName,
             address,
-            quantitySold,
             distance,
             detail,
-            // supOpen,
-            // supClose,
+            supOpen,
+            supClose,
             phone,
             null,
           )
@@ -129,7 +128,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
   const handleAddress = (value: string) => {
     setAddress(value)
   }
-  const handleDistance = (value: number) => {
+  const handleDistance = (value: string) => {
     setDistance(value)
   }
 
@@ -285,7 +284,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                 <input
                                   id="name-food-select"
                                   value={address}
-                                  type="string"
+                                  type="text"
                                   autoComplete="off"
                                   onChange={(e) =>
                                     handleAddress(e.target.value)
@@ -305,7 +304,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                 <input
                                   id="name-food-select"
                                   value={phone}
-                                  type="string"
+                                  type="text"
                                   autoComplete="off"
                                   onChange={(e) => handlePhone(e.target.value)}
                                   className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
@@ -328,11 +327,11 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                   <input
                                     id="name-food-select"
                                     value={distance}
-                                    type="string"
+                                    type="text"
                                     autoComplete="off"
-                                    onChange={(e) =>
-                                      handleDistance(+e.target.value)
-                                    }
+                                    onChange={(
+                                      e: ChangeEvent<HTMLInputElement>,
+                                    ) => handleDistance(e.target.value)}
                                     className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                   <span>km</span>
@@ -351,7 +350,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                   id="name-food-select"
                                   placeholder="8:00 AM"
                                   value={supOpen}
-                                  type="string"
+                                  type="text"
                                   autoComplete="off"
                                   onChange={(e) =>
                                     handleSupOpen(e.target.value)
@@ -372,7 +371,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                   id="name-food-select"
                                   placeholder="3:00 PM"
                                   value={supClose}
-                                  type="string"
+                                  type="text"
                                   autoComplete="off"
                                   onChange={(e) =>
                                     handleSupClose(e.target.value)

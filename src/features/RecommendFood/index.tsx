@@ -2,11 +2,12 @@ import foodsApis from "@/api/foodsApi"
 import { useWindowDimensions } from "@/hooks"
 import { foodData } from "@/models"
 import { ChevronLeft, ChevronRight } from "@mui/icons-material"
-import { Box, IconButton } from "@mui/material"
+import { Box, IconButton, Stack } from "@mui/material"
 import * as React from "react"
 import "swiper/css"
 import { Swiper, SwiperSlide } from "swiper/react"
 import SliderItemRecommend from "./SliderItemRecommend"
+import { CustomButton } from "@/components/Custom/CustomButon"
 
 export interface RecommendFoodProps {}
 
@@ -42,6 +43,7 @@ export function RecommendFood(props: RecommendFoodProps) {
   //
 
   return (
+    <>
     <Box
       className="flex "
       sx={{
@@ -78,7 +80,7 @@ export function RecommendFood(props: RecommendFoodProps) {
             ? 3
             : 4
         }
-        spaceBetween={25}
+        spaceBetween={20}
         allowTouchMove={true}
         ref={swiperRef}
       >
@@ -96,5 +98,34 @@ export function RecommendFood(props: RecommendFoodProps) {
         </Box>
       )}
     </Box>
+    <Stack alignItems="center" >
+    <Box className="container-base base-pd">
+      <CustomButton
+        fullWidth
+        sx={{
+          width: "100%",
+          border: "1px solid var(--color-df-1)",
+          color: "var(--color-df-1)",
+          mt: "15px",
+          mb: "20px",
+          borderRadius: "6px",
+          fontSize: "17px",
+          height: "50px",
+          fontWeight: "600",
+          textTransform: "unset",
+          transition: "all 0.2s",
+          "&:hover": {
+            border: "1px solid var(--color-df-1)",
+            background: "rgb(241, 245, 249)",
+            color: "var(--color-df-1)",
+          },
+        }}
+      >
+        Xem thêm món ăn
+      </CustomButton>
+    </Box>
+  </Stack>
+    </>
+    
   )
 }

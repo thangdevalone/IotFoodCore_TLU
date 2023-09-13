@@ -51,7 +51,7 @@ const ItemRecommend = (props: propsData) => {
   return (
     <Tooltip title="Bấm để thêm vào giỏ hàng">
       <Box
-        className={`w-full h-full rounded-md my-2 relative cursor-pointer ${
+        className={`w-full h-full rounded-md my-3 relative cursor-pointer ${
           width < 500 && "flex gap-2"
         }`}
         sx={{
@@ -89,6 +89,12 @@ const ItemRecommend = (props: propsData) => {
                   : " text-lg font-medium"
                 : "text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold"
             }`}
+            style={{
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2, // Số dòng tối đa
+            }}
           >
             {foodName}
           </span>
@@ -131,13 +137,13 @@ const ItemRecommend = (props: propsData) => {
               <Box className="flex mt-[1px] capitalize gap-5 items-center">
                 <Typography
                   className="whitespace-nowrap flex-1 overflow-hidden overflow-ellipsis"
-                  sx={{ fontSize: "14px" }}
+                  sx={{ fontSize: "13px" }}
                 >
                   {nameStore}
                 </Typography>
                 <Typography
                   className="text-gray-400 "
-                  sx={{ fontSize: "14px" }}
+                  sx={{ fontSize: "13px" }}
                 >
                   {handlePrice(price)} VND
                 </Typography>
@@ -145,7 +151,7 @@ const ItemRecommend = (props: propsData) => {
               <Box
                 sx={{
                   "& *": {
-                    fontSize: "14px",
+                    fontSize: "13px",
                   },
                 }}
                 className="flex mt-1 justify-between items-center"

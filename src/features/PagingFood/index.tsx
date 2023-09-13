@@ -61,12 +61,15 @@ export function PagingFood(props: RecommendFoodProps) {
       className={`flex items-center justify-center mb-5`}
       ref={scrollContainerRef}
     >
-      <Grid container spacing={1} columnSpacing={{ xs: 1, sm: 3, md: 4 }}>
+      <Grid container  sx={{"& .infinite-scroll-component__outerdiv":{
+        width:"100%"
+      },width:"100%",ml:"0px"}} columnSpacing={{ xs: 0, sm: 3, md: 4 }}>
         <InfiniteScroll
           dataLength={data.length}
           next={fetchData}
+        
           hasMore={hasMore}
-          loader={<h4>Hai Dang khong cho them san pham...</h4>}
+          loader={<h4>Loading...</h4>}
         >
           {data?.map((item: foodData) => (
             <Grid item xs={12} sm={6} md={3} key={item.id}>

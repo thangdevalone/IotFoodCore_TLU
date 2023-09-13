@@ -35,6 +35,7 @@ export function Home(props: HomeProps) {
       <section className="recommend-store">
         <RecommendRestaurant />
       </section>
+      {width<501&& <div className="line-1"></div>}
       <p className="base-tx base-pd mb-[24px]">
         Các món bán chạy nhất tại{" "}
         <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
@@ -42,6 +43,7 @@ export function Home(props: HomeProps) {
       <section className="recommend-store">
         <RecommendFood />
       </section>
+      {width<501&& <div className="line-1"></div>}
       {width < 501 && (
         <>
           <p className="base-tx base-pd mb-[24px]">Các món bán hiện tại</p>
