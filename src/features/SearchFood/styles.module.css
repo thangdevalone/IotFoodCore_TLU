@@ -55,3 +55,10 @@
   }
  
 }
+
+.base-tx {
+  margin-bottom: 32px;
+  margin: 0 auto;
+  max-width: 1280px;
+}
+

@@ -1,15 +1,28 @@
-import { Box, Paper, Stack, Typography } from "@mui/material"
-import * as React from "react"
+import { Box, Paper, Stack } from "@mui/material"
 import classes from "./styles.module.css"
-import { InputField } from "@/components/FormControls"
-
-import classNames from "classnames"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { useWindowDimensions } from "@/hooks"
+import classNames from "classnames"
+import { useNavigate } from "react-router-dom"
+import React from "react"
+import { useSnackbar } from "notistack"
 export interface SearchFoodProps {}
 
 export function SearchFood(props: SearchFoodProps) {
   const { width } = useWindowDimensions()
+  const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
+  const [search, setSearch] = React.useState<string>("")
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") handleSearch()
+  }
+
+  const handleSearch = () => {
+    if (search) navigate(`/search?key=${search}`)
+    else
+      enqueueSnackbar("Bạn chưa nhập gì để tìm kiếm !", { variant: "warning" })
+  }
+
   return (
     <Box
       className={classNames({
@@ -39,6 +52,8 @@ export function SearchFood(props: SearchFoodProps) {
               <img className={classes.chef} src="/assets/cook.gif" />
             )}
             <input
+              onKeyDown={handleKeyPress}
+              onChange={(e) => setSearch(e.target.value)}
               className="appearance-none border-2 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="search-food"
               style={{
@@ -50,6 +65,7 @@ export function SearchFood(props: SearchFoodProps) {
               placeholder="Tìm kiếm món ăn"
             />
             <CustomButton
+              onClick={() => handleSearch()}
               fullWidth
               sx={{
                 background: "var(--color-df-1)",

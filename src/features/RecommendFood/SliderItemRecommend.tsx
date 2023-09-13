@@ -1,46 +1,38 @@
 import { useAppDispatch } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
 import { VoucherIcon } from "@/components/Icon/VoucherIcon"
+import { foodData } from "@/models"
 import { handlePrice } from "@/utils"
 import { Box, Tooltip, Typography } from "@mui/material"
 import { useSnackbar } from "notistack"
-interface propsData {
-  idFood: number
-  nameStore: string
-  foodName?: any | string
-  price: number
-  star?: number
-  time?: number
-  distance?: string
-  imgFood: string
-  width: number
-  idStore: number
-  detail: string
-  qSold: number
-}
 
-const SliderItemRecommend = (props: propsData) => {
+const SliderItemRecommend = (props: foodData) => {
   const {
-    idFood,
-    nameStore,
+    id,
     foodName,
     price,
-    imgFood,
-    qSold,
-    idStore,
     detail,
+    nameRestaurantFood,
+    imgFood,
+    createBy,
+    createAt,
+    quantityPurchased,
+    typeFoodEntityId,
+    restaurantEntityId,
+    status,
+    toppingEntities,
   } = props
 
   const dispatch = useAppDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const handleAddToCart = () => {
     const data = {
-      idFood,
+      idFood: id,
       name: foodName,
       price,
       quantity: 1,
-      idStore,
-      nameStore,
+      idStore: restaurantEntityId,
+      nameStore: nameRestaurantFood,
       imgFood,
     }
     enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
@@ -58,7 +50,7 @@ const SliderItemRecommend = (props: propsData) => {
         }}
         onClick={handleAddToCart}
       >
-        <Box className=" min-w-[140px] min-h-[100px]">
+        <Box className="min-w-[140px] min-h-[100px]">
           <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
             <Box
               className={`img-res`}
@@ -73,14 +65,8 @@ const SliderItemRecommend = (props: propsData) => {
             ></Box>
           </Box>
         </Box>
-        <Box
-          className={`flex flex-col w-full overflow-hidden pd-1 mt-[8px]
-          `}
-        >
-          <span
-            className={`capitalize text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold
-            }`}
-          >
+        <Box className="flex flex-col w-full overflow-hidden pd-1 mt-[8px]">
+          <span className="capitalize text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold">
             {foodName}
           </span>
 
@@ -89,7 +75,7 @@ const SliderItemRecommend = (props: propsData) => {
               className="whitespace-nowrap flex-1 overflow-hidden overflow-ellipsis"
               sx={{ fontSize: "14px" }}
             >
-              {nameStore}
+              {nameRestaurantFood}
             </Typography>
             <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
               {handlePrice(price)} VND
@@ -103,7 +89,7 @@ const SliderItemRecommend = (props: propsData) => {
             }}
             className="flex mt-1 justify-between items-center"
           >
-            <span>Đã bán: {qSold}</span>
+            <span>Đã bán: {quantityPurchased}</span>
             <div>
               <VoucherIcon />
               <span className="ml-1">

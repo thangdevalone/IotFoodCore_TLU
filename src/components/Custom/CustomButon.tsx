@@ -32,5 +32,3 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
     </Button>
   )
 }
-
-
