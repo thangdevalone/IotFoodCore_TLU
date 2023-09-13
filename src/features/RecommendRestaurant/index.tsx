@@ -77,7 +77,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
               ? 3
               : 4
           }
-          spaceBetween={25}
+          spaceBetween={20}
           allowTouchMove={true}
           ref={swiperRef}
         >
@@ -103,10 +103,11 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           </Box>
         )}
       </Box>
-      <Stack alignItems="center" onClick={() => handleStore()}>
+      <Stack alignItems="center" >
         <Box className="container-base base-pd">
           <CustomButton
             fullWidth
+            onClick={() => handleStore()}
             sx={{
               width: "100%",
               border: "1px solid var(--color-df-1)",

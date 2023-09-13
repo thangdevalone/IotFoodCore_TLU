@@ -1,14 +1,15 @@
 import { Question, WhyChoose } from "@/features/About"
 import { Banner } from "@/features/Banner"
 import { RecommendFood } from "@/features/RecommendFood"
+import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 import { SearchFood } from "@/features/SearchFood"
 import TypeFood from "@/features/TypeFood"
 import { useWindowDimensions } from "@/hooks"
-import "./styles_home.css"
 import { Box } from "@mui/material"
-import { Footer, Header } from "../Common"
-import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 import React from "react"
+import { Footer, Header } from "../Common"
+import "./styles_home.css"
+import { PagingFood } from "@/features/PagingFood"
 export interface HomeProps {}
 
 export interface HomeProps {}
@@ -34,17 +35,23 @@ export function Home(props: HomeProps) {
       <section className="recommend-store">
         <RecommendRestaurant />
       </section>
+      {width<501&& <div className="line-1"></div>}
       <p className="base-tx base-pd mb-[24px]">
         Các món bán chạy nhất tại{" "}
         <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
       </p>
-      <section
-        className={
-          width > 901 ? "recommend-store" : "container-base base-pd type-food"
-        }
-      >
+      <section className={"recommend-store"}>
         <RecommendFood />
       </section>
+      {width<501&& <div className="line-1"></div>}
+      {width < 501 && (
+        <>
+          <p className="base-tx base-pd mb-[24px]">Các món bán hiện tại</p>
+          <section className={"container-base base-pd type-food"}>
+            <PagingFood />
+          </section>
+        </>
+      )}
       {width >= 600 && (
         <>
           <p className="base-tx  base-pd  mb-[24px]">
@@ -53,9 +60,7 @@ export function Home(props: HomeProps) {
           <section className="container-base base-pd type-food">
             <TypeFood />
           </section>
-          <p className="base-tx base-pd mb-[16px]">
-            IotFood có gì nổi bật?
-          </p>
+          <p className="base-tx base-pd mb-[16px]">IotFood có gì nổi bật?</p>
           <section className="container-base base-pd why-choose">
             <WhyChoose />
           </section>

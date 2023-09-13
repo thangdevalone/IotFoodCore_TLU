@@ -56,6 +56,11 @@
     line-height: unset;
     margin-bottom: 10px !important;
   }
+  .line-1 {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border: 2px solid #e5e9f0;
+  }
  
 }
 .recommend-store {

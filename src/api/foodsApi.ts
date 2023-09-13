@@ -1,4 +1,5 @@
 import axiosClient from "./axiosClient"
+import { PageConfig } from "@/models"
 
 const foodsApis = {
   getRecommendFoods() {
@@ -27,6 +28,10 @@ const foodsApis = {
   },
   searchFoods(search: string) {
     const url = `auth/search-food?searchString=${search}`
+    return axiosClient.post(url)
+  },
+  pagingFood(page: PageConfig) {
+    const url = `auth/paging-food-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
 }

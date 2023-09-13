@@ -37,9 +37,14 @@ export function Footer(props: FooterProps) {
             >
               <p className="mb-2 font-semibold text-lg">Phát triển bởi</p>
               <Stack direction="column" spacing={1}>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" } }}>
+                <Typography sx={{ "&:hover": { textDecoration: "underline" } ,width:"fit-content"}}>
                   <Link to={"https://github.com/thangdevalone"} target="_blank">
                     thangdevalone (lead)
+                  </Link>
+                </Typography>
+                <Typography sx={{ "&:hover": { textDecoration: "underline" },width:"fit-content" }}>
+                  <Link to={"https://github.com/haidaqn"} target="_blank">
+                    haidaqn
                   </Link>
                 </Typography>
               </Stack>
@@ -56,7 +61,7 @@ export function Footer(props: FooterProps) {
             >
               <p className="mb-2 font-semibold text-lg">Dẫn dắt bởi</p>
               <Stack direction="column" spacing={1}>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" } }}>
+                <Typography sx={{ "&:hover": { textDecoration: "underline" } ,width:"fit-content" }}>
                   <Link
                     to={"https://www.facebook.com/giang.bui.3511"}
                     target="_blank"
@@ -118,7 +123,7 @@ export function Footer(props: FooterProps) {
         <Divider
           sx={{ backgroundColor: "white", width: "100%", m: "20px 0px" }}
         />
-        <Grid sx={{mb:"20px"}} container spacing={2}>
+        <Grid sx={{ mb: "20px" }} container spacing={2}>
           <Grid item xs={8}>
             <button
               type="button"
@@ -152,11 +157,7 @@ export function Footer(props: FooterProps) {
             <Divider
               sx={{ backgroundColor: "white", width: "100%", m: "10px 0px" }}
             />
-            <Typography
-              variant="body2"
-              color="white"
-              
-            >
+            <Typography variant="body2" color="white">
               {"Copyright © "}
               <Link color="inherit" to="#">
                 Iot soup

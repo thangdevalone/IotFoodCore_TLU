@@ -1,14 +1,54 @@
-import * as React from 'react';
+import React from "react" // Import React
 import "./style_about.css"
-export interface  QuestionProps {
+import { Stack, Divider } from "@mui/material"
+
+export interface QuestionProps {}
+export interface QuestionItemProps {
+  question: string | null
+  answer: string | null
 }
 
-export function Question (props:  QuestionProps) {
+const dataQuestion = [
+  {
+    question:
+      "Tôi có thể thanh toán trực tuyến trên IotFood cho đơn hàng của mình không?",
+    answer:
+      "Chúng tôi chưa hỗ trợ dịch vụ thanh toán trực tiếp trên bản cập nhật lần này",
+  },
+  {
+    question: "Tôi có thể đặt đồ ăn trên IotFood cho người khác không?",
+    answer:
+      "Tất nhiên rồi, hãy chăm sóc những người thân yêu của mình bằng cách gửi những món ăn mà họ yêu thích đến tận nhà. Bạn chỉ cần cập nhật địa chỉ giao hàng và tên người nhận trước khi đặt đơn hàng của bạn.",
+  },
+  {
+    question: "IotFood tính phí giao đồ ăn như thế nào?",
+    answer:
+      "Phí giao hàng của chúng tôi chỉ trong tầm giá từ 3-15 nghìn theo khoảng cách khoảng cách càng xa thì phí giao càng lớn. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn hằng ngày.",
+  },
+  {
+    question: "IotFood hoạt động như nào?",
+    answer:
+      "Chúng tôi hoạt động theo mô hình gom đơn. Để sao cho phí ship của bạn là rẻ nhất kèm với giá của các cửa hàng sẽ không bị tăng lên so với thực tế như các ứng dụng giao hàng khác.",
+  },
+]
+
+const QuestionItem = (props: QuestionItemProps) => {
+  const { question, answer } = props
   return (
-    <div>
-      <div>
-        <p>IotFood có cung cấp dịch vụ giao đồ ăn 24x7 không?</p>
-      </div>
-    </div>
-  );
+    <Stack direction="column" className="w-full">
+      <p className="text-2xl font-bold">{question}</p>
+      <p className="text-base mt-2">{answer}</p>
+      <Divider sx={{ margin: "30px 0 20px 0", borderWidth: "0.09rem" }} />
+    </Stack>
+  )
+}
+
+export function Question(props: QuestionProps) {
+  return (
+    <Stack direction="column" spacing={2} className="w-full">
+      {dataQuestion.map((item, index) => (
+        <QuestionItem key={index} {...item} />
+      ))}
+    </Stack>
+  )
 }

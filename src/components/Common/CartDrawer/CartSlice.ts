@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 export interface iDataStore {
   items: CartItemData[]
   name: string
+  
   id: number
 }
 export interface CardState {

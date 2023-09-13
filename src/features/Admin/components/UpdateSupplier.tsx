@@ -1,6 +1,6 @@
 import foodsApis from "@/api/foodsApi"
 import { StoreDetailData } from "@/models"
-import React, { useEffect, memo } from "react"
+import React, { useEffect, memo, ChangeEvent } from "react"
 import adminApi from "@/api/adminApi"
 import {
   ArrowBackIosNew,
@@ -20,6 +20,7 @@ import {
   Stack,
   Tab,
   Tabs,
+  MenuItem,
 } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { useNavigate } from "react-router-dom"
@@ -28,10 +29,13 @@ const UpdateSupplier = ({ id }: { id: string }) => {
   const [value, setValue] = React.useState(0)
   const [phone, setPhone] = React.useState<string>("")
   const [address, setAddress] = React.useState<string>("")
+  const [supOpen, setSupOpen] = React.useState<string>("")
+  const [supClose, setSupClose] = React.useState<string>("")
   const [restaurantName, setRestaurantName] = React.useState<string>("")
   const [detail, setDetail] = React.useState<string>("")
   const [imagePreview, setImagePreview] = React.useState<string | null>(null)
-  const [distance, setDistance] = React.useState<number>(0)
+  const [distance, setDistance] = React.useState<string>("")
+  const [quantitySold, setQuantitySold] = React.useState<number>(0)
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const { enqueueSnackbar } = useSnackbar()
@@ -39,11 +43,14 @@ const UpdateSupplier = ({ id }: { id: string }) => {
     const fetchData = async () => {
       const response = await foodsApis.getDetailStore(+id)
       if (response?.status) {
-        setPhone(response?.data?.phoneNumber)
-        setAddress(response?.data?.address)
-        setDetail(response?.data?.detail)
         setRestaurantName(response?.data?.restaurantName)
+        setAddress(response?.data?.address)
+        setQuantitySold(response?.data?.quantitySold)
         setDistance(response?.data?.distance)
+        setDetail(response?.data?.detail)
+        setSupOpen(response?.data?.timeStart)
+        setSupClose(response?.data?.timeClose)
+        setPhone(response?.data?.phoneNumber)
         setImagePreview(response?.data?.imgRes)
       }
     }
@@ -65,6 +72,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
       imgRef.current.click()
     }
   }
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = event.target.files && event.target.files[0]
     if (selectedImage && event.target.files) {
@@ -84,8 +92,11 @@ const UpdateSupplier = ({ id }: { id: string }) => {
             +id,
             restaurantName,
             address,
+        
             distance,
             detail,
+            supOpen,
+            supClose,
             phone,
             file,
           )
@@ -96,6 +107,8 @@ const UpdateSupplier = ({ id }: { id: string }) => {
             address,
             distance,
             detail,
+            supOpen,
+            supClose,
             phone,
             null,
           )
@@ -106,7 +119,6 @@ const UpdateSupplier = ({ id }: { id: string }) => {
         enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
       }
     }
-    console.log(file)
     uploadImage()
   }
 
@@ -116,8 +128,16 @@ const UpdateSupplier = ({ id }: { id: string }) => {
   const handleAddress = (value: string) => {
     setAddress(value)
   }
-  const handleDistance = (value: number) => {
+  const handleDistance = (value: string) => {
     setDistance(value)
+  }
+
+  const handleSupOpen = (value: string) => {
+    setSupOpen(value)
+  }
+
+  const handleSupClose = (value: string) => {
+    setSupClose(value)
   }
   const navigate = useNavigate()
 
@@ -264,12 +284,12 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                 <input
                                   id="name-food-select"
                                   value={address}
-                                  type="string"
+                                  type="text"
                                   autoComplete="off"
                                   onChange={(e) =>
                                     handleAddress(e.target.value)
                                   }
-                                  className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                  className="block px-0 w-[250px] border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                 />
                               </Grid>
                               <Grid item xs={4}>
@@ -284,7 +304,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                 <input
                                   id="name-food-select"
                                   value={phone}
-                                  type="string"
+                                  type="text"
                                   autoComplete="off"
                                   onChange={(e) => handlePhone(e.target.value)}
                                   className="block px-0 w-[250px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
@@ -293,7 +313,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                             </Grid>
                           </Grid>
                           <Grid item xs={6}>
-                            <Grid container spacing={0}>
+                            <Grid container spacing={2}>
                               <Grid item xs={4}>
                                 <label
                                   htmlFor="type-food-select"
@@ -307,15 +327,57 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                                   <input
                                     id="name-food-select"
                                     value={distance}
-                                    type="string"
+                                    type="text"
                                     autoComplete="off"
-                                    onChange={(e) =>
-                                      handleDistance(+e.target.value)
-                                    }
+                                    onChange={(
+                                      e: ChangeEvent<HTMLInputElement>,
+                                    ) => handleDistance(e.target.value)}
                                     className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                   <span>km</span>
                                 </div>
+                              </Grid>
+                              <Grid item xs={4}>
+                                <label
+                                  htmlFor="type-food-select"
+                                  className="font-medium "
+                                >
+                                  Giờ mở cửa
+                                </label>
+                              </Grid>
+                              <Grid item xs={8}>
+                                <input
+                                  id="name-food-select"
+                                  placeholder="8:00 AM"
+                                  value={supOpen}
+                                  type="text"
+                                  autoComplete="off"
+                                  onChange={(e) =>
+                                    handleSupOpen(e.target.value)
+                                  }
+                                  className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                />
+                              </Grid>
+                              <Grid item xs={4}>
+                                <label
+                                  htmlFor="type-food-select"
+                                  className="font-medium "
+                                >
+                                  Giờ đóng cửa
+                                </label>
+                              </Grid>
+                              <Grid item xs={8}>
+                                <input
+                                  id="name-food-select"
+                                  placeholder="3:00 PM"
+                                  value={supClose}
+                                  type="text"
+                                  autoComplete="off"
+                                  onChange={(e) =>
+                                    handleSupClose(e.target.value)
+                                  }
+                                  className="block px-0 w-[250px]  border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                />
                               </Grid>
                             </Grid>
                           </Grid>

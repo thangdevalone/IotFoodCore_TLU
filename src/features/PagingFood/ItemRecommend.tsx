@@ -9,16 +9,13 @@ import { useSnackbar } from "notistack"
 interface propsData {
   idFood: number
   nameStore: string
-  foodName?: any | string
+  foodName: string
   price: number
-  star?: number
-  time?: number
-  distance?: string
   imgFood: string
-  width: number
   idStore: number
   detail: string
   qSold: number
+  typeFoodEntityId: number
 }
 
 const ItemRecommend = (props: propsData) => {
@@ -31,6 +28,7 @@ const ItemRecommend = (props: propsData) => {
     qSold,
     idStore,
     detail,
+    typeFoodEntityId,
   } = props
 
   const { width } = useWindowDimensions()
@@ -53,7 +51,7 @@ const ItemRecommend = (props: propsData) => {
   return (
     <Tooltip title="Bấm để thêm vào giỏ hàng">
       <Box
-        className={`w-full h-full rounded-md relative cursor-pointer ${
+        className={`w-full h-full rounded-md my-3 relative cursor-pointer ${
           width < 500 && "flex gap-2"
         }`}
         sx={{
@@ -91,6 +89,12 @@ const ItemRecommend = (props: propsData) => {
                   : " text-lg font-medium"
                 : "text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold"
             }`}
+            style={{
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2, // Số dòng tối đa
+            }}
           >
             {foodName}
           </span>
@@ -105,7 +109,12 @@ const ItemRecommend = (props: propsData) => {
                 </span>
               )}
 
-              <Stack flexDirection='row' sx={{mt:1}} justifyContent="space-between" alignItems='flex-end'>
+              <Stack
+                flexDirection="row"
+                sx={{ mt: 1 }}
+                justifyContent="space-between"
+                alignItems="flex-end"
+              >
                 <span
                   className={`text-[15px] ${
                     width < 500 ? "font-semibold" : "text-gray-400"
@@ -128,13 +137,13 @@ const ItemRecommend = (props: propsData) => {
               <Box className="flex mt-[1px] capitalize gap-5 items-center">
                 <Typography
                   className="whitespace-nowrap flex-1 overflow-hidden overflow-ellipsis"
-                  sx={{ fontSize: "14px" }}
+                  sx={{ fontSize: "13px" }}
                 >
                   {nameStore}
                 </Typography>
                 <Typography
                   className="text-gray-400 "
-                  sx={{ fontSize: "14px" }}
+                  sx={{ fontSize: "13px" }}
                 >
                   {handlePrice(price)} VND
                 </Typography>
@@ -142,7 +151,7 @@ const ItemRecommend = (props: propsData) => {
               <Box
                 sx={{
                   "& *": {
-                    fontSize: "14px",
+                    fontSize: "13px",
                   },
                 }}
                 className="flex mt-1 justify-between items-center"
