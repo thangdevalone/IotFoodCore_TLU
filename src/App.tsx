@@ -42,7 +42,7 @@ function App() {
             <Route path="detail-store/:idStore" element={<DetailStore />} />
           </Route>
           <Route path="/search" element={<Store />}>
-            <Route path=":searchParams" element={<SearchList />} />
+            <Route  element={<SearchList />} />
           </Route>
           <Route element={<ProtectAuth />}>
             <Route path="/login" element={<LoginPage />} />

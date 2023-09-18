@@ -1,8 +1,7 @@
 import History from "@/Router/History"
 import adminApi from "@/api/adminApi"
-import { SupplierFields } from "@/constants"
-import { RestaurantRoot, TypeRestaurant } from "@/models"
-import { formatCurrencyKM } from "@/utils"
+import { ProductItem, ProductRoot } from "@/models"
+import { formatCurrencyVND } from "@/utils"
 import { Delete, Settings } from "@mui/icons-material"
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material"
 import {
@@ -13,55 +12,54 @@ import {
   type MRT_SortingState,
 } from "material-react-table"
 import { useSnackbar } from "notistack"
+import queryString from "query-string"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { ReactSpreadsheetImport } from "react-spreadsheet-import"
+import { useLocation, useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
 
-
-export function Supplier() {
+export function Product() {
+  const location = useLocation() // Get the current location object
+  const queryParams = queryString.parse(location.search) // Parse query parameters from the location
   const navigate = useNavigate()
-  const [restaurant, setRestaurant] = useState<TypeRestaurant[]>([])
+  const [products, setProducts] = useState<ProductItem[]>([])
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
   const [rowCount, setRowCount] = useState(0)
-
+  const {enqueueSnackbar} = useSnackbar()
   //table state
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [sorting, setSorting] = useState<MRT_SortingState>([])
-  const [open, setOpen] = useState(false)
-  const [isDel, setIsDel] = useState(false)
-  const [isOpenImport,setIsOpenImport]=useState(false)
-  const { enqueueSnackbar } = useSnackbar()
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
-
+  const [isDel,setIsDel]=useState(false)  
+  const [open, setOpen] = useState(false)
   const settingRef = useRef<HTMLButtonElement>(null)
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
-
   const handleSelectRows = (row: any) => {
-    const idData = row.map((item: any) => item.original.id)
-    ;(async () => {
+    console.log(row);
+    const idData=row.map((item:any)=>item.original.id);
+    (async ()=>{
       try {
-        await adminApi.deleteStore(idData)
-        enqueueSnackbar("Xóa thành công", { variant: "success" })
-        setIsDel((item) => !item)
+        await adminApi.deleteFood(idData)
+        enqueueSnackbar("Xóa thành công",{variant:"success"})
+        setIsDel((item)=>!item)
       } catch (error) {
-        enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
+        enqueueSnackbar("Có lỗi xảy ra thử lại sau",{variant:"error"})
         console.log(error)
       }
     })()
   }
+  
   useEffect(() => {
     const fetchData = async () => {
-      if (!restaurant.length) {
+      if (!products.length) {
         setIsLoading(true)
       } else {
         setIsRefetching(true)
@@ -76,10 +74,10 @@ export function Supplier() {
       // Update the location object with the new search parameters
       History.push({ search: updatedSearchParams.toString() })
       try {
-        const res = await adminApi.getAllResFoods(pagination)
-        const myRestaurant = res.data as RestaurantRoot
-        setRestaurant(myRestaurant.responList)
-        setRowCount(myRestaurant.totalRow)
+        const res = await adminApi.getAllProducts(pagination)
+        const myProducts = res.data as ProductRoot
+        setProducts(myProducts.data)
+        setRowCount(myProducts.totalRow)
       } catch (error) {
         setIsError(true)
         console.error(error)
@@ -100,46 +98,38 @@ export function Supplier() {
     pagination.pageSize,
     sorting,
   ])
-
-  const columns = useMemo<MRT_ColumnDef<TypeRestaurant>[]>(
+  
+  const columns = useMemo<MRT_ColumnDef<ProductItem>[]>(
     () => [
       { accessorKey: "id", header: "ID" },
-      { accessorKey: "restaurantName", header: "Tên nhà cung cấp" },
-      { accessorKey: "imgRes", header: "Ảnh" ,Cell:({cell})=><img src={cell.getValue<string>()} className="w-[70px] h-[70px] object-cover" />},
-
+      { accessorKey: "foodName", header: "Tên sản phẩm" },
+      { accessorKey: "nameRestaurantFood", header: "Thuộc về" },
       { accessorKey: "star", header: "Đánh giá" },
-
       {
-        accessorKey: "distance",
-        header: "Khoảng cách",
-        Cell: ({ cell }) => formatCurrencyKM(cell.getValue<string>()),
+        accessorKey: "price",
+        header: "Đơn giá",
+        Cell: ({ cell }) => formatCurrencyVND(cell.getValue<string>()),
       },
-      { accessorKey: "phoneNumber", header: "Số điện thoại" },
-      { accessorKey: "address", header: "Địa chỉ" }
+      { accessorKey: "detail", header: "Mô tả" },
+      { accessorKey: "quantityPurchased", header: "Đã bán" },
+      { accessorKey: "status", header: "Trạng thái" },
     ],
     [],
   )
-  const onClose= () => {
-    setIsOpenImport(false)
-  }
-  // Called after user completes the flow. Provides data array, where data keys matches your field keys.
-  const  onSubmit= (data:any)=> {
-    console.log(data)
-  }
+
   return (
     <Box sx={{ height: "100%" }}>
-      <SettingMenu anchorRef={settingRef} setIsOpenImport={setIsOpenImport} open={open} setOpen={setOpen} />
-      <ReactSpreadsheetImport isOpen={isOpenImport} onClose={onClose} onSubmit={onSubmit} fields={SupplierFields} />
+      <SettingMenu anchorRef={settingRef} open={open} setOpen={setOpen} />
       <MaterialReactTable
         muiTablePaperProps={{ sx: { height: "100%" } }}
         muiTableContainerProps={{ sx: { height: "calc(100% - 112px)" } }}
         columns={columns}
-        data={restaurant}
+        data={products}
         enableRowSelection
         manualFiltering
+        manualPagination
         muiTableBodyRowProps={({ row }) => ({
-          onClick: () =>
-            navigate(`/admin/update?form=supplier/${row.original.id}`),
+          onClick: () => console.log(row),
           sx: { cursor: "pointer" },
         })}
         manualSorting
@@ -164,14 +154,15 @@ export function Supplier() {
               sx={{ mr: "10px" }}
               variant="contained"
               onClick={() => {
-                navigate("/admin/new?form=store")
+                navigate("/admin/new?form=product")
               }}
             >
               Tạo
             </Button>
             <Typography sx={{ fontSize: "18px", fontWeight: 500, mr: "10px" }}>
-              Nhà cung cấp
+              Sản phẩm
             </Typography>
+
             <IconButton
               ref={settingRef}
               onClick={handleToggle}
@@ -196,14 +187,15 @@ export function Supplier() {
         )}
         onColumnFiltersChange={setColumnFilters}
         onGlobalFilterChange={setGlobalFilter}
-        onSortingChange={setSorting}
         onPaginationChange={setPagination}
+        onSortingChange={setSorting}
         rowCount={rowCount}
         enableStickyHeader
         state={{
           columnFilters,
           globalFilter,
           isLoading,
+          pagination,
           showAlertBanner: isError,
           showProgressBars: isRefetching,
           sorting,

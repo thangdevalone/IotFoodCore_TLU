@@ -11,6 +11,7 @@ import queryString from "query-string"
 import NewStore from "@/features/Admin/components/NewSupplier"
 import UpdateSupplier from "@/features/Admin/components/UpdateSupplier"
 import UpdateType from "@/features/Admin/components/UpdateType"
+import NewTopping from "@/features/Admin/components/NewTopping"
 
 const WelComeAdmin = () => {
   return (
@@ -94,6 +95,7 @@ export default function Admin() {
           <Route path="/product" element={<Product />} />
           <Route path="/type" element={<TypeProduct />} />
           <Route path="/supplier" element={<Supplier />} />
+          <Route path="/expand-food" element={<NewTopping/>} />
           <Route path="/new" element={<FormRouter />} />
           <Route path="/update" element={<FormUpdate />} />
         </Routes>

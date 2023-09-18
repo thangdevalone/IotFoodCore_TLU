@@ -18,6 +18,6 @@ export const ProductList = getList(
   ["/product", "/type", "/supplier"],
 )
 export const ConfigList = getList(
-  ["Cài đặt", "Nhân viên", "Phương thức thanh toán"],
-  ["/setting", "/config-emp", "/pay-method"],
+  ["Cài đặt","Món kèm", "Nhân viên", "Phương thức thanh toán"],
+  ["/setting","/expand-food","/config-emp", "/pay-method"],
 )

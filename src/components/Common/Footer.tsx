@@ -1,17 +1,22 @@
-import { Copyright } from "@mui/icons-material"
-import {
-  Badge,
-  Box,
-  Chip,
-  Divider,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Box, Divider, Grid, Stack, Typography } from "@mui/material"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
 export interface FooterProps {}
+interface StoreButtonProps {
+  path: string;
+  title: string;
+  app: string;
+}
+const StoreButton: React.FC<StoreButtonProps> = ({ path, title, app }) => (
+  <Stack className="w-[200px] cursor-pointer rounded-xl px-3.5 py-2 bg-white hover:bg-slate-200" direction="row" alignItems="center">
+    <img src={path} className="w-[35px]" alt={title} />
+    <Stack direction="column" sx={{ ml: 1 }}>
+      <span className="text-sm">{title}</span>
+      <span className="font-medium text-lg">{app}</span>
+    </Stack>
+  </Stack>
+);
 
 export function Footer(props: FooterProps) {
   const [rate, setRate] = useState(false)
@@ -36,12 +41,22 @@ export function Footer(props: FooterProps) {
             >
               <p className="mb-2 font-semibold text-lg">Phát triển bởi</p>
               <Stack direction="column" spacing={1}>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" } ,width:"fit-content"}}>
+                <Typography
+                  sx={{
+                    "&:hover": { textDecoration: "underline" },
+                    width: "fit-content",
+                  }}
+                >
                   <Link to={"https://github.com/thangdevalone"} target="_blank">
                     thangdevalone (lead)
                   </Link>
                 </Typography>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" },width:"fit-content" }}>
+                <Typography
+                  sx={{
+                    "&:hover": { textDecoration: "underline" },
+                    width: "fit-content",
+                  }}
+                >
                   <Link to={"https://github.com/haidaqn"} target="_blank">
                     haidaqn
                   </Link>
@@ -60,7 +75,12 @@ export function Footer(props: FooterProps) {
             >
               <p className="mb-2 font-semibold text-lg">Dẫn dắt bởi</p>
               <Stack direction="column" spacing={1}>
-                <Typography sx={{ "&:hover": { textDecoration: "underline" } ,width:"fit-content" }}>
+                <Typography
+                  sx={{
+                    "&:hover": { textDecoration: "underline" },
+                    width: "fit-content",
+                  }}
+                >
                   <Link
                     to={"https://www.facebook.com/giang.bui.3511"}
                     target="_blank"
@@ -147,11 +167,23 @@ export function Footer(props: FooterProps) {
                 {rate ? 1 : 0}
               </div>
             </button>
+            <Stack direction="row" spacing={2} sx={{mt:2}}>
+              <StoreButton
+                path="/assets/play-store.svg"
+                app="Google Play"
+                title="Get app on"
+              />
+               <StoreButton
+                path="/assets/apple.svg"
+                app="App Store"
+                title="Download on the"
+              />
+            </Stack>
           </Grid>
           <Grid item xs={4}>
             <p className="text-white">
-              Đây là dự án trong chuỗi phát triển của sinh viên trường Đại học Thăng
-              Long chúc bạn có 1 trải nghiệm tốt. Xin cảm ơn!
+              Đây là dự án trong chuỗi phát triển của sinh viên trường Đại học
+              Thăng Long chúc bạn có 1 trải nghiệm tốt. Xin cảm ơn!
             </p>
             <Divider
               sx={{ backgroundColor: "white", width: "100%", m: "10px 0px" }}

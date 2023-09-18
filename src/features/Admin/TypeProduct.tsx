@@ -105,7 +105,7 @@ const TypeProduct = () => {
     () => [
       { accessorKey: "id", header: "ID" },
       { accessorKey: "nameType", header: "Tên loại sản phẩm" },
-      { accessorKey: "imgType", header: "Ảnh loại sản phẩm" },
+      { accessorKey: "imgType", header: "Ảnh loại sản phẩm" ,Cell:({cell})=><img src={cell.getValue<string>()} className="w-[70px] h-[70px] object-cover" />},
       { accessorKey: "status", header: "Trạng thái" },
     ],
     [],

@@ -1,6 +1,6 @@
+import { ExpandFood } from './../models/Topping';
 import { PageConfig } from "./../models/Config"
 import axiosClient from "./axiosClient"
-import { ToppingItem } from "@/models"
 const adminApi = {
   getAllProducts(page: PageConfig) {
     const url = `ADMIN/paging-food-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
@@ -24,10 +24,13 @@ const adminApi = {
     const url = `ADMIN/paging-res?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  addTopping(data:ExpandFood){
+    const url="ADMIN/add-topping"
+    return axiosClient.post(url,data)
+  },
   addRestaurant(
     restaurantName: string,
     address: string,
-    quantitySold: number,
     distance: string,
     detail: string,
     phoneNumber: string,
@@ -38,7 +41,6 @@ const adminApi = {
     const data = new FormData()
     data.append("restaurantName", restaurantName)
     data.append("address", address)
-    data.append("quantitySold", String(quantitySold))
     data.append("distance", distance)
     data.append("detail", detail)
     data.append("phoneNumber", phoneNumber)
@@ -59,7 +61,7 @@ const adminApi = {
     imgFood: File,
     typeFoodEntityId: number,
     restaurantEntityId: number,
-    toppingList: ToppingItem[] | [],
+    
   ) {
     const data = new FormData()
     data.append("foodName", name)
@@ -68,15 +70,7 @@ const adminApi = {
     data.append("imgFood", imgFood)
     data.append("typeFoodEntityId", typeFoodEntityId.toString())
     data.append("restaurantEntityId", restaurantEntityId.toString())
-    data.append(
-      "toppingRequest",
-      JSON.stringify(
-        toppingList.map((item: ToppingItem) => ({
-          name: item.name,
-          price: item.price,
-        })),
-      ),
-    )
+    
     const url = "ADMIN/add-food"
     return axiosClient.post(url, data, {
       headers: {

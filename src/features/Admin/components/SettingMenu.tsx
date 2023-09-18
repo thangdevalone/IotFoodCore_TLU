@@ -16,10 +16,11 @@ interface SettingMenuProps {
   anchorRef: React.RefObject<HTMLButtonElement>
   open: boolean
   setOpen: (newVal: boolean) => void
+  setIsOpenImport?: (newVal: boolean) => void
 }
 
 export default function SettingMenu(props: SettingMenuProps) {
-  const { anchorRef, open, setOpen } = props
+  const { anchorRef, open, setOpen, setIsOpenImport } = props
   const handleClose = (event: Event | React.SyntheticEvent) => {
     if (
       anchorRef.current &&
@@ -82,13 +83,22 @@ export default function SettingMenu(props: SettingMenuProps) {
                 aria-labelledby="composition-button"
                 onKeyDown={handleListKeyDown}
               >
-                <MenuItem onClick={handleClose}>
+                <MenuItem
+                  onClick={(e: Event | React.SyntheticEvent) => {
+                    handleClose(e)
+                    if (setIsOpenImport) setIsOpenImport(true)
+                  }}
+                >
                   <ListItemIcon>
                     <FileDownloadOutlined fontSize="small" htmlColor="black" />
                   </ListItemIcon>
                   Nhập dữ liệu
                 </MenuItem>
-                <MenuItem   onClick={handleClose}>
+                <MenuItem
+                  onClick={(e: Event | React.SyntheticEvent) => {
+                    handleClose(e)
+                  }}
+                >
                   <ListItemIcon>
                     <FileUploadOutlined fontSize="small" htmlColor="black" />
                   </ListItemIcon>

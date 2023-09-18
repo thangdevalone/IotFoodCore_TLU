@@ -2,29 +2,33 @@ import foodsApis from "@/api/foodsApi"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { Box, Stack, Grid } from "@mui/material"
 import * as React from "react"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useSnackbar } from "notistack"
 import { foodData } from "@/models"
 import SliderItemRecommend from "@/features/RecommendFood/SliderItemRecommend"
 import "../styles.module.css"
+import queryString from 'query-string';
 
 const SearchList = () => {
-  const { searchParams } = useParams()
+  const location = useLocation();
+  const parsed = queryString.parseUrl(location.search);
   const [search, setSearch] = React.useState<string>("")
   const [dataSearch, setDataSearch] = React.useState<foodData[]>([])
   const [searchHistory, setSearchHistory] = React.useState<string[]>([])
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
+  console.log(parsed,location.search)
 
   const fetchData = async (search: string) => {
-    if (searchParams) {
-      const response = await foodsApis.searchFoods(search)
-      if (response?.status) {
-        setDataSearch(response.data)
-        navigate(`/search/${search}`)
-      }
-    }
+    // console.log(parsed)
+    // if (parsed) {
+    //   const response = await foodsApis.searchFoods(parsed)
+    //   if (response?.status) {
+    //     setDataSearch(response.data)
+    //     navigate(`/search?key=${search}`)
+    //   }
+    // }
   }
 
   const handleSearch = () => {
@@ -47,11 +51,10 @@ const SearchList = () => {
     fetchData(value)
   }
 
-  React.useEffect(() => {
-    if (searchParams) fetchData(searchParams)
-  }, [searchParams])
+  // React.useEffect(() => {
+  //   if (searchParams) fetchData(searchParams)
+  // }, [searchParams])
 
-  console.log(dataSearch)
 
   return (
     <Box className="container-base base-pd w-full">
@@ -60,7 +63,7 @@ const SearchList = () => {
           className="appearance-none border-2 flex-5 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           id="search-food"
           onChange={(e) => setSearch(e.target.value)}
-          onKeyPress={handleKeyPress} // sự kiện enter
+          onKeyDown={handleKeyPress} // sự kiện enter
           style={{
             height: "50px",
             borderRadius: "6px",

@@ -25,8 +25,6 @@ import {
 import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import ToppingTable from "./ToppingTable"
-import { ToppingItem } from "@/models"
 
 function a11yProps(index: number) {
   return {
@@ -49,8 +47,7 @@ function NewProduct(props: NewProductProps) {
   const [detail, setDetail] = React.useState<string>("")
 
   const { enqueueSnackbar } = useSnackbar()
-  const [toppingList, setToppingList] = React.useState<ToppingItem[] | []>([])
-
+  
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue)
   }
@@ -98,7 +95,7 @@ function NewProduct(props: NewProductProps) {
             file,
             Number(typePick?.id),
             Number(resPick?.id),
-            toppingList,
+          
           )
           setLoadding(false)
           enqueueSnackbar("Thêm mới sản phẩm thành công", {
@@ -111,7 +108,7 @@ function NewProduct(props: NewProductProps) {
           setFile(null)
           setTypePick(null)
           setResPick(null)
-          setToppingList([])
+          
         } else {
           setLoadding(false)
           enqueueSnackbar("Bắt buộc phải có ảnh", { variant: "error" })
@@ -282,7 +279,6 @@ function NewProduct(props: NewProductProps) {
                       aria-label="basic tabs example"
                     >
                       <Tab label="Thông tin sản phẩm" {...a11yProps(0)} />
-                      <Tab label="Topping" {...a11yProps(2)} />
                     </Tabs>
                   </Box>
                   <div hidden={tabs !== 0}>
@@ -370,14 +366,7 @@ function NewProduct(props: NewProductProps) {
                       </Box>
                     )}
                   </div>
-                  <div hidden={tabs !== 1}>
-                    <Stack alignItems="flex-end" sx={{ m: "10px 0px" }}>
-                      <ToppingTable
-                        toppingList={toppingList}
-                        setToppingList={setToppingList}
-                      />
-                    </Stack>
-                  </div>
+            
                 </div>
               </div>
             </Box>

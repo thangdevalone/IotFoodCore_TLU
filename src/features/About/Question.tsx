@@ -6,6 +6,7 @@ export interface QuestionProps {}
 export interface QuestionItemProps {
   question: string | null
   answer: string | null
+  last:boolean
 }
 
 const dataQuestion = [
@@ -18,12 +19,12 @@ const dataQuestion = [
   {
     question: "Tôi có thể đặt đồ ăn trên IotFood cho người khác không?",
     answer:
-      "Tất nhiên rồi, hãy chăm sóc những người thân yêu của mình bằng cách gửi những món ăn mà họ yêu thích đến tận nhà. Bạn chỉ cần cập nhật địa chỉ giao hàng và tên người nhận trước khi đặt đơn hàng của bạn.",
+      "Tất nhiên rồi, hãy chăm sóc những người thân yêu của mình bằng cách gửi những món ăn mà họ yêu thích đến tận trương. Bạn chỉ cần ghi rõ mô tả chi tiết tên và số điện thoại ở đơn hàng khi đặt đơn hàng của bạn.",
   },
   {
     question: "IotFood tính phí giao đồ ăn như thế nào?",
     answer:
-      "Phí giao hàng của chúng tôi chỉ trong tầm giá từ 3-15 nghìn theo khoảng cách khoảng cách càng xa thì phí giao càng lớn. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn hằng ngày.",
+      "Phí giao hàng của chúng tôi chỉ trong tầm giá từ 3-15 nghìn theo khoảng cách khoảng cách càng xa thì phí giao càng lớn kèm với hóa đơn nhiều sản phẩm thì giá ship cũng sẽ tăng. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn hằng ngày.",
   },
   {
     question: "IotFood hoạt động như nào?",
@@ -33,12 +34,12 @@ const dataQuestion = [
 ]
 
 const QuestionItem = (props: QuestionItemProps) => {
-  const { question, answer } = props
+  const { question, answer,last } = props
   return (
-    <Stack direction="column" className="w-full">
+    <Stack direction="column">
       <p className="text-2xl font-bold">{question}</p>
       <p className="text-base mt-2">{answer}</p>
-      <Divider sx={{ margin: "30px 0 20px 0", borderWidth: "0.09rem" }} />
+      {last ?<div className="mb-[80px]"></div>: <Divider sx={{ margin: "30px 0 20px 0", borderWidth: "0.09rem" }} />}
     </Stack>
   )
 }
@@ -47,7 +48,7 @@ export function Question(props: QuestionProps) {
   return (
     <Stack direction="column" spacing={2} className="w-full">
       {dataQuestion.map((item, index) => (
-        <QuestionItem key={index} {...item} />
+        <QuestionItem key={index} {...item} last={index===dataQuestion.length-1} />
       ))}
     </Stack>
   )

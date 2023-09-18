@@ -113,7 +113,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
             null,
           )
         }
-        enqueueSnackbar("Sửa cửa hàng thành công", { variant: "success" })
+        enqueueSnackbar("Sửa nhà cung cấp thành công", { variant: "success" })
       } catch (error) {
         console.log(error)
         enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
@@ -162,7 +162,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
           variant="contained"
           sx={{ mr: "10px", textTransform: "revert" }}
         >
-          Danh sách cửa hàng
+          Nhà cung cấp
         </Button>
         <IconButton onClick={handlePushProduct} size="small" sx={{ mr: "5px" }}>
           <CloudUpload fontSize="small" />
@@ -182,12 +182,12 @@ const UpdateSupplier = ({ id }: { id: string }) => {
         <Grid sx={{ width: "100%", height: "100%" }} container spacing={2}>
           <Grid item xs={8}>
             <Box sx={{ width: "100%", height: "100%" }} className="mb-4">
-              <p className="font-medium text-lg mb-2">Sửa cửa hàng</p>
+              <p className="font-medium text-lg mb-2">Sửa nhà cung cấp</p>
               <div className="border   bg-white rounded-md border-gray-300 p-[15px]">
                 <div className="flex w-[100%]">
                   <div className="flex-1 mr-[20px]">
                     <label className="font-medium text-md block">
-                      Tên cửa hàng
+                      Tên nhà cung cấp
                     </label>
                     <Input
                       fullWidth
@@ -263,7 +263,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                       value={value}
                       aria-label="basic tabs example"
                     >
-                      <Tab label="Thông tin cửa hàng" {...a11yProps(0)} />
+                      <Tab label="Thông tin nhà cung cấp" {...a11yProps(0)} />
                     </Tabs>
                   </Box>
                   <div>
@@ -388,13 +388,13 @@ const UpdateSupplier = ({ id }: { id: string }) => {
                           htmlFor="message"
                           className="block mb-2  font-medium text-gray-900 dark:text-white"
                         >
-                          Mô tả cửa hàng
+                          Mô tả
                         </label>
                         <textarea
                           id="message"
                           rows={4}
                           className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Viết mô tả về cửa hàng của Hải Đăng Store..."
+                          placeholder="Viết mô tả về nhà cung cấp của Hải Đăng Store..."
                           onChange={(e) => setDetail(e.target.value)}
                           value={detail}
                         ></textarea>
