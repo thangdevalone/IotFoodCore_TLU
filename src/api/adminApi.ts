@@ -86,20 +86,12 @@ const adminApi = {
     sdt: string,
     accountName: string,
     imgUser: File) {
-    console.log({ username, password, sdt, accountName })
-    const data = new FormData()
-    data.append("username", accountName)
-    data.append("id", "0")
-    data.append("password", password)
-    data.append("sdt", sdt)
-    data.append("accountName", username)
-    data.append("imgUser", "https://tse4.mm.bing.net/th?id=OIP.tS4o_QzG25ntuI90jWWWXQHaHa&pid=Api&P=0&h=180")
     const url = "ADMIN/MANAGER/add-employee"
     return axiosClient.post(url, {
-      "username": "Nguyễn Ngọc Huyền",
-      "password": "Huyen1234.",
-      "sdt": "0962319014",
-      "accountName": "A419662",
+      "username": accountName,
+      "password": password,
+      "sdt": sdt,
+      "accountName": username,
       "imgUser": "string"
     })},
 

@@ -11,6 +11,7 @@ export interface UserProps {
 
 export function User(props: UserProps) {
     const user = useInforUser()
+    console.log({user})
     return (
         <>
 

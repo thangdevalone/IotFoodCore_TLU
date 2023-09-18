@@ -1,9 +1,5 @@
-import cloudUploadApi from "@/api/cloudUploadApi"
 
 import { CLOUD_NAME } from "@/constants"
-
-import RemoveRedEyeTwoToneIcon from '@mui/icons-material/RemoveRedEyeTwoTone';
-import VisibilityOffTwoToneIcon from '@mui/icons-material/VisibilityOffTwoTone';
 import {
   ArrowBackIosNew,
   CloudUpload,

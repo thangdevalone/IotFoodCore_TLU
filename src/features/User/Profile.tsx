@@ -11,10 +11,10 @@ export function Profile(props: ProfileProps) {
     const user = useInforUser()
     let imageRef = useRef<HTMLInputElement>(null);
     const [formData, setFormData] = useState({
-        accountName: '',
-        msv: '',
-        sdt: '',
-        imgUser: '',
+        accountName: user?.accountName || '',
+        msv: user?.msv || '',
+        sdt: user?.sdt || '',
+        imgUser: user?.imgUser || '',
     });
     const handleImageChange = (e: any) => {
         const file = e.target.files[0] as ExtendedFile;

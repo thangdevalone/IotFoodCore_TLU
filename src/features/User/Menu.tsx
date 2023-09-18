@@ -10,6 +10,7 @@ export interface MenuProps {
 
 export function Menu(props: MenuProps) {
     const user = useInforUser()
+    console.log(user?.accountName)
     const navigate = useNavigate();
     return (
         <div>
