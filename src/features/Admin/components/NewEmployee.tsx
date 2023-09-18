@@ -1,4 +1,3 @@
-
 import { CLOUD_NAME } from "@/constants"
 import {
   ArrowBackIosNew,
@@ -22,12 +21,14 @@ import {
 } from "@mui/material"
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import adminApi from "@/api/adminApi";
+import adminApi from "@/api/adminApi"
+import { useSnackbar } from "notistack"
 interface TabPanelProps {
   children?: React.ReactNode
   index: number
   value: number
 }
+const { enqueueSnackbar } = useSnackbar()
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
@@ -53,7 +54,7 @@ function a11yProps(index: number) {
     "aria-controls": `simple-tabpanel-${index}`,
   }
 }
-export interface NewEmployeeProps { }
+export interface NewEmployeeProps {}
 
 function NewEmployee(props: NewEmployeeProps) {
   const [value, setValue] = React.useState(0)
@@ -70,7 +71,10 @@ function NewEmployee(props: NewEmployeeProps) {
     setValue(newValue)
   }
 
-  const handleChangeInput = (value: string, callback: (newVal: string) => void) => {
+  const handleChangeInput = (
+    value: string,
+    callback: (newVal: string) => void,
+  ) => {
     callback(value)
   }
   const handleImageClick = () => {
@@ -91,20 +95,26 @@ function NewEmployee(props: NewEmployeeProps) {
       reader.readAsDataURL(selectedImage)
     }
   }
-  const handlePushEmployee = async() => {
-      try {
-        if (file) {
-          const data = new FormData()
-          data.append("file", file)
-          data.append("upload_preset", "thangdev_food")
-          data.append("cloud_name", CLOUD_NAME)
-          const res = await adminApi.addEmployee(name, password, phoneNumber, employeeNumber, file)
-          console.log({res})
-        }
-      } catch (error:any) {
-        console.log(error)
+  const handlePushEmployee = async () => {
+    try {
+      if (file) {
+        const data = new FormData()
+        data.append("file", file)
+        data.append("upload_preset", "thangdev_food")
+        data.append("cloud_name", CLOUD_NAME)
+        const res = await adminApi.addEmployee(
+          name,
+          password,
+          phoneNumber,
+          employeeNumber,
+          file,
+        )
+        enqueueSnackbar("Tạo nhân viên thành công", { variant: "success" })
       }
-
+    } catch (error: any) {
+      console.log(error)
+      enqueueSnackbar("Tạo nhân viên thất bại ", { variant: "error" })
+    }
   }
   const navigate = useNavigate()
   return (
@@ -130,7 +140,11 @@ function NewEmployee(props: NewEmployeeProps) {
         >
           Nhân viên
         </Button>
-        <IconButton onClick={handlePushEmployee} size="small" sx={{ mr: "5px" }}>
+        <IconButton
+          onClick={handlePushEmployee}
+          size="small"
+          sx={{ mr: "5px" }}
+        >
           <CloudUpload fontSize="small" />
         </IconButton>
         <IconButton size="small" sx={{ mr: "5px" }}>
@@ -158,7 +172,9 @@ function NewEmployee(props: NewEmployeeProps) {
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
                       placeholder="VD: Nguyễn Văn A"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setName)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChangeInput(e.target.value, setName)
+                      }
                     />
                   </div>
 
@@ -229,7 +245,6 @@ function NewEmployee(props: NewEmployeeProps) {
                       aria-label="basic tabs example"
                     >
                       <Tab label="Thông tin nhân viên" {...a11yProps(0)} />
-
                     </Tabs>
                   </Box>
                   <div hidden={value !== 0}>
@@ -253,7 +268,14 @@ function NewEmployee(props: NewEmployeeProps) {
                                     value={employeeNumber}
                                     type="string"
                                     autoComplete="off"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setEmployeeNumber)}
+                                    onChange={(
+                                      e: React.ChangeEvent<HTMLInputElement>,
+                                    ) =>
+                                      handleChangeInput(
+                                        e.target.value,
+                                        setEmployeeNumber,
+                                      )
+                                    }
                                     className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                 </div>
@@ -269,13 +291,19 @@ function NewEmployee(props: NewEmployeeProps) {
                               </Grid>
                               <Grid item xs={8}>
                                 <div className="flex items-end">
-
                                   <input
                                     id="name-food-select"
                                     value={password}
                                     type={eyeOpen ? "string" : "password"}
                                     autoComplete="off"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setPassword)}
+                                    onChange={(
+                                      e: React.ChangeEvent<HTMLInputElement>,
+                                    ) =>
+                                      handleChangeInput(
+                                        e.target.value,
+                                        setPassword,
+                                      )
+                                    }
                                     className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                 </div>
@@ -299,7 +327,14 @@ function NewEmployee(props: NewEmployeeProps) {
                                     value={phoneNumber}
                                     type="string"
                                     autoComplete="off"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e.target.value, setPhoneNumber)}
+                                    onChange={(
+                                      e: React.ChangeEvent<HTMLInputElement>,
+                                    ) =>
+                                      handleChangeInput(
+                                        e.target.value,
+                                        setPhoneNumber,
+                                      )
+                                    }
                                     className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                 </div>
@@ -307,7 +342,6 @@ function NewEmployee(props: NewEmployeeProps) {
                             </Grid>
                           </Grid>
                         </Grid>
-
                       </Box>
                     )}
                   </div>

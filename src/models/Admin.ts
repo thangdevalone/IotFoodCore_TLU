@@ -8,6 +8,11 @@ export interface ProductRoot {
   data: ProductItem[]
 }
 
+export interface UserRoot {
+  totalRow: number
+  loginResponDtos: EmployeeItem[]
+}
+
 export interface RestaurantRoot {
   totalRow: number
   responList: TypeRestaurant[]
@@ -57,10 +62,17 @@ export interface TypeRestaurant {
 }
 export interface EmployeeItem {
   id: number
-  nameEmployee: string
-  password: string
-  // avatar: string
-  action:boolean|null
-  phoneNumber:string 
-  employeeNumber:string // Mã nhân viên
+  role: Role[]
+  token: any
+  sdt: string
+  accountName: string
+  imgUser: string
+  msv: string
+}
+
+export interface Role {
+  id: number
+  createDate: any
+  status: any
+  authority: string
 }

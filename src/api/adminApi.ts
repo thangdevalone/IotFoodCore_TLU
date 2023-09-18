@@ -85,15 +85,17 @@ const adminApi = {
     password: string,
     sdt: string,
     accountName: string,
-    imgUser: File) {
+    imgUser: File,
+  ) {
     const url = "ADMIN/MANAGER/add-employee"
     return axiosClient.post(url, {
-      "username": accountName,
-      "password": password,
-      "sdt": sdt,
-      "accountName": username,
-      "imgUser": "string"
-    })},
+      username: accountName,
+      password: password,
+      sdt: sdt,
+      accountName: username,
+      imgUser: "string",
+    })
+  },
 
   addType(imgType: File, nameType: string) {
     const data = new FormData()
@@ -157,6 +159,10 @@ const adminApi = {
   deleteStore(storeArray: Array<number>) {
     const url = "ADMIN/delete-res"
     return axiosClient.post(url, storeArray)
+  },
+  getPagingEmployee(page: PageConfig) {
+    const url = `ADMIN/paging-employee?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
+    return axiosClient.post(url)
   },
 }
 
