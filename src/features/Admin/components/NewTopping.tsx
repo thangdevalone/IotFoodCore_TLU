@@ -49,6 +49,7 @@ function NewTopping(props: NewProductProps) {
         enqueueSnackbar("Tạo loại thất bại", { variant: "error" })
       }
     }
+    uploadImage()
   }
   const navigate = useNavigate()
   return (

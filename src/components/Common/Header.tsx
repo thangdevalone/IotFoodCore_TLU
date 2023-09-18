@@ -2,9 +2,8 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
 import { handlePrice } from "@/utils"
 import { Avatar, Badge, Box, Stack, Typography } from "@mui/material"
-import useDetectScroll from "@smakss/react-scroll-direction"
 import classNames from "classnames"
-import { MouseEvent, useEffect, useRef, useState } from "react"
+import { MouseEvent, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { CartDrawer } from "."
 import { CustomButton } from "../Custom/CustomButon"
@@ -12,10 +11,13 @@ import { BagBoldIcon, BagIcon, NotiIcon } from "../Icon"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
-export interface HeaderProps {}
+export interface HeaderProps {
+  isHeaderColorRed: boolean
+}
 
-export interface HeaderProps {}
+
 export function Header(props: HeaderProps) {
+  const { isHeaderColorRed } = props
   const user = useInforUser()
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
@@ -26,15 +28,15 @@ export function Header(props: HeaderProps) {
     setAnchorEl(event.currentTarget)
   }
   const cartRef = useRef<HTMLDivElement>(null)
-  const scrollDir = useDetectScroll({})
-  useEffect(() => {
-    if (scrollDir === "up" && cartRef.current) {
-      cartRef.current.style.transform = "translate(-50%,0px)"
-    }
-    if (scrollDir == "down" && cartRef.current) {
-      cartRef.current.style.transform = "translate(-50%,80px)"
-    }
-  }, [scrollDir])
+  // const scrollDir = useDetectScroll({})
+  // useEffect(() => {
+  //   if (scrollDir === "up" && cartRef.current) {
+  //     cartRef.current.style.transform = "translate(-50%,0px)"
+  //   }
+  //   if (scrollDir == "down" && cartRef.current) {
+  //     cartRef.current.style.transform = "translate(-50%,80px)"
+  //   }
+  // }, [scrollDir])
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -56,7 +58,7 @@ export function Header(props: HeaderProps) {
           "items-center",
           "justify-center",
           "ani-bg",
-          { "header-sd": !setterBg && !mobile, "header-color": setterBg },
+          { "header-sd": !(setterBg || isHeaderColorRed) && !mobile, "header-color": setterBg || isHeaderColorRed },
         )}
         sx={{
           height: `${width <= 500 ? "60px" : "80px"}`,
@@ -82,8 +84,8 @@ export function Header(props: HeaderProps) {
                 mobile && setterBg
                   ? "/assets/iotfood.png"
                   : mobile
-                  ? "/assets/iotfood_b.png"
-                  : "/assets/iotfood.png"
+                    ? "/assets/iotfood_b.png"
+                    : "/assets/iotfood.png"
               }
               style={{ width: `${width <= 500 ? "100px" : "130px"}` }}
               alt="logo"

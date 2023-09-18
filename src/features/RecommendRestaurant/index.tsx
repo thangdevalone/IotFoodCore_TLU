@@ -89,6 +89,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
                 imgFood={item.imgRes}
                 nameStore={item.restaurantName}
                 distance={String(item.distance)}
+                star={item.star}
                 price={item.price}
                 idStore={item.id}
               />

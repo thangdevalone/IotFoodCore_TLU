@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { authActions } from "@/features/auth/AuthSlice"
+import { useNavigate } from "react-router-dom"
 import { useInforUser } from "@/hooks"
 import {
   AccountCircleOutlined,
@@ -9,7 +10,6 @@ import {
   StorageOutlined,
 } from "@mui/icons-material"
 import { Divider, ListItemIcon, Menu, MenuItem } from "@mui/material"
-import { useNavigate } from "react-router-dom"
 
 export interface MenuUserProps {
   anchorEl: null | HTMLElement
@@ -24,6 +24,10 @@ export function MenuUser(props: MenuUserProps) {
   const handleLogOut = () => {
     handleClose()
     dispatch(authActions.logout())
+  }
+  const navUser = () => {
+    handleClose()
+    navigate('/user/profile');
   }
   const handleAdmin= ()=>{
     handleClose()
@@ -67,7 +71,7 @@ export function MenuUser(props: MenuUserProps) {
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      <MenuItem onClick={handleClose}>
+      <MenuItem onClick={navUser}>
         <ListItemIcon>
           <AccountCircleOutlined fontSize="small" />
         </ListItemIcon>

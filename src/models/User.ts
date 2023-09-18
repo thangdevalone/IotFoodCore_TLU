@@ -10,6 +10,7 @@ export interface User {
 
 export interface Role {
   id: number
-  authority: string,
-  status:boolean | null
+  createDate: any
+  status: any
+  authority: string
 }

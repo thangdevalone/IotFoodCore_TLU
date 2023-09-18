@@ -13,8 +13,6 @@ export interface RecommendFoodProps {}
 
 export function RecommendFood(props: RecommendFoodProps) {
   const [data, setData] = React.useState<foodData[]>([])
-  const [seeAll, setSeeAll] = React.useState<boolean>(true)
-
   const swiperRef = React.useRef<any>(null)
 
   const slidePrev = () => {

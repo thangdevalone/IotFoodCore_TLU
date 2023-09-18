@@ -12,8 +12,6 @@ import "./styles_home.css"
 import { PagingFood } from "@/features/PagingFood"
 export interface HomeProps {}
 
-export interface HomeProps {}
-
 export function Home(props: HomeProps) {
   const { width } = useWindowDimensions()
   React.useEffect(() => {
@@ -22,7 +20,7 @@ export function Home(props: HomeProps) {
 
   return (
     <Box className="relative tx-df-sz">
-      <Header />
+      <Header isHeaderColorRed={false}/>
       {width > 750 && <Banner />}
       <section className="container-base search-food">
         <SearchFood />

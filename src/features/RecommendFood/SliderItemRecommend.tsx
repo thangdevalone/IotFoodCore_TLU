@@ -20,7 +20,6 @@ const SliderItemRecommend = (props: foodData) => {
     typeFoodEntityId,
     restaurantEntityId,
     status,
-    toppingEntities,
   } = props
 
   const dispatch = useAppDispatch()
@@ -50,16 +49,17 @@ const SliderItemRecommend = (props: foodData) => {
         }}
         onClick={handleAddToCart}
       >
-        <Box className="min-w-[140px] min-h-[100px]">
+        <Box className=" w-[100%] h-[23vh]">
           <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
             <Box
               className={`img-res`}
               sx={{
+                
                 transition: "all 0.3s",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 width: "100%",
-                height: "18vh",
+                height: "100%",
                 backgroundImage: `url(${imgFood})`,
               }}
             ></Box>
@@ -89,7 +89,7 @@ const SliderItemRecommend = (props: foodData) => {
             }}
             className="flex mt-1 justify-between items-center"
           >
-            <span>Đã bán: {quantityPurchased}</span>
+            <span>Đã bán: {quantityPurchased ||0}</span>
             <div>
               <VoucherIcon />
               <span className="ml-1">

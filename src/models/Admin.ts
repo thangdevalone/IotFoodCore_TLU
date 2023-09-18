@@ -1,3 +1,5 @@
+import { Role } from "."
+
 export interface searchRoot {
   id: number
   title: string
@@ -6,6 +8,11 @@ export interface searchRoot {
 export interface ProductRoot {
   totalRow: number
   data: ProductItem[]
+}
+
+export interface UserRoot {
+  totalRow: number
+  loginResponDtos: EmployeeItem[]
 }
 
 export interface RestaurantRoot {
@@ -57,3 +64,14 @@ export interface TypeRestaurant {
   detail: string
   star:number
 }
+export interface EmployeeItem {
+  id: number
+  role: Role[]
+  token: any
+  sdt: string
+  accountName: string
+  imgUser: string
+  msv: string
+}
+
+

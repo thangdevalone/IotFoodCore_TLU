@@ -1,7 +1,4 @@
-import adminApi from "@/api/adminApi"
-import { AutoField } from "@/components/Common"
-import { searchRoot } from "@/models"
-import { handlePrice } from "@/utils"
+
 import {
   ArrowBackIosNew,
   CloudUpload,
@@ -13,7 +10,6 @@ import {
   Backdrop,
   Box,
   Button,
-  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -21,49 +17,65 @@ import {
   Stack,
   Tab,
   Tabs,
+  Typography,
 } from "@mui/material"
-import { useSnackbar } from "notistack"
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import adminApi from "@/api/adminApi"
+import { useSnackbar } from "notistack"
+interface TabPanelProps {
+  children?: React.ReactNode
+  index: number
+  value: number
+}
+const { enqueueSnackbar } = useSnackbar()
 
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  )
+}
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   }
 }
-export interface NewProductProps {}
+export interface NewEmployeeProps {}
 
-function NewProduct(props: NewProductProps) {
-  const [tabs, setTabs] = React.useState(0)
-  const [price, setPrice] = React.useState<string>("")
-  const [loadding, setLoadding] = React.useState(false)
-  const [resPick, setResPick] = React.useState<searchRoot | null>(null)
-  const [typePick, setTypePick] = React.useState<searchRoot | null>(null)
+function NewEmployee(props: NewEmployeeProps) {
+  const [value, setValue] = React.useState(0)
+  const [password, setPassword] = React.useState<string>("")
+  const [name, setName] = React.useState<string>("")
+  const [employeeNumber, setEmployeeNumber] = React.useState<string>("")
+  const [phoneNumber, setPhoneNumber] = React.useState<string>("")
   const [file, setFile] = React.useState<File | null>()
   const imgRef = React.useRef<HTMLInputElement | null>(null)
-  const [openBackDrop, setOpenBackDrop] = React.useState(false)
-  const [nameFood, setNameFood] = React.useState<string>("")
-  const [detail, setDetail] = React.useState<string>("")
+  const [eyeOpen, setEyeOpen] = React.useState(true)
 
-  const { enqueueSnackbar } = useSnackbar()
-  
+  const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabs(newValue)
+    setValue(newValue)
   }
 
-  const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value
-
-    const sanitizedValue = rawValue.replace(/[^\d,]/g, "")
-
-    // Convert comma-separated string to a numeric value
-    const numericValue = parseFloat(sanitizedValue.replace(/,/g, ""))
-    if (!isNaN(numericValue)) {
-      setPrice(handlePrice(numericValue))
-    } else {
-      setPrice("")
-    }
+  const handleChangeInput = (
+    value: string,
+    callback: (newVal: string) => void,
+  ) => {
+    callback(value)
   }
   const handleImageClick = () => {
     if (imgRef.current !== null && !imagePreview) {
@@ -73,7 +85,7 @@ function NewProduct(props: NewProductProps) {
   const [imagePreview, setImagePreview] = React.useState<string | null>(null)
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = event.target.files && event.target.files[0]
-    console.log(selectedImage)
+
     if (selectedImage && event.target.files) {
       setFile(event.target.files[0])
       const reader = new FileReader()
@@ -83,59 +95,26 @@ function NewProduct(props: NewProductProps) {
       reader.readAsDataURL(selectedImage)
     }
   }
-  const handlePushProduct = () => {
-    async function uploadImage() {
-      setLoadding(true)
-      try {
-        if (file) {
-          await adminApi.addFood(
-            nameFood,
-            parseInt(price.replace(/\D/g, "")),
-            detail,
-            file,
-            Number(typePick?.id),
-            Number(resPick?.id),
-          
-          )
-          setLoadding(false)
-          enqueueSnackbar("Thêm mới sản phẩm thành công", {
-            variant: "success",
-          })
-          setNameFood("")
-          setDetail("")
-          setPrice("")
-          setImagePreview(null)
-          setFile(null)
-          setTypePick(null)
-          setResPick(null)
-          
-        } else {
-          setLoadding(false)
-          enqueueSnackbar("Bắt buộc phải có ảnh", { variant: "error" })
-        }
-      } catch (error) {
-        setLoadding(false)
-
-        enqueueSnackbar("Có lỗi xảy ra vui lòng thử lại", { variant: "error" })
+  const handlePushEmployee = async () => {
+    try {
+      if (file) {
+        const res = await adminApi.addEmployee(
+          name,
+          password,
+          phoneNumber,
+          employeeNumber,
+          file,
+        )
+        enqueueSnackbar("Tạo nhân viên thành công", { variant: "success" })
       }
+    } catch (error: any) {
+      console.log(error)
+      enqueueSnackbar("Tạo nhân viên thất bại ", { variant: "error" })
     }
-    uploadImage()
-  }
-  const handleChangeInput = (
-    value: string,
-    callback: (newVal: string) => void,
-  ) => {
-    callback(value)
   }
   const navigate = useNavigate()
   return (
     <Box sx={{ height: "100%" }}>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loadding}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <Stack
         direction="row"
         alignItems="center"
@@ -150,14 +129,18 @@ function NewProduct(props: NewProductProps) {
           size="small"
           startIcon={<ArrowBackIosNew fontSize="small" />}
           onClick={() => {
-            navigate("/admin/product")
+            navigate("/admin/employee")
           }}
           variant="contained"
           sx={{ mr: "10px", textTransform: "revert" }}
         >
-          Sản phẩm
+          Nhân viên
         </Button>
-        <IconButton onClick={handlePushProduct} size="small" sx={{ mr: "5px" }}>
+        <IconButton
+          onClick={handlePushEmployee}
+          size="small"
+          sx={{ mr: "5px" }}
+        >
           <CloudUpload fontSize="small" />
         </IconButton>
         <IconButton size="small" sx={{ mr: "5px" }}>
@@ -170,41 +153,25 @@ function NewProduct(props: NewProductProps) {
           p: "10px",
           height: "calc(100% - 51px)",
         }}
-        className="overflow-x-hidden overflow-y-auto"
       >
         <Grid sx={{ width: "100%", height: "100%" }} container spacing={2}>
           <Grid item xs={8}>
-            <Box sx={{ width: "100%", height: "100%" }} className="mb-4">
-              <p className="font-medium text-lg mb-2">Thêm sản phẩm mới</p>
+            <Box sx={{ width: "100%", height: "100%" }}>
+              <p className="font-medium text-lg mb-2">Thêm nhân viên mới</p>
               <div className="border   bg-white rounded-md border-gray-300 p-[15px]">
                 <div className="flex w-[100%]">
                   <div className="flex-1 mr-[20px]">
                     <label className="font-medium text-md block">
-                      Tên sản phẩm
+                      Tên nhân viên
                     </label>
                     <Input
                       fullWidth
                       sx={{ height: "50px", fontSize: "25px", p: 0 }}
-                      placeholder="VD: Trà sữa trân trâu đường đen"
-                      value={nameFood}
+                      placeholder="VD: Nguyễn Văn A"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleChangeInput(e.target.value, setNameFood)
+                        handleChangeInput(e.target.value, setName)
                       }
                     />
-                    <div className="flex items-center mb-4 mt-3">
-                      <input
-                        id="state-product"
-                        type="checkbox"
-                        defaultChecked={true}
-                        className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded"
-                      />
-                      <label
-                        htmlFor="state-product"
-                        className="ml-2 text-sm cursor-pointer font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Đang bán
-                      </label>
-                    </div>
                   </div>
 
                   <div
@@ -242,12 +209,7 @@ function NewProduct(props: NewProductProps) {
                             <IconButton onClick={() => setOpenBackDrop(true)}>
                               <Visibility htmlColor="white" />
                             </IconButton>
-                            <IconButton
-                              onClick={() => {
-                                setImagePreview(null)
-                                setFile(null)
-                              }}
-                            >
+                            <IconButton onClick={() => setImagePreview(null)}>
                               <Delete htmlColor="white" />
                             </IconButton>
                           </div>
@@ -274,48 +236,73 @@ function NewProduct(props: NewProductProps) {
                 <div>
                   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs
-                      value={tabs}
+                      value={value}
                       onChange={handleChange}
                       aria-label="basic tabs example"
                     >
-                      <Tab label="Thông tin sản phẩm" {...a11yProps(0)} />
+                      <Tab label="Thông tin nhân viên" {...a11yProps(0)} />
                     </Tabs>
                   </Box>
-                  <div hidden={tabs !== 0}>
-                    {tabs === 0 && (
+                  <div hidden={value !== 0}>
+                    {value === 0 && (
                       <Box sx={{ padding: "20px 15px" }}>
                         <Grid container spacing={2}>
                           <Grid item xs={6}>
                             <Grid container spacing={2}>
                               <Grid item xs={4}>
                                 <label
-                                  htmlFor="type-food-select"
+                                  htmlFor="name-food-select"
                                   className="font-medium "
                                 >
-                                  Loại sản phẩm
+                                  Mã nhân viên
                                 </label>
                               </Grid>
                               <Grid item xs={8}>
-                                <AutoField
-                                  apiHandle="type"
-                                  value={typePick}
-                                  setValue={setTypePick}
-                                />
+                                <div className="flex items-end">
+                                  <input
+                                    id="name-food-select"
+                                    value={employeeNumber}
+                                    type="string"
+                                    autoComplete="off"
+                                    onChange={(
+                                      e: React.ChangeEvent<HTMLInputElement>,
+                                    ) =>
+                                      handleChangeInput(
+                                        e.target.value,
+                                        setEmployeeNumber,
+                                      )
+                                    }
+                                    className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                  />
+                                </div>
                               </Grid>
+
                               <Grid item xs={4}>
                                 <label
-                                  htmlFor="type-food-select"
+                                  htmlFor="name-food-select"
                                   className="font-medium "
                                 >
-                                  Thuộc về
+                                  Mật khẩu
                                 </label>
                               </Grid>
                               <Grid item xs={8}>
-                                <AutoField
-                                  apiHandle="res"
-                                  value={resPick}
-                                  setValue={setResPick}
-                                />
+                                <div className="flex items-end">
+                                  <input
+                                    id="name-food-select"
+                                    value={password}
+                                    type={eyeOpen ? "string" : "password"}
+                                    autoComplete="off"
+                                    onChange={(
+                                      e: React.ChangeEvent<HTMLInputElement>,
+                                    ) =>
+                                      handleChangeInput(
+                                        e.target.value,
+                                        setPassword,
+                                      )
+                                    }
+                                    className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                  />
+                                </div>
                               </Grid>
                             </Grid>
                           </Grid>
@@ -326,18 +313,24 @@ function NewProduct(props: NewProductProps) {
                                   htmlFor="name-food-select"
                                   className="font-medium "
                                 >
-                                  Đơn giá
+                                  Số điện thoại
                                 </label>
                               </Grid>
                               <Grid item xs={8}>
                                 <div className="flex items-end">
-                                  đ
                                   <input
                                     id="name-food-select"
-                                    value={price}
+                                    value={phoneNumber}
                                     type="string"
                                     autoComplete="off"
-                                    onChange={handleChangePrice}
+                                    onChange={(
+                                      e: React.ChangeEvent<HTMLInputElement>,
+                                    ) =>
+                                      handleChangeInput(
+                                        e.target.value,
+                                        setPhoneNumber,
+                                      )
+                                    }
                                     className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"
                                   />
                                 </div>
@@ -345,28 +338,15 @@ function NewProduct(props: NewProductProps) {
                             </Grid>
                           </Grid>
                         </Grid>
-                        <Box sx={{ mt: "30px" }}>
-                          <label
-                            htmlFor="message"
-                            className="block mb-2  font-medium text-gray-900 dark:text-white"
-                          >
-                            Mô tả sản phẩm
-                          </label>
-                          <textarea
-                            id="message"
-                            rows={4}
-                            value={detail}
-                            onChange={(
-                              e: React.ChangeEvent<HTMLTextAreaElement>,
-                            ) => handleChangeInput(e.target.value, setDetail)}
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Viết mô tả về sản phẩm..."
-                          ></textarea>
-                        </Box>
                       </Box>
                     )}
                   </div>
-            
+                  <div hidden={value !== 1}>
+                    {value === 1 && <Box sx={{ p: 2 }}>Bán hàng</Box>}
+                  </div>
+                  <div hidden={value !== 2}>
+                    {value === 2 && <Box sx={{ p: 2 }}>Mua hàng</Box>}
+                  </div>
                 </div>
               </div>
             </Box>
@@ -376,7 +356,7 @@ function NewProduct(props: NewProductProps) {
               elevation={1}
               sx={{
                 width: "100%",
-                height: "95%",
+                height: "100%",
                 borderRadius: "8px",
                 p: "10px",
               }}
@@ -390,4 +370,4 @@ function NewProduct(props: NewProductProps) {
   )
 }
 
-export default NewProduct
+export default NewEmployee

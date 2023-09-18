@@ -17,16 +17,33 @@ export interface RestaurantData {
   imgRes: string
   distance: number
 }
-export interface StoreDetailData {
+export interface  StoreDetailData  {
   id: number
+  createDate: string
+  status: boolean
   restaurantName: string
   address: string
-  quantitySold: number
-  distance: string
+  quantitySold: any
+  distance: number
+  star: number
+  timeStart: string
+  timeClose: string
   detail: string
   phoneNumber: string
   imgRes: string
-  foodEntities: foodData[]
+  time: any
+  toppingEntityList: ToppingEntityList[]
+  foodEntities: any[]
+}
+
+export interface ToppingEntityList {
+  id: number
+  createDate: string
+  status: boolean
+  title: string
+  items: string
+  requi: boolean
+  restaurantEntityId: number
 }
 
 export interface foodData {
@@ -50,7 +67,6 @@ export interface CartItemData {
   price: number
   quantity: number
   idStore: number
-  distanceStore:number
   nameStore: string
   type?: boolean
   imgFood: string

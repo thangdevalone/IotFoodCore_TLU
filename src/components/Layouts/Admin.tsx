@@ -4,7 +4,9 @@ import { Outlet, Route, Routes, useLocation } from "react-router-dom"
 import { HeaderAdmin } from "../Common/HeaderAdmin"
 import { Product, Quote, Supplier } from "@/features/Admin"
 import { ToolbarAdmin } from "../Common"
+import { Employee } from "@/features/Admin/Employee"
 import NewProduct from "@/features/Admin/components/NewProduct"
+import NewEmployee from "@/features/Admin/components/NewEmployee"
 import NewType from "@/features/Admin/components/NewType"
 import TypeProduct from "@/features/Admin/TypeProduct"
 import queryString from "query-string"
@@ -52,6 +54,8 @@ const FormRouter = () => {
       return <NewProduct />
     case "store":
       return <NewStore />
+    case "employee":
+      return <NewEmployee />
     default:
       return null
   }
@@ -92,6 +96,7 @@ export default function Admin() {
         <Routes>
           <Route path="/" element={<WelComeAdmin />} />
           <Route path="/quote" element={<Quote />} />
+          <Route path="/employee" element={<Employee />} />
           <Route path="/product" element={<Product />} />
           <Route path="/type" element={<TypeProduct />} />
           <Route path="/supplier" element={<Supplier />} />

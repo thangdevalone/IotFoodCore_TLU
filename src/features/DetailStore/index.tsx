@@ -32,8 +32,6 @@ const DetailStore = (props: DetailProps) => {
     { name: `${data?.restaurantName}`, link: "/" },
   ]
 
-  // console.log(data);
-
   return (
     <Box className="container-base base-pd">
       <Box className=" flex flex-col gap-8">
