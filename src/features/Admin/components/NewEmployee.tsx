@@ -28,7 +28,7 @@ interface TabPanelProps {
   index: number
   value: number
 }
-const { enqueueSnackbar } = useSnackbar()
+
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
@@ -65,7 +65,7 @@ function NewEmployee(props: NewEmployeeProps) {
   const [file, setFile] = React.useState<File | null>()
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [eyeOpen, setEyeOpen] = React.useState(true)
-
+  const { enqueueSnackbar } = useSnackbar()
   const [openBackDrop, setOpenBackDrop] = React.useState(false)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
