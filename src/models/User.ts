@@ -2,7 +2,7 @@ export interface User {
   role: Role[]
   token: string
   id:number
-  std: string
+  sdt: string
   accountName: string
   imgUser: string
   msv: string

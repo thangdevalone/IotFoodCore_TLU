@@ -14,7 +14,6 @@ import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
 import { Profile } from "./features/User/Profile"
 import { User } from "./features/User"
-import { OrdersUser } from "./features/User/OrdersUser"
 import { ChangePassword } from "./features/User/ChangePassword"
 import { Address } from "./features/User/Address"
 function App() {
@@ -45,7 +44,6 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="address" element={<Address />} />
             <Route path="changePassword" element={<ChangePassword />} />
-            <Route path="orders" element={<OrdersUser />} />
           </Route>
           <Route path="/store" element={<Store />}>
             <Route path="get-all-store" element={<GetAllStore />} />

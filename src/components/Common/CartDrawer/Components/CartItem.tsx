@@ -106,8 +106,8 @@ const CartItem = (props: propsData) => {
               {item.name}
             </Typography>
           </Stack>
-          <Typography className="flex-2">
-            {handlePrice(item.price)} VND
+          <Typography className="flex-2" sx={{textAlign:"end"}}>
+            {handlePrice(item.price)} ₫
           </Typography>
         </>
       ) : (
@@ -127,7 +127,7 @@ const CartItem = (props: propsData) => {
 
             <Typography sx={{ fontSize: "12px" }}>Topping:</Typography>
             <Typography className="flex-2" sx={{ fontSize: "14px", mt: 1 }}>
-              {handlePrice(item.price)} VND
+              {handlePrice(item.price)} ₫
             </Typography>
             <Box className="flex items-center gap-2 flex-1 mt-2">
               <Box

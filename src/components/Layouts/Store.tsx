@@ -7,10 +7,8 @@ export interface propsData {}
 export function Store(props: propsData) {
   return (
     <Box className="tx-df-sz">
-      <Header isHeaderColorRed={true}/>
-      <Box className="mt-24">
-        <Outlet />
-      </Box>
+      <Header sx={{ backgroundColor: "white" }} isWhiteLogo={false} />
+      <Outlet />
     </Box>
   )
 }

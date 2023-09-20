@@ -108,12 +108,13 @@ export function CartDrawer(props: CardDrawerProps) {
                     padding: "24px",
                     overflow: "hidden auto",
                     height: "calc(100% - 200px)",
+                    width:"100%"
                   }}
                   spacing={3}
                 >
                   {dataStore.map((data: iDataStore) => (
-                    <>
-                      <div key={data.id}>
+                    <div key={data.id}>
+                      <div>
                         <div className="font-medium text-xl">{data.name}</div>
                         <CartList items={data.items} />
                       </div>
@@ -123,12 +124,13 @@ export function CartDrawer(props: CardDrawerProps) {
                             fontSize: "13px",
                           },
                           width: "100%",
+                          mt:1
                         }}
                         justifyContent="space-between"
                         direction="row"
                         spacing={3}
                       >
-                        <Stack direction="column">
+                        <Stack direction="column" >
                           <span>Tổng</span>
                           {user?<p>Phí vận chuyển:</p>:<p>
                             Phí vận chuyển sẽ được hiển thị khi bạn đăng nhập
@@ -136,7 +138,7 @@ export function CartDrawer(props: CardDrawerProps) {
                         </Stack>
                         <span> {handlePrice(price)} ₫</span>
                       </Stack>
-                    </>
+                    </div>
                   ))}
                 </Stack>
                 <Box
@@ -167,7 +169,7 @@ export function CartDrawer(props: CardDrawerProps) {
                           ),
                         )
                       }}
-                      className={`bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+                      className={`bg-gray-50 border appearance-none custom-select border-gray-300 text-black rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ${
                         width < 400 ? "max-w-[150px] ml-2  p-2" : "p-2.5"
                       }`}
                     >

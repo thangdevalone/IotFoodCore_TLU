@@ -1,13 +1,14 @@
+import foodsApis from "@/api/foodsApi"
+import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
+import { VoucherIcon } from "@/components/Icon"
+import { useWindowDimensions } from "@/hooks"
+import { StoreDetailData } from "@/models"
+import { BorderColor } from "@mui/icons-material"
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
+import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
+import { Box, Stack, Typography } from "@mui/material"
 import * as React from "react"
 import { useParams } from "react-router-dom"
-import foodsApis from "@/api/foodsApi"
-import { StoreDetailData } from "@/models"
-import { Box, Typography, Grid } from "@mui/material"
-import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import ItemRecommend from "../RecommendRestaurant/ItemRecommend"
-import { useWindowDimensions } from "@/hooks"
-import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
 
 export interface DetailProps {}
 
@@ -33,103 +34,90 @@ const DetailStore = (props: DetailProps) => {
   ]
 
   return (
-    <Box className="container-base base-pd">
-      <Box className=" flex flex-col gap-8">
-        <Box className="">
-          <BreadcrumbsCommon items={breadcrumbItems} />
-        </Box>
-        <Box
-          className="gap-3 flex h-[40vh] relative"
-          sx={{
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-            backgroundImage: `url(${data?.imgRes})`,
-          }}
-        >
-          <div
-            style={{
-              background:
-                "linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))",
-            }}
-            className="absolute top-0 left-0 right-0 bottom-0 bg-opacity-50 bg-gray-100"
-          ></div>
-          <Box className="flex-2 relative z-10 pl-6 pt-4  text-white">
-            <span
-              className={`${
-                width <= 460
-                  ? "text-lg"
-                  : width <= 750
-                  ? "text-xl"
-                  : width <= 900
-                  ? "text-2xl"
-                  : "text-3xl"
-              } font-semibold flex justify-start capitalize z-[100]`}
-            >
-              {data?.restaurantName}
-            </span>
-            <Typography>{data?.detail}</Typography>
-            <Box className="flex gap-5 items-center mt-2 absolute bottom-4">
-              <Box className=" flex  justify-center items-center ">
-                <StarRateRoundedIcon style={{ color: "orange" }} />
-                <Typography sx={{ fontSize: "14px" }}>5</Typography>
-              </Box>
-              <Box className="flex gap-2">
-                <Box className="flex items-center justify-center gap-2">
-                  <AccessTimeRoundedIcon />
-                  <Typography sx={{ fontSize: "14px" }}>4 phút</Typography>
+    <>
+      {data ? (
+        <>
+          <Box className="mt-[70px] py-5 border-b-[1px] border-slate-400">
+            <Box className="container-base base-pd">
+              <BreadcrumbsCommon items={breadcrumbItems} />
+              <Stack direction="row" spacing={2}>
+                <Box sx={{ flex: 2 ,maxWidth:width>1000?"none":"600px"}}>
+                  <Typography variant="h4" sx={{ fontWeight: 500, mb: 1 }}>
+                    {data.restaurantName}
+                  </Typography>
+                  <p className="text-[#676767] text-sm py-1 ">{data.detail}</p>
+                  <Box className="flex gap-2 my-2">
+                    <Box className="flex items-center justify-center gap-2">
+                      <AccessTimeRoundedIcon />
+
+                      <Typography sx={{ fontSize: "14px" }}>
+                        {Math.floor(Number(data.distance) * 12)} phút
+                      </Typography>
+                    </Box>
+                    •
+                    <Typography
+                      sx={{ fontSize: "14px" }}
+                      className="flex items-center justify-center"
+                    >
+                      {data.distance} km
+                    </Typography>
+                    •
+                    <Typography
+                      sx={{ fontSize: "14px" }}
+                      className="flex items-center justify-center"
+                    >
+                      <svg
+                        className=" w-4 h-4 mr-2 text-yellow-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                      </svg>{" "}
+                      {data.star}
+                    </Typography>
+                  </Box>
+                  <p className="mt-1">
+                    <span className="mr-10 font-medium text-[#676767]">
+                      Giờ mở cửa
+                    </span>{" "}
+                    <span className="text-sm text-[#676767]">
+                      Hôm nay {data.timeStart}-{data.timeClose}
+                    </span>
+                  </p>
+                  <div className="flex flex-row item-center gap-3 my-2">
+                    <VoucherIcon color="var(--color-df-2)" />{" "}
+                    <span className="text-[var(--color-df-2)]">
+                      Nhiều voucher có sẵn
+                    </span>
+                  </div>
+                  <p>Đã bán: 0</p>
                 </Box>
-                •
-                <Typography
-                  sx={{ fontSize: "14px" }}
-                  className="flex items-center justify-center"
-                >
-                  {data?.distance} km
-                </Typography>
-              </Box>
+                {width > 1000 && (
+                  <Box sx={{ flex: 1,display:"flex",justifyContent:"flex-end" }}>
+                    <img
+                      src={data.imgRes}
+
+                      className="h-[100%] w-auto max-h-[250px] max-w-[350px] object-cover rounded-lg "
+                      alt=""
+                    />
+                  </Box>
+                )}
+              </Stack>
             </Box>
           </Box>
-        </Box>
-      </Box>
-      {data?.foodEntities && (
-        <Box className="flex gap-5 flex-col mt-3">
-          <span className="text-2xl font-semibold flex justify-start lg:ml-0 ml-[44px]">
-            Ưu đãi hôm nay
-          </span>
-          <Box>
-            <Grid
-              className=""
-              container
-              spacing={4}
-              columnSpacing={{ xs: 1, sm: 3, md: 4 }}
-            >
-              {data?.foodEntities?.map((item) => (
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={3}
-                  key={item.id}
-                  className="h-[290px]"
-                >
-                  <ItemRecommend
-                    idFood={item.id}
-                    width={width}
-                    imgFood={item.imgFood}
-                    key={item.id}
-                    foodName={item.foodName}
-                    distance={item.distance}
-                    star={4}
-                    price={item.price}
-                    idStore={item.restaurantEntityId}
-                    nameStore={data.restaurantName}
-                  />
-                </Grid>
-              ))}
-            </Grid>
+          <Box
+            className="h-[500px]"
+            sx={{ backgroundColor: " rgb(240, 242, 245)" }}
+          >
+            <Box className="container-base base-pd"></Box>
           </Box>
-        </Box>
+        </>
+      ) : (
+        ""
       )}
-    </Box>
+    </>
   )
 }
 

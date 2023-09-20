@@ -20,7 +20,7 @@ export function Home(props: HomeProps) {
 
   return (
     <Box className="relative tx-df-sz">
-      <Header isHeaderColorRed={false}/>
+      <Header/>
       {width > 750 && <Banner />}
       <section className="container-base search-food">
         <SearchFood />

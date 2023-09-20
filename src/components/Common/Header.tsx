@@ -3,7 +3,7 @@ import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
 import { handlePrice } from "@/utils"
 import { Avatar, Badge, Box, Stack, Typography } from "@mui/material"
 import classNames from "classnames"
-import { MouseEvent, useRef, useState } from "react"
+import { MouseEvent, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { CartDrawer } from "."
 import { CustomButton } from "../Custom/CustomButon"
@@ -11,13 +11,15 @@ import { BagBoldIcon, BagIcon, NotiIcon } from "../Icon"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
+import useDetectScroll from "@smakss/react-scroll-direction"
 export interface HeaderProps {
-  isHeaderColorRed: boolean
+  sx?: { [index: string]: string }
+  className?: string
+  isWhiteLogo?: boolean
 }
 
-
 export function Header(props: HeaderProps) {
-  const { isHeaderColorRed } = props
+  const { sx, className, isWhiteLogo = true } = props
   const user = useInforUser()
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
@@ -28,15 +30,15 @@ export function Header(props: HeaderProps) {
     setAnchorEl(event.currentTarget)
   }
   const cartRef = useRef<HTMLDivElement>(null)
-  // const scrollDir = useDetectScroll({})
-  // useEffect(() => {
-  //   if (scrollDir === "up" && cartRef.current) {
-  //     cartRef.current.style.transform = "translate(-50%,0px)"
-  //   }
-  //   if (scrollDir == "down" && cartRef.current) {
-  //     cartRef.current.style.transform = "translate(-50%,80px)"
-  //   }
-  // }, [scrollDir])
+  const scrollDir = useDetectScroll({})
+  useEffect(() => {
+    if (scrollDir === "up" && cartRef.current) {
+      cartRef.current.style.transform = "translate(-50%,0px)"
+    }
+    if (scrollDir == "down" && cartRef.current) {
+      cartRef.current.style.transform = "translate(-50%,80px)"
+    }
+  }, [scrollDir])
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -58,13 +60,20 @@ export function Header(props: HeaderProps) {
           "items-center",
           "justify-center",
           "ani-bg",
-          { "header-sd": !(setterBg || isHeaderColorRed) && !mobile, "header-color": setterBg || isHeaderColorRed },
+          { [`${className}`]: className },
+          { "header-sd": !(setterBg || sx) && !mobile },
+          `${
+            !isWhiteLogo
+              ? setterBg && "header-unset"
+              : setterBg && "header-color"
+          }`,
         )}
         sx={{
           height: `${width <= 500 ? "60px" : "80px"}`,
           position: "fixed",
           zIndex: 20,
           top: 0,
+          ...sx,
         }}
       >
         <Stack
@@ -81,11 +90,13 @@ export function Header(props: HeaderProps) {
           <Link to="/">
             <img
               src={
-                mobile && setterBg
+                !isWhiteLogo
+                  ? "/assets/iotfood_b.png"
+                  : mobile && setterBg
                   ? "/assets/iotfood.png"
                   : mobile
-                    ? "/assets/iotfood_b.png"
-                    : "/assets/iotfood.png"
+                  ? "/assets/iotfood_b.png"
+                  : "/assets/iotfood.png"
               }
               style={{ width: `${width <= 500 ? "100px" : "130px"}` }}
               alt="logo"
@@ -116,13 +127,17 @@ export function Header(props: HeaderProps) {
                     display: "flex",
                     gap: "3px",
                     backgroundColor: `${
-                      setterBg || lengthFood === 0
+                      !isWhiteLogo
+                        ? "white"
+                        : setterBg || lengthFood === 0
                         ? "white"
                         : "var(--color-layer-2)"
                     }`,
                     "&:hover": {
                       backgroundColor: `${
-                        setterBg || lengthFood === 0
+                        !isWhiteLogo
+                          ? "white"
+                          : setterBg || lengthFood === 0
                           ? "white"
                           : "var(--color-layer-2)"
                       }`,
@@ -132,7 +147,9 @@ export function Header(props: HeaderProps) {
                 >
                   <BagIcon
                     color={`${
-                      setterBg || dataStore.length === 0
+                      !isWhiteLogo
+                        ? "var(--color-df-1)"
+                        : setterBg || dataStore.length === 0
                         ? "var(--color-df-1)"
                         : "white"
                     }`}
@@ -145,7 +162,11 @@ export function Header(props: HeaderProps) {
                           fontWeight: "500",
                           transform: "translateY(1px)",
                           color: `${
-                            setterBg || lengthFood === 0 ? "black" : "white"
+                            !isWhiteLogo
+                              ? "var(--color-df-1)"
+                              : setterBg || lengthFood === 0
+                              ? "black"
+                              : "white"
                           }`,
                         }}
                       >
@@ -274,7 +295,13 @@ export function Header(props: HeaderProps) {
               </>
             ) : (
               <Link to={"/login"}>
-                <CustomButton  sx={{ padding: "10px 15px" ,fontSize:`${width<=500?"10px":"13px"}`,height:"100%"}}>
+                <CustomButton
+                  sx={{
+                    padding: "10px 15px",
+                    fontSize: `${width <= 500 ? "10px" : "13px"}`,
+                    height: "100%",
+                  }}
+                >
                   Đăng nhập/Đăng ký
                 </CustomButton>
               </Link>

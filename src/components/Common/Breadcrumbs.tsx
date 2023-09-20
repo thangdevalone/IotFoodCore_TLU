@@ -31,15 +31,7 @@ const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
         return (
           <span
             key={index}
-            className={`${
-              width <= 460
-                ? "text-[12px]"
-                : width <= 750
-                ? "text-base"
-                : width <= 900
-                ? "text-xl"
-                : "text-base"
-            } text-blue-500 capitalize`}
+            className={` text-blue-500 capitalize`}
           >
             {item.name}
           </span>
@@ -59,6 +51,7 @@ const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
   return (
     <Breadcrumbs
       separator={<NavigateNextIcon fontSize="small" />}
+      sx={{mt:2,mb:1}}
       aria-label="breadcrumbs"
     >
       {breadcrumbs}

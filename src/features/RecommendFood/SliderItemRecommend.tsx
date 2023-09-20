@@ -77,8 +77,8 @@ const SliderItemRecommend = (props: foodData) => {
             >
               {nameRestaurantFood}
             </Typography>
-            <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
-              {handlePrice(price)} VND
+            <Typography  sx={{ fontSize: "14px",fontWeight:600 }}>
+              {handlePrice(price)} ₫
             </Typography>
           </Box>
           <Box
