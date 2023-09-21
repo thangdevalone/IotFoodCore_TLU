@@ -10,7 +10,7 @@ export function handlePriceShip(km:number,sp:number):number{
       return Math.floor(3000*km+2000*sp)
     }
     if (sp>10){
-      return Math.floor(3500*km+2500*sp)
+      return Math.floor(3500*km+3000*sp)
     }
   }
   if (km<=5){
@@ -24,7 +24,7 @@ export function handlePriceShip(km:number,sp:number):number{
       return Math.floor(2500*km+2500*sp)
     }
     if (sp>10){
-      return Math.floor(3000*km+3000*sp)
+      return Math.floor(3500*km+3500*sp)
     }
   }
   return 0;

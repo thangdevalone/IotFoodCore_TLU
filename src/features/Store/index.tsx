@@ -35,17 +35,16 @@ const GetAllStore = (props: propsData) => {
   return (
     <Box className="flex flex-col gap-5 container-base base-pd">
       <BreadcrumbsCommon items={breadcrumbItems} />
-      <Grid container spacing={{ xs: 0, sm:1,md:2,lg:3 }}>
+      <Grid container spacing={{ xs: 0, sm: 1, md: 2, lg: 3 }}>
         {data?.map((item) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <ItemRes
-              idFood={item.id}
-              imgFood={item.imgRes}
-              nameStore={item.restaurantName}
-              distance={String(item.distance)}
+              imgRes={item.imgRes}
+              nameRes={item.restaurantName}
+              distance={item.distance}
+              detail={item.detail}
               star={item.star}
-              price={item.price}
-              idStore={item.id}
+              idRes={item.id}
             />
           </Grid>
         ))}

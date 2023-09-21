@@ -62,7 +62,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
         )}
         <Swiper
           modules={[]}
-          className="slide-base"
+          className="slide-base py-2 "
           style={{ width: "100%" }}
           slidesPerView={
             width <= 450
@@ -82,16 +82,14 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           ref={swiperRef}
         >
           {data?.map((item, index) => (
-            <SwiperSlide key={index + item?.id}>
+            <SwiperSlide  key={index + item?.id}>
               <ItemRes
-                idFood={item.id}
-               
-                imgFood={item.imgRes}
-                nameStore={item.restaurantName}
-                distance={String(item.distance)}
+                imgRes={item.imgRes}
+                nameRes={item.restaurantName}
+                distance={item.distance}
+                detail={item.detail}
                 star={item.star}
-                price={item.price}
-                idStore={item.id}
+                idRes={item.id}
               />
             </SwiperSlide>
           ))}
@@ -123,7 +121,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
               transition: "all 0.2s",
               "&:hover": {
                 border: "1px solid var(--color-df-1)",
-                background: "rgb(241, 245, 249)",
+                background: "white",
                 color: "var(--color-df-1)",
               },
             }}

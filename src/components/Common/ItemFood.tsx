@@ -65,7 +65,7 @@ const ItemFood = (props: propsData) => {
         }}
         onClick={handleAddToCart}
       >
-        <Box className=" min-w-[140px] min-h-[100px]">
+        <Box className=" min-w-[100px] min-h-[100px]">
           <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
             <Box
               className={`img-res`}
@@ -75,7 +75,7 @@ const ItemFood = (props: propsData) => {
                 backgroundSize: "cover",
                 width: "100%",
                 height: width < 500 ? "100%" : "18vh",
-                backgroundImage: `url(${imgFood})`,
+                backgroundImage: `url(${imgFood || "/assets/no_img.jpg"})`,
               }}
             ></Box>
           </Box>
@@ -85,23 +85,17 @@ const ItemFood = (props: propsData) => {
             width < 500 ? "justify-between mt-[0px] pl-1" : "mt-[8px]"
           }`}
         >
-          <span
+          <p
             className={`capitalize ${
               width < 500
                 ? width < 350
-                  ? "text-base font-medium"
+                  ? "text-base font-medium line-clamp-2"
                   : " text-lg font-medium"
                 : "text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold"
             }`}
-            style={{
-              overflow: "hidden",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2, // Số dòng tối đa
-            }}
           >
             {foodName}
-          </span>
+          </p>
           {width < 500 ? (
             <>
               <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-[14px]">
@@ -124,7 +118,7 @@ const ItemFood = (props: propsData) => {
                     width < 500 ? "font-semibold" : "text-gray-400"
                   }`}
                 >
-                  {handlePrice(price)} VND
+                  {handlePrice(price)} ₫
                 </span>
                 <Box className="cursor-pointer hover:opacity-90">
                   <AddCircleIcon

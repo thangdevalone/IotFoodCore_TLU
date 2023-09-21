@@ -97,7 +97,7 @@ useEffect(() => {
                 width: "100px",
                 left: "15px",
               }}
-              src="/assets/iotfood.png"
+              src="/assets/tlufood.png"
             />
           ) : (
             <img
@@ -108,7 +108,7 @@ useEffect(() => {
                 transform:"translateX(-50%)",
                 left: "50%",
               }}
-              src="/assets/iotfood_b.png"
+              src="/assets/tlufood_b.png"
             />
           )}
           {width > 900 && (

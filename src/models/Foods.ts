@@ -8,16 +8,15 @@ export interface TypeFoodsData {
 
 export interface RestaurantData {
   id: number
-  detail: number
-  price: number
-  star: number
-  quantity: number
-  timeout: number
-  typeFoodEntityId: number
-  quantityPurchased: number
   restaurantName: string
-  imgRes: string
+  quantitySold: number
+  timeStart:string
+  timeClose:string
   distance: number
+  imgRes: string
+  time: null
+  detail: string
+  star:number
 }
 export interface  StoreDetailData  {
   id: number
