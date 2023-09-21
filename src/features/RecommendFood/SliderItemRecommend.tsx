@@ -14,6 +14,7 @@ const SliderItemRecommend = (props: foodData) => {
     detail,
     nameRestaurantFood,
     imgFood,
+    distance,
     createBy,
     createAt,
     quantityPurchased,
@@ -33,6 +34,7 @@ const SliderItemRecommend = (props: foodData) => {
       idStore: restaurantEntityId,
       nameStore: nameRestaurantFood,
       imgFood,
+      distance:distance
     }
     enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
     dispatch(cartActions.addToCart(data))
@@ -90,12 +92,6 @@ const SliderItemRecommend = (props: foodData) => {
             className="flex mt-1 justify-between items-center"
           >
             <span>Đã bán: {quantityPurchased ||0}</span>
-            <div>
-              <VoucherIcon />
-              <span className="ml-1">
-                {Math.floor(Math.random() * (5 - 2 + 1)) + 2} Ưu đãi
-              </span>
-            </div>
           </Box>
         </Box>
       </Box>

@@ -1,21 +1,29 @@
 import { CartItemData } from "@/models"
+import { handlePriceShip } from "@/utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface iDataStore {
   items: CartItemData[]
   name: string
+  distance:number,
+  shipFee?:number,
+  amount?:number,
   id: number
 }
 export interface CardState {
-  totalPrice: number
+  totalPrice?: number | undefined
+  totalAmount?:number | undefined
+  totalShip?:number | undefined
   open: boolean
   lengthFood: number
   dataStore: iDataStore[] | []
   timeDeliver: "10:00 AM" | "11:15 AM" | "12:15 AM"
 }
 const initialState: CardState = {
-  totalPrice: 0,
+  totalPrice: undefined,
   open: false,
+  totalShip:undefined,
+  totalAmount:undefined,
   lengthFood: 0,
   dataStore: [],
   timeDeliver: "11:15 AM",
@@ -37,9 +45,20 @@ const cartSlice = createSlice({
     ) {
       state.timeDeliver = action.payload
     },
-
+    setTotalShip(state,action:PayloadAction<number>){
+      state.totalShip=action.payload
+    },
+    setTotalAmount(state,action:PayloadAction<number>){
+      state.totalAmount=action.payload
+    },
+    setShipFee(state,action:PayloadAction<{id:number,shipFee:number}>){
+      state.dataStore[state.dataStore.findIndex((data:iDataStore)=>data.id===action.payload.id)].shipFee=action.payload.shipFee
+    },
+     setAmount(state,action:PayloadAction<{id:number,amount:number}>){
+      state.dataStore[state.dataStore.findIndex((data:iDataStore)=>data.id===action.payload.id)].amount=action.payload.amount
+    },
     addToCart(state, action: PayloadAction<CartItemData>) {
-      const { idFood, name, quantity, type, nameStore, idStore } =
+      const { idFood, name, quantity, type, nameStore, idStore,distance } =
         action.payload
       if (state.dataStore.length) {
         const existingStore = state.dataStore.find(
@@ -64,7 +83,6 @@ const cartSlice = createSlice({
                 })
             } else {
               state.lengthFood += 1
-
               state.dataStore
                 .find((item) => item.name === nameStore && item.id === idStore)
                 ?.items.map((food) =>
@@ -84,6 +102,7 @@ const cartSlice = createSlice({
             {
               id: idStore,
               name: nameStore,
+              distance:distance,
               items: [action.payload],
             },
           ]
@@ -94,6 +113,7 @@ const cartSlice = createSlice({
           {
             id: idStore,
             name: nameStore,
+            distance:distance,
             items: [action.payload],
           },
         ]

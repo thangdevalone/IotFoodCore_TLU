@@ -6,9 +6,11 @@ export interface propsData {}
 
 export function Store(props: propsData) {
   return (
-    <Box className="tx-df-sz">
+    <Box>
       <Header sx={{ backgroundColor: "white" }} isWhiteLogo={false} />
-      <Outlet />
+      <div className="mt-[80px] "  style={{ backgroundColor: "rgb(240, 242, 245)",minHeight:"calc(100vh - 80px)" }}>
+        <Outlet />
+      </div>
     </Box>
   )
 }

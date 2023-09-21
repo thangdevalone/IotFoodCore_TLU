@@ -27,7 +27,7 @@ export interface ProductItem {
   detail: string | null
   nameRestaurantFood: string
   imgFood: string
-  distance: string | null
+  distance: number | null
   time: number
   star: number
   quantity: number

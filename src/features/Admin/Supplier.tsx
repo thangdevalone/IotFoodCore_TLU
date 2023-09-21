@@ -170,7 +170,7 @@ export function Supplier() {
               Tạo
             </Button>
             <Typography sx={{ fontSize: "18px", fontWeight: 500, mr: "10px" }}>
-              Nhà cung cấp
+              Nhà cung cấp  
             </Typography>
             <IconButton
               ref={settingRef}

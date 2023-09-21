@@ -114,7 +114,7 @@ export function RecommendFood(props: RecommendFoodProps) {
           transition: "all 0.2s",
           "&:hover": {
             border: "1px solid var(--color-df-1)",
-            background: "rgb(241, 245, 249)",
+            background: "white",
             color: "var(--color-df-1)",
           },
         }}

@@ -28,7 +28,7 @@ export function Footer(props: FooterProps) {
       <div className="container-base base-pd">
         <Grid sx={{ mb: 4 }} container spacing={2}>
           <Grid item xs={3}>
-            <img src="/assets/iotfood.png" style={{ width: "200px" }} />
+            <img src="/assets/tlufood.png" style={{ width: "200px" }} />
           </Grid>
           <Grid item xs={3}>
             <Box
@@ -48,7 +48,7 @@ export function Footer(props: FooterProps) {
                   }}
                 >
                   <Link to={"https://github.com/thangdevalone"} target="_blank">
-                    thangdevalone (lead)
+                    thangdevalone (PM,FE)
                   </Link>
                 </Typography>
                 <Typography
@@ -58,9 +58,20 @@ export function Footer(props: FooterProps) {
                   }}
                 >
                   <Link to={"https://github.com/haidaqn"} target="_blank">
-                    haidaqn
+                    haidaqn (FE)
                   </Link>
                 </Typography>
+                <Typography
+                  sx={{
+                    "&:hover": { textDecoration: "underline" },
+                    width: "fit-content",
+                  }}
+                >
+                  <Link to={"https://github.com/vietcoi2k3"} target="_blank">
+                    vietcoi2k3 (BE)
+                  </Link>
+                </Typography>
+               
               </Stack>
             </Box>
           </Grid>

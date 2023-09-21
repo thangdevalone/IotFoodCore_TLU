@@ -91,12 +91,12 @@ export function Header(props: HeaderProps) {
             <img
               src={
                 !isWhiteLogo
-                  ? "/assets/iotfood_b.png"
+                  ? "/assets/tlufood_b.png"
                   : mobile && setterBg
-                  ? "/assets/iotfood.png"
+                  ? "/assets/tlufood.png"
                   : mobile
-                  ? "/assets/iotfood_b.png"
-                  : "/assets/iotfood.png"
+                  ? "/assets/tlufood_b.png"
+                  : "/assets/tlufood.png"
               }
               style={{ width: `${width <= 500 ? "100px" : "130px"}` }}
               alt="logo"
@@ -297,6 +297,7 @@ export function Header(props: HeaderProps) {
               <Link to={"/login"}>
                 <CustomButton
                   sx={{
+                    lineHeight:"1.85",
                     padding: "10px 15px",
                     fontSize: `${width <= 500 ? "10px" : "13px"}`,
                     height: "100%",

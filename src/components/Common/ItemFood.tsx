@@ -13,12 +13,13 @@ interface propsData {
   price: number
   imgFood: string
   idStore: number
-  detail: string
+  detail: string | null
   qSold: number
+  distance:number 
   typeFoodEntityId: number
 }
 
-const ItemRecommend = (props: propsData) => {
+const ItemFood = (props: propsData) => {
   const {
     idFood,
     nameStore,
@@ -27,6 +28,7 @@ const ItemRecommend = (props: propsData) => {
     imgFood,
     qSold,
     idStore,
+    distance,
     detail,
     typeFoodEntityId,
   } = props
@@ -41,8 +43,10 @@ const ItemRecommend = (props: propsData) => {
       price,
       quantity: 1,
       idStore,
+      distance:distance,
       nameStore,
       imgFood,
+
     }
     enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
     dispatch(cartActions.addToCart(data))
@@ -51,7 +55,7 @@ const ItemRecommend = (props: propsData) => {
   return (
     <Tooltip title="Bấm để thêm vào giỏ hàng">
       <Box
-        className={`w-full h-full rounded-md my-3 relative cursor-pointer ${
+        className={`w-full p-4 bg-white  rounded-md relative cursor-pointer ${
           width < 500 && "flex gap-2"
         }`}
         sx={{
@@ -61,7 +65,7 @@ const ItemRecommend = (props: propsData) => {
         }}
         onClick={handleAddToCart}
       >
-        <Box className=" min-w-[140px] min-h-[100px]">
+        <Box className=" min-w-[100px] min-h-[100px]">
           <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
             <Box
               className={`img-res`}
@@ -71,7 +75,7 @@ const ItemRecommend = (props: propsData) => {
                 backgroundSize: "cover",
                 width: "100%",
                 height: width < 500 ? "100%" : "18vh",
-                backgroundImage: `url(${imgFood})`,
+                backgroundImage: `url(${imgFood || "/assets/no_img.jpg"})`,
               }}
             ></Box>
           </Box>
@@ -81,23 +85,17 @@ const ItemRecommend = (props: propsData) => {
             width < 500 ? "justify-between mt-[0px] pl-1" : "mt-[8px]"
           }`}
         >
-          <span
+          <p
             className={`capitalize ${
               width < 500
                 ? width < 350
-                  ? "text-base font-medium"
+                  ? "text-base font-medium line-clamp-2"
                   : " text-lg font-medium"
                 : "text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold"
             }`}
-            style={{
-              overflow: "hidden",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2, // Số dòng tối đa
-            }}
           >
             {foodName}
-          </span>
+          </p>
           {width < 500 ? (
             <>
               <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-[14px]">
@@ -120,7 +118,7 @@ const ItemRecommend = (props: propsData) => {
                     width < 500 ? "font-semibold" : "text-gray-400"
                   }`}
                 >
-                  {handlePrice(price)} VND
+                  {handlePrice(price)} ₫
                 </span>
                 <Box className="cursor-pointer hover:opacity-90">
                   <AddCircleIcon
@@ -157,12 +155,14 @@ const ItemRecommend = (props: propsData) => {
                 className="flex mt-1 justify-between items-center"
               >
                 <span>Đã bán: {qSold}</span>
-                <div>
-                  <VoucherIcon />
-                  <span className="ml-1">
-                    {Math.floor(Math.random() * (5 - 2 + 1)) + 2} Ưu đãi
-                  </span>
-                </div>
+                <Box className="cursor-pointer hover:opacity-90">
+                  <AddCircleIcon
+                    style={{
+                      color: "var(--color-df-1)",
+                      fontSize: `${width < 350 ? "24px" : "28px"}`,
+                    }}
+                  />
+                </Box>
               </Box>
             </>
           )}
@@ -172,4 +172,4 @@ const ItemRecommend = (props: propsData) => {
   )
 }
 
-export default ItemRecommend
+export default ItemFood

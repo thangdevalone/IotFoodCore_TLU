@@ -1,7 +1,7 @@
 {
   "name": "iot-food",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,6 +25,7 @@
     "@zxing/library": "^0.20.0",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
+    "dotenv-expand": "^10.0.0",
     "emoji-picker-react": "^4.4.10",
     "material-react-table": "^1.14.0",
     "notistack": "^3.0.1",
