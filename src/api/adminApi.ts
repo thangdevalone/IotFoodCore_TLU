@@ -1,4 +1,4 @@
-import { ExpandFood } from './../models/Topping';
+import { ExpandFood } from "./../models/Topping"
 import { PageConfig } from "./../models/Config"
 import axiosClient from "./axiosClient"
 const adminApi = {
@@ -24,9 +24,9 @@ const adminApi = {
     const url = `ADMIN/paging-res?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
-  addTopping(data:ExpandFood){
-    const url="ADMIN/add-topping"
-    return axiosClient.post(url,data)
+  addTopping(data: ExpandFood) {
+    const url = "ADMIN/add-topping"
+    return axiosClient.post(url, data)
   },
   addRestaurant(
     restaurantName: string,
@@ -61,7 +61,6 @@ const adminApi = {
     imgFood: File,
     typeFoodEntityId: number,
     restaurantEntityId: number,
-    
   ) {
     const data = new FormData()
     data.append("foodName", name)
@@ -70,7 +69,7 @@ const adminApi = {
     data.append("imgFood", imgFood)
     data.append("typeFoodEntityId", typeFoodEntityId.toString())
     data.append("restaurantEntityId", restaurantEntityId.toString())
-    
+
     const url = "ADMIN/add-food"
     return axiosClient.post(url, data, {
       headers: {
@@ -94,7 +93,6 @@ const adminApi = {
       imgUser: imgUser,
     })
   },
-
   addType(imgType: File, nameType: string) {
     const data = new FormData()
     data.append("imgType", imgType)
@@ -150,6 +148,32 @@ const adminApi = {
       },
     })
   },
+  updateProduct(
+    id: number,
+    foodName: string,
+    price: number,
+    detail: string,
+    imgFood: File | null,
+    typeFoodEntityId: number,
+    restaurantEntityId: number,
+  ) {
+    const data = new FormData()
+    data.append("id", String(id))
+    data.append("foodName", foodName)
+    data.append("price", String(price))
+    data.append("detail", detail)
+    if (imgFood !== null) {
+      data.append("imgFood", imgFood)
+    }
+    data.append("typeFoodEntityId", String(typeFoodEntityId))
+    data.append("restaurantEntityId", String(restaurantEntityId))
+    const url = "ADMIN/update-food"
+    return axiosClient.put(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  },
   deleteFood(foodArray: Array<number>) {
     const url = "ADMIN/delete-food"
     return axiosClient.post(url, foodArray)
@@ -163,7 +187,11 @@ const adminApi = {
     return axiosClient.post(url, storeArray)
   },
   getPagingEmployee(page: PageConfig) {
-    const url = `ADMIN/paging-employee?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
+    const url = `ADMIN/MANAGER/paging-employee?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
+    return axiosClient.post(url)
+  },
+  getPagingUser(page: PageConfig) {
+    const url = `ADMIN/paging-user?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
 }

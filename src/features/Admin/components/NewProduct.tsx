@@ -47,7 +47,7 @@ function NewProduct(props: NewProductProps) {
   const [detail, setDetail] = React.useState<string>("")
 
   const { enqueueSnackbar } = useSnackbar()
-  
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue)
   }
@@ -95,7 +95,6 @@ function NewProduct(props: NewProductProps) {
             file,
             Number(typePick?.id),
             Number(resPick?.id),
-          
           )
           setLoadding(false)
           enqueueSnackbar("Thêm mới sản phẩm thành công", {
@@ -108,7 +107,6 @@ function NewProduct(props: NewProductProps) {
           setFile(null)
           setTypePick(null)
           setResPick(null)
-          
         } else {
           setLoadding(false)
           enqueueSnackbar("Bắt buộc phải có ảnh", { variant: "error" })
@@ -366,7 +364,6 @@ function NewProduct(props: NewProductProps) {
                       </Box>
                     )}
                   </div>
-            
                 </div>
               </div>
             </Box>

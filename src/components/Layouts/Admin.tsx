@@ -5,6 +5,7 @@ import { HeaderAdmin } from "../Common/HeaderAdmin"
 import { Product, Quote, Supplier } from "@/features/Admin"
 import { ToolbarAdmin } from "../Common"
 import { Employee } from "@/features/Admin/Employee"
+import { Customer } from "@/features/Admin/Customer"
 import NewProduct from "@/features/Admin/components/NewProduct"
 import NewEmployee from "@/features/Admin/components/NewEmployee"
 import NewType from "@/features/Admin/components/NewType"
@@ -14,6 +15,8 @@ import NewStore from "@/features/Admin/components/NewSupplier"
 import UpdateSupplier from "@/features/Admin/components/UpdateSupplier"
 import UpdateType from "@/features/Admin/components/UpdateType"
 import NewTopping from "@/features/Admin/components/NewTopping"
+import UpdateProduct from "@/features/Admin/components/UpdateProduct"
+import UpdateCustomer from "@/features/Admin/components/UpdateCustomer"
 
 const WelComeAdmin = () => {
   return (
@@ -74,7 +77,9 @@ const FormUpdate = () => {
       case "type":
         return <UpdateType id={id} />
       case "product":
-        return <UpdateType id={id} />
+        return <UpdateProduct id={id} />
+      case "customer":
+        return <UpdateCustomer id={id} />
       default:
         return null
     }
@@ -97,10 +102,11 @@ export default function Admin() {
           <Route path="/" element={<WelComeAdmin />} />
           <Route path="/quote" element={<Quote />} />
           <Route path="/employee" element={<Employee />} />
+          <Route path="/customer" element={<Customer />} />
           <Route path="/product" element={<Product />} />
           <Route path="/type" element={<TypeProduct />} />
           <Route path="/supplier" element={<Supplier />} />
-          <Route path="/expand-food" element={<NewTopping/>} />
+          <Route path="/expand-food" element={<NewTopping />} />
           <Route path="/new" element={<FormRouter />} />
           <Route path="/update" element={<FormUpdate />} />
         </Routes>

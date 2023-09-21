@@ -26,7 +26,7 @@ export function Product() {
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
   const [rowCount, setRowCount] = useState(0)
-  const {enqueueSnackbar} = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
   //table state
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState("")
@@ -35,7 +35,7 @@ export function Product() {
     pageIndex: 0,
     pageSize: 10,
   })
-  const [isDel,setIsDel]=useState(false)  
+  const [isDel, setIsDel] = useState(false)
   const [open, setOpen] = useState(false)
   const settingRef = useRef<HTMLButtonElement>(null)
 
@@ -43,20 +43,20 @@ export function Product() {
     setOpen((prevOpen) => !prevOpen)
   }
   const handleSelectRows = (row: any) => {
-    console.log(row);
-    const idData=row.map((item:any)=>item.original.id);
-    (async ()=>{
+    console.log(row)
+    const idData = row.map((item: any) => item.original.id)
+    ;(async () => {
       try {
         await adminApi.deleteFood(idData)
-        enqueueSnackbar("Xóa thành công",{variant:"success"})
-        setIsDel((item)=>!item)
+        enqueueSnackbar("Xóa thành công", { variant: "success" })
+        setIsDel((item) => !item)
       } catch (error) {
-        enqueueSnackbar("Có lỗi xảy ra thử lại sau",{variant:"error"})
+        enqueueSnackbar("Có lỗi xảy ra thử lại sau", { variant: "error" })
         console.log(error)
       }
     })()
   }
-  
+
   useEffect(() => {
     const fetchData = async () => {
       if (!products.length) {
@@ -98,7 +98,7 @@ export function Product() {
     pagination.pageSize,
     sorting,
   ])
-  
+
   const columns = useMemo<MRT_ColumnDef<ProductItem>[]>(
     () => [
       { accessorKey: "id", header: "ID" },
@@ -129,7 +129,8 @@ export function Product() {
         manualFiltering
         manualPagination
         muiTableBodyRowProps={({ row }) => ({
-          onClick: () => console.log(row),
+          onClick: () =>
+            navigate(`/admin/update?form=product/${row.original.id}`),
           sx: { cursor: "pointer" },
         })}
         manualSorting
