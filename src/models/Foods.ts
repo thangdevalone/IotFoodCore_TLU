@@ -1,3 +1,5 @@
+import { ProductItem } from "."
+
 export interface TypeFoodsData {
   id: number
   nameType: string
@@ -22,35 +24,36 @@ export interface  StoreDetailData  {
   createDate: string
   status: boolean
   restaurantName: string
-  address: string
   quantitySold: any
   distance: number
   star: number
   timeStart: string
   timeClose: string
   detail: string
-  phoneNumber: string
   imgRes: string
-  time: any
   toppingEntityList: ToppingEntityList[]
-  foodEntities: any[]
+  foodRecommendDtos: ProductItem[]
 }
 
 export interface ToppingEntityList {
   id: number
-  createDate: string
+  itemList: ItemToppingEntity[]
   status: boolean
   title: string
-  items: string
   requi: boolean
   restaurantEntityId: number
 }
 
+export interface ItemToppingEntity{
+  name:string
+  price:number
+}
 export interface foodData {
   id: number
   foodName: string
   price: number
   detail: string
+  distance:number
   nameRestaurantFood: string
   imgFood: string
   createBy?: string
@@ -67,6 +70,7 @@ export interface CartItemData {
   price: number
   quantity: number
   idStore: number
+  distance:number
   nameStore: string
   type?: boolean
   imgFood: string

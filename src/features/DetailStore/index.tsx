@@ -3,12 +3,11 @@ import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
 import { VoucherIcon } from "@/components/Icon"
 import { useWindowDimensions } from "@/hooks"
 import { StoreDetailData } from "@/models"
-import { BorderColor } from "@mui/icons-material"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
-import { Box, Stack, Typography } from "@mui/material"
+import { Box, Grid, Stack, Typography } from "@mui/material"
 import * as React from "react"
 import { useParams } from "react-router-dom"
+import ItemFood from "../../components/Common/ItemFood"
 
 export interface DetailProps {}
 
@@ -37,11 +36,13 @@ const DetailStore = (props: DetailProps) => {
     <>
       {data ? (
         <>
-          <Box className="mt-[70px] py-5 border-b-[1px] border-slate-400">
-            <Box className="container-base base-pd">
+          <Box className="mt-[70px] bg-white pt-5 pb-10 border-b-[1px] border-slate-400">
+            <Box className="container-base  base-pd">
               <BreadcrumbsCommon items={breadcrumbItems} />
               <Stack direction="row" spacing={2}>
-                <Box sx={{ flex: 2 ,maxWidth:width>1000?"none":"600px"}}>
+                <Box
+                  sx={{ flex: 2, maxWidth: width > 1000 ? "none" : "600px" }}
+                >
                   <Typography variant="h4" sx={{ fontWeight: 500, mb: 1 }}>
                     {data.restaurantName}
                   </Typography>
@@ -95,10 +96,15 @@ const DetailStore = (props: DetailProps) => {
                   <p>Đã bán: 0</p>
                 </Box>
                 {width > 1000 && (
-                  <Box sx={{ flex: 1,display:"flex",justifyContent:"flex-end" }}>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
                     <img
                       src={data.imgRes}
-
                       className="h-[100%] w-auto max-h-[250px] max-w-[350px] object-cover rounded-lg "
                       alt=""
                     />
@@ -108,10 +114,29 @@ const DetailStore = (props: DetailProps) => {
             </Box>
           </Box>
           <Box
-            className="h-[500px]"
+            className="h-[auto] py-10"
             sx={{ backgroundColor: " rgb(240, 242, 245)" }}
           >
-            <Box className="container-base base-pd"></Box>
+            <Box className="container-base base-pd ">
+              <Grid container spacing={{ xs: 2, sm: 2, md:3,lg:3 }}>
+                {data.foodRecommendDtos.map((item) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
+                    <ItemFood
+                      idFood={item.id}
+                      detail={item.detail}
+                      imgFood={item.imgFood}
+                      foodName={item.foodName}
+                      price={item.price}
+                      distance={item.distance || 0}
+                      qSold={item.quantityPurchased || 0}
+                      nameStore={item.nameRestaurantFood}
+                      idStore={item.restaurantEntityId}
+                      typeFoodEntityId={item.typeFoodEntityId}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
           </Box>
         </>
       ) : (

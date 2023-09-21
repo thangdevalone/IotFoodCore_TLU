@@ -13,12 +13,13 @@ interface propsData {
   price: number
   imgFood: string
   idStore: number
-  detail: string
+  detail: string | null
   qSold: number
+  distance:number 
   typeFoodEntityId: number
 }
 
-const ItemRecommend = (props: propsData) => {
+const ItemFood = (props: propsData) => {
   const {
     idFood,
     nameStore,
@@ -27,6 +28,7 @@ const ItemRecommend = (props: propsData) => {
     imgFood,
     qSold,
     idStore,
+    distance,
     detail,
     typeFoodEntityId,
   } = props
@@ -41,8 +43,10 @@ const ItemRecommend = (props: propsData) => {
       price,
       quantity: 1,
       idStore,
+      distance:distance,
       nameStore,
       imgFood,
+
     }
     enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
     dispatch(cartActions.addToCart(data))
@@ -51,7 +55,7 @@ const ItemRecommend = (props: propsData) => {
   return (
     <Tooltip title="Bấm để thêm vào giỏ hàng">
       <Box
-        className={`w-full h-full rounded-md my-3 relative cursor-pointer ${
+        className={`w-full p-4 bg-white  rounded-md relative cursor-pointer ${
           width < 500 && "flex gap-2"
         }`}
         sx={{
@@ -157,12 +161,14 @@ const ItemRecommend = (props: propsData) => {
                 className="flex mt-1 justify-between items-center"
               >
                 <span>Đã bán: {qSold}</span>
-                <div>
-                  <VoucherIcon />
-                  <span className="ml-1">
-                    {Math.floor(Math.random() * (5 - 2 + 1)) + 2} Ưu đãi
-                  </span>
-                </div>
+                <Box className="cursor-pointer hover:opacity-90">
+                  <AddCircleIcon
+                    style={{
+                      color: "var(--color-df-1)",
+                      fontSize: `${width < 350 ? "24px" : "28px"}`,
+                    }}
+                  />
+                </Box>
               </Box>
             </>
           )}
@@ -172,4 +178,4 @@ const ItemRecommend = (props: propsData) => {
   )
 }
 
-export default ItemRecommend
+export default ItemFood

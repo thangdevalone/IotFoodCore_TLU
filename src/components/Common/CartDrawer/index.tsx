@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { useInforUser, useWindowDimensions } from "@/hooks"
-import { handlePrice } from "@/utils"
+import { handlePrice, handlePriceShip } from "@/utils"
 import { ArrowBackIosNew } from "@mui/icons-material"
 import * as React from "react"
 import { cartActions, iDataStore } from "./CartSlice"
@@ -132,11 +132,16 @@ export function CartDrawer(props: CardDrawerProps) {
                       >
                         <Stack direction="column" >
                           <span>Tổng</span>
-                          {user?<p>Phí vận chuyển:</p>:<p>
+                          {user?<p>Phí vận chuyển</p>:<p>
                             Phí vận chuyển sẽ được hiển thị khi bạn đăng nhập
                           </p>}
                         </Stack>
-                        <span> {handlePrice(price)} ₫</span>
+                        <Stack direction="column">
+                        <span className="text-end">{handlePrice(price)} ₫</span>
+                        <span className="text-end">{handlePrice(handlePriceShip(data.distance,data.items.reduce((sum:number,item:CartItemData)=>sum+=item.quantity,0)))} ₫</span>
+                        <div className="border border-gray-400 my-[2px]"></div>
+                        <span className="text-end font-semibold">{handlePrice(handlePriceShip(data.distance,data.items.reduce((sum:number,item:CartItemData)=>sum+=item.quantity,0))+price)} ₫</span>
+                        </Stack>
                       </Stack>
                     </div>
                   ))}

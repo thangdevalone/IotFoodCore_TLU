@@ -1,4 +1,4 @@
 export type PageConfig={
-  pageSize:number,
+  pageSize:number
   pageIndex:number
 }

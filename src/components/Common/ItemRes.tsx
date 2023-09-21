@@ -13,11 +13,10 @@ interface propsData {
   time?: number
   distance?: string
   imgFood: string
-  width: number
   idStore: number
 }
 
-const ItemRecommend = (props: propsData) => {
+const ItemRes = (props: propsData) => {
   const {
     idFood,
     nameStore,
@@ -103,4 +102,4 @@ const ItemRecommend = (props: propsData) => {
   )
 }
 
-export default ItemRecommend
+export default ItemRes

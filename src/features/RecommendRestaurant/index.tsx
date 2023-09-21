@@ -1,14 +1,14 @@
-import { Swiper, SwiperSlide } from "swiper/react"
-import "swiper/css"
-import { Box, IconButton, Stack } from "@mui/material"
-import { ChevronLeft, ChevronRight } from "@mui/icons-material"
-import * as React from "react"
 import foodsApis from "@/api/foodsApi"
-import { useWindowDimensions } from "@/hooks"
-import ItemRecommend from "./ItemRecommend"
 import { CustomButton } from "@/components/Custom/CustomButon"
+import { useWindowDimensions } from "@/hooks"
 import { RestaurantData } from "@/models/Foods"
+import { ChevronLeft, ChevronRight } from "@mui/icons-material"
+import { Box, IconButton, Stack } from "@mui/material"
+import * as React from "react"
 import { useNavigate } from "react-router-dom"
+import "swiper/css"
+import { Swiper, SwiperSlide } from "swiper/react"
+import ItemRes from "../../components/Common/ItemRes"
 
 export interface RecommendRestaurantProps {}
 
@@ -83,9 +83,9 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
         >
           {data?.map((item, index) => (
             <SwiperSlide key={index + item?.id}>
-              <ItemRecommend
+              <ItemRes
                 idFood={item.id}
-                width={width}
+               
                 imgFood={item.imgRes}
                 nameStore={item.restaurantName}
                 distance={String(item.distance)}

@@ -3,8 +3,6 @@ import { FoodRoot, foodData } from "@/models"
 import { Box, Grid } from "@mui/material"
 import * as React from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import "swiper/css"
-import ItemRecommend from "./ItemRecommend"
 
 export interface RecommendFoodProps {}
 
@@ -73,17 +71,18 @@ export function PagingFood(props: RecommendFoodProps) {
         >
           {data?.map((item: foodData) => (
             <Grid item xs={12} sm={6} md={3} key={item.id}>
-              <ItemRecommend
+              {/* <ItemRecommend
                 idFood={item.id}
                 detail={item.detail}
                 imgFood={item.imgFood}
                 foodName={item.foodName}
                 price={item.price}
+                distance={item.distance}
                 qSold={item.quantityPurchased || 0}
                 nameStore={item.nameRestaurantFood}
                 idStore={item.restaurantEntityId}
                 typeFoodEntityId={item.typeFoodEntityId}
-              />
+              /> */}
             </Grid>
           ))}
         </InfiniteScroll>

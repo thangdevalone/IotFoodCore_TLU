@@ -19,7 +19,7 @@ export function Home(props: HomeProps) {
   }, [])
 
   return (
-    <Box className="relative tx-df-sz">
+    <Box className="relative">
       <Header/>
       {width > 750 && <Banner />}
       <section className="container-base search-food">
