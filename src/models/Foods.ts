@@ -31,7 +31,7 @@ export interface  StoreDetailData  {
   detail: string
   imgRes: string
   toppingEntityList: ToppingEntityList[]
-  foodRecommendDtos: ProductItem[]
+  foodRecommendDtos: foodData[]
 }
 
 export interface ToppingEntityList {
@@ -52,15 +52,17 @@ export interface foodData {
   foodName: string
   price: number
   detail: string
-  distance:number
   nameRestaurantFood: string
   imgFood: string
-  createBy?: string
-  createAt?: Date
-  quantityPurchased: number
+  createBy: string
+  createAt: string
+  quantityPurchased: any
   typeFoodEntityId: number
   restaurantEntityId: number
-  status: boolean | null
+  status: boolean
+  distance: number
+  toppingEntityList: ToppingEntityList[]
+  nameType: string
 }
 
 export interface CartItemData {

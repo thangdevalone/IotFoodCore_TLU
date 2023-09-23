@@ -13,7 +13,7 @@ interface propsData {
   detail:string
 }
 
-const ItemRes = (props: propsData) => {
+export const ItemRes = (props: propsData) => {
   const {
     nameRes,
     imgRes,
@@ -30,24 +30,36 @@ const ItemRes = (props: propsData) => {
   }
   return (
     <Box
-    sx={{transition:"all 0.3s"}}
+    sx={{
+      "&:hover .img-res": {
+        transform: "scale(1.05)",
+      },
+    }}
       className="w-[100%]  box-border    cursor-pointer"
       onClick={() => handleRouter(idRes)}
     >
-      <Box
-        className="w-[100%] h-[23vh] rounded-md object-cover"
-        sx={{
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundImage: `url(${imgRes})`,
-        }}
-      ></Box>
+      <Box className=" w-[100%] h-[23vh]">
+          <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
+            <Box
+              className={`img-res`}
+              sx={{
+                
+                transition: "all 0.3s",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                width: "100%",
+                height: "100%",
+                backgroundImage: `url(${imgRes || "/assets/no_img.jpg"})`,
+              }}
+            ></Box>
+          </Box>
+        </Box>
       <Stack className="mt-[8px]">
         <span className="text-lg font-semibold capitalize whitespace-nowrap overflow-hidden overflow-ellipsis">
           {nameRes}
         </span>
         <p className="text-sm text-slate-400 whitespace-nowrap overflow-hidden overflow-ellipsis">
-          {detail}
+          {detail || " "}
         </p>
         <Box className="flex gap-10 items-center mt-1 ">
           <Box className="flex gap-2">
@@ -87,4 +99,4 @@ const ItemRes = (props: propsData) => {
   )
 }
 
-export default ItemRes
+

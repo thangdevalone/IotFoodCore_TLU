@@ -4,7 +4,7 @@ import { RestaurantData } from "@/models"
 import { Box, Grid } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
-import ItemRes from "@/components/Common/ItemRes"
+import { ItemRes } from "@/components/Common"
 
 export interface propsData {}
 

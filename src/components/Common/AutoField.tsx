@@ -45,6 +45,7 @@ export function AutoField(props: AutoFieldProps) {
       onChange={(event: React.SyntheticEvent, newValue: searchRoot | null) => {
         setValue(newValue)
       }}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       loading={loading}
       renderInput={(params) => (
         <TextField

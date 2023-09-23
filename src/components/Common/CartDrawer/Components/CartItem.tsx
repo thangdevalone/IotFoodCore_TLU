@@ -19,6 +19,7 @@ const CartItem = (props: propsData) => {
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
   const handleAdd = () => {
+    if(quantity>=15) return
     setQuantity((prev) => +prev + 1)
     dispatch(cartActions.addToCart(item))
   }
@@ -34,6 +35,9 @@ const CartItem = (props: propsData) => {
   }
 
   const handleOnChangeInput = (value: number) => {
+    if(quantity>15){
+      setQuantity(15)
+    }
     setQuantity(value)
   }
   React.useEffect(()=>{
@@ -42,7 +46,10 @@ const CartItem = (props: propsData) => {
     }
   },[quantity])
   const handleSetQuantity = (value: number) => {
-
+    if(quantity>15){
+      setQuantity(15)
+      return
+    }
     if (value === 0) {
       dispatch(cartActions.removerCart(item))
     } else {
@@ -74,7 +81,6 @@ const CartItem = (props: propsData) => {
             </Box>
             <input
               type="number"
-              
               onBlur={(e) => handleSetQuantity(+e.target.value)}
               onChange={(e) => handleOnChangeInput(+e.target.value)}
               value={quantity}

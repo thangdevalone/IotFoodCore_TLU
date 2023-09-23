@@ -1,4 +1,5 @@
 import foodsApis from "@/api/foodsApi"
+import { ItemRes } from "@/components/Common"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { useWindowDimensions } from "@/hooks"
 import { RestaurantData } from "@/models/Foods"
@@ -8,7 +9,7 @@ import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import "swiper/css"
 import { Swiper, SwiperSlide } from "swiper/react"
-import ItemRes from "../../components/Common/ItemRes"
+
 
 export interface RecommendRestaurantProps {}
 

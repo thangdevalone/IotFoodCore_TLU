@@ -16,6 +16,7 @@ import { cartActions, iDataStore } from "./CartSlice"
 import CartList from "./Components/CartList"
 import "./style_drawer.css"
 import { CartItemData, Order } from "@/models"
+import { ToppingAccord } from ".."
 
 export interface CardDrawerProps {}
 
@@ -33,7 +34,6 @@ export function CartDrawer(props: CardDrawerProps) {
   }
   React.useEffect(() => {
     if (!dataStore) return
-    const itemFoods: CartItemData[] = []
     let sum = 0
     let ship=0
     dataStore?.forEach((store) => {
@@ -50,9 +50,8 @@ export function CartDrawer(props: CardDrawerProps) {
         ),
       )
       ship+=shipFee
-      dispatch(cartActions.setAmount({id:store.id,amount:shipFee}))
-      dispatch(cartActions.setShipFee({id:store.id,shipFee:amount}))
-
+      dispatch(cartActions.setAmount({id:store.id,amount:amount}))
+      dispatch(cartActions.setShipFee({id:store.id,shipFee:shipFee}))
     })
     dispatch(cartActions.setTotalAmount(sum))
     dispatch(cartActions.setTotalShip(ship))
@@ -134,6 +133,7 @@ export function CartDrawer(props: CardDrawerProps) {
                     <div key={data.id}>
                       <div>
                         <div className="font-medium text-xl">{data.name}</div>
+                        {/* <ToppingAccord toppingEntity={}/> */}
                         <CartList items={data.items} />
                       </div>
                       <Stack

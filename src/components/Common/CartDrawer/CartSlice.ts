@@ -1,14 +1,15 @@
-import { CartItemData } from "@/models"
+import { CartItemData, ToppingEntityList } from "@/models"
 import { handlePriceShip } from "@/utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface iDataStore {
   items: CartItemData[]
   name: string
-  distance:number,
-  shipFee?:number,
-  amount?:number,
+  distance:number
+  shipFee?:number
+  amount?:number
   id: number
+  toppingEntityList?: ToppingEntityList[]
 }
 export interface CardState {
   totalPrice?: number | undefined
@@ -56,6 +57,9 @@ const cartSlice = createSlice({
     },
      setAmount(state,action:PayloadAction<{id:number,amount:number}>){
       state.dataStore[state.dataStore.findIndex((data:iDataStore)=>data.id===action.payload.id)].amount=action.payload.amount
+    },
+    setToppingRes(state,action:PayloadAction<{id:number,listTopping:ToppingEntityList[]}>){
+      state.dataStore[state.dataStore.findIndex((data:iDataStore)=>data.id===action.payload.id)].toppingEntityList=action.payload.listTopping
     },
     addToCart(state, action: PayloadAction<CartItemData>) {
       const { idFood, name, quantity, type, nameStore, idStore,distance } =
