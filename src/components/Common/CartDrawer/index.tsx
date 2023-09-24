@@ -15,16 +15,16 @@ import * as React from "react"
 import { cartActions, iDataStore } from "./CartSlice"
 import CartList from "./Components/CartList"
 import "./style_drawer.css"
-import { CartItemData } from "@/models"
+import { CartItemData, Order } from "@/models"
+import { ToppingAccord } from ".."
 
 export interface CardDrawerProps {}
 
 export function CartDrawer(props: CardDrawerProps) {
-  const { open, dataStore, timeDeliver, lengthFood } = useAppSelector(
+  const { open, dataStore, timeDeliver, lengthFood,totalPrice,totalAmount,totalShip } = useAppSelector(
     (state) => state.cart,
   )
   const user = useInforUser()
-  const [price, setPrice] = React.useState<number>(0)
   const iOS =
     typeof navigator !== "undefined" &&
     /iPad|iPhone|iPod/.test(navigator.userAgent)
@@ -32,19 +32,36 @@ export function CartDrawer(props: CardDrawerProps) {
   const toggleDrawer = () => {
     dispatch(cartActions.toggleCart())
   }
-
   React.useEffect(() => {
-    const itemFoods: CartItemData[] = []
-    dataStore?.forEach((store) =>
-      store.items.forEach((item) => itemFoods.push(item)),
-    )
-    const total = itemFoods.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0,
-    )
-    setPrice(total)
-    dispatch(cartActions.setTotalPrice(total))
+    if (!dataStore) return
+    let sum = 0
+    let ship=0
+    dataStore?.forEach((store) => {
+      let amount = 0
+      store.items.forEach((item) => {
+        amount += item.price * item.quantity
+        sum += amount
+      })
+      const shipFee = handlePriceShip(
+        store.distance,
+        store.items.reduce(
+          (sum: number, item: CartItemData) => (sum += item.quantity),
+          0,
+        ),
+      )
+      ship+=shipFee
+      dispatch(cartActions.setAmount({id:store.id,amount:amount}))
+      dispatch(cartActions.setShipFee({id:store.id,shipFee:shipFee}))
+    })
+    dispatch(cartActions.setTotalAmount(sum))
+    dispatch(cartActions.setTotalShip(ship))
+    dispatch(cartActions.setTotalPrice(sum+ship))
+
+
   }, [dataStore])
+  const handleAddOrder = () => {
+    const order: Order | {} = {}
+  }
   const { width } = useWindowDimensions()
   return (
     <div>
@@ -108,7 +125,7 @@ export function CartDrawer(props: CardDrawerProps) {
                     padding: "24px",
                     overflow: "hidden auto",
                     height: "calc(100% - 200px)",
-                    width:"100%"
+                    width: "100%",
                   }}
                   spacing={3}
                 >
@@ -116,6 +133,7 @@ export function CartDrawer(props: CardDrawerProps) {
                     <div key={data.id}>
                       <div>
                         <div className="font-medium text-xl">{data.name}</div>
+                        <ToppingAccord toppingEntity={data.toppingEntityList || []}/>
                         <CartList items={data.items} />
                       </div>
                       <Stack
@@ -124,23 +142,29 @@ export function CartDrawer(props: CardDrawerProps) {
                             fontSize: "13px",
                           },
                           width: "100%",
-                          mt:1
+                          mt: 1,
                         }}
                         justifyContent="space-between"
                         direction="row"
                         spacing={3}
                       >
-                        <Stack direction="column" >
+                        <Stack direction="column">
                           <span>Tổng</span>
-                          {user?<p>Phí vận chuyển</p>:<p>
-                            Phí vận chuyển sẽ được hiển thị khi bạn đăng nhập
-                          </p>}
+                          {user ? (
+                            <p>Phí vận chuyển</p>
+                          ) : (
+                            <p>
+                              Phí vận chuyển sẽ được hiển thị khi bạn đăng nhập
+                            </p>
+                          )}
                         </Stack>
                         <Stack direction="column">
-                        <span className="text-end">{handlePrice(price)} ₫</span>
-                        <span className="text-end">{handlePrice(handlePriceShip(data.distance,data.items.reduce((sum:number,item:CartItemData)=>sum+=item.quantity,0)))} ₫</span>
-                        <div className="border border-gray-400 my-[2px]"></div>
-                        <span className="text-end font-semibold">{handlePrice(handlePriceShip(data.distance,data.items.reduce((sum:number,item:CartItemData)=>sum+=item.quantity,0))+price)} ₫</span>
+                          <span className="text-end">
+                            {handlePrice(data.amount)} ₫
+                          </span>
+                          <span className="text-end">{handlePrice(data.shipFee)} ₫</span>
+                          <div className="border border-gray-400 my-[2px]"></div>
+                          <span className="text-end font-semibold">{handlePrice((data.shipFee ||0)+(data.amount ||0))} ₫</span>
                         </Stack>
                       </Stack>
                     </div>
@@ -185,11 +209,12 @@ export function CartDrawer(props: CardDrawerProps) {
                   </div>
                   <Box className="flex justify-between items-center text-xl mb-3">
                     <span className="">Tổng tiền :</span>
-                    <span className="font-medium">{handlePrice(price)} ₫</span>
+                    <span className="font-medium">{handlePrice(totalPrice)} ₫</span>
                   </Box>
                   <Box className="w-full">
                     <CustomButton
                       fullWidth
+                      onClick={handleAddOrder}
                       sx={{
                         background: "var(--color-df-1)",
                         color: "white",

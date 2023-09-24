@@ -1,4 +1,5 @@
 import foodsApis from "@/api/foodsApi"
+import { ItemFood } from "@/components/Common"
 import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
 import { VoucherIcon } from "@/components/Icon"
 import { useWindowDimensions } from "@/hooks"
@@ -7,7 +8,6 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import { Box, Grid, Stack, Typography } from "@mui/material"
 import * as React from "react"
 import { useParams } from "react-router-dom"
-import ItemFood from "../../components/Common/ItemFood"
 
 export interface DetailProps {}
 
@@ -122,16 +122,18 @@ const DetailStore = (props: DetailProps) => {
                 {data.foodRecommendDtos.map((item) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
                     <ItemFood
-                      idFood={item.id}
-                      detail={item.detail}
-                      imgFood={item.imgFood}
-                      foodName={item.foodName}
-                      price={item.price}
-                      distance={item.distance || 0}
-                      qSold={item.quantityPurchased || 0}
-                      nameStore={item.nameRestaurantFood}
-                      idStore={item.restaurantEntityId}
-                      typeFoodEntityId={item.typeFoodEntityId}
+                       idFood={item.id}
+                       detail={item.detail}
+                       imgFood={item.imgFood}
+                       idRes={item.restaurantEntityId}
+                       toppingList={data.toppingEntityList}
+                       foodName={item.foodName}
+                       price={item.price}
+                       distance={item.distance || 0}
+                       qSold={item.quantityPurchased || 0}
+                       nameStore={item.nameRestaurantFood}
+                       idStore={item.restaurantEntityId}
+                       typeFoodEntityId={item.typeFoodEntityId}
                     />
                   </Grid>
                 ))}

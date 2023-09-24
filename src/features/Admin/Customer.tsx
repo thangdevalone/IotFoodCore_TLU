@@ -1,24 +1,16 @@
 import adminApi from "@/api/adminApi"
 
-import { useEffect, useMemo, useRef, useState } from "react"
-import Switch from "@mui/material/Switch"
 import History from "@/Router/History"
-import { UserItem, ProductRoot, UserRoot } from "@/models"
-import { formatCurrencyVND } from "@/utils"
+import { UserItem, UserRoot } from "@/models"
 import {
   Delete,
-  Settings,
-  Visibility,
-  VisibilityOff,
+  Settings
 } from "@mui/icons-material"
 import {
   Box,
-  Button,
   IconButton,
   Stack,
-  Typography,
-  InputAdornment,
-  Input,
+  Typography
 } from "@mui/material"
 import {
   MaterialReactTable,
@@ -28,6 +20,7 @@ import {
   type MRT_SortingState,
 } from "material-react-table"
 import queryString from "query-string"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
 

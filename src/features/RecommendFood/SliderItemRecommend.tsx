@@ -56,13 +56,12 @@ const SliderItemRecommend = (props: foodData) => {
             <Box
               className={`img-res`}
               sx={{
-                
                 transition: "all 0.3s",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 width: "100%",
                 height: "100%",
-                backgroundImage: `url(${imgFood})`,
+                backgroundImage: `url(${imgFood || "/assets/no_img.jpg"})`,
               }}
             ></Box>
           </Box>

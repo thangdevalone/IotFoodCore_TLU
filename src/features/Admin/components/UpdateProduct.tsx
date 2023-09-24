@@ -83,6 +83,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
       reader.readAsDataURL(selectedImage)
     }
   }
+  console.log(detail)
   const handlePushProduct = () => {
     async function uploadImage() {
       setLoadding(true)
@@ -91,7 +92,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
           await adminApi.updateProduct(
             +id,
             nameFood,
-            +price,
+            parseInt(price.replace(/\D/g, "")),
             detail,
             file,
             Number(typePick?.id),
@@ -101,7 +102,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
           await adminApi.updateProduct(
             +id,
             nameFood,
-            +price,
+            parseInt(price.replace(/\D/g, "")),
             detail,
             null,
             Number(typePick?.id),
@@ -112,14 +113,9 @@ const UpdateProduct = ({ id }: { id: string }) => {
         enqueueSnackbar("Sửa mới sản phẩm thành công", {
           variant: "success",
         })
-        setNameFood("")
-        setDetail("")
-        setPrice("")
-        setImagePreview(null)
-        setFile(null)
-        setTypePick(null)
-        setResPick(null)
+      
       } catch (error) {
+        console.log(error)
         setLoadding(false)
         enqueueSnackbar("Có lỗi xảy ra vui lòng thử lại", { variant: "error" })
       }
@@ -141,7 +137,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
         setDetail(response?.data?.detail)
         setImagePreview(response?.data?.imgFood)
         setNameFood(response?.data?.foodName)
-        setPrice(response?.data?.price)
+        setPrice(handlePrice(response?.data?.price))
         setTypePick({
           id: response?.data?.typeFoodEntityId,
           title: response?.data?.nameType,
@@ -364,7 +360,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
                                   <input
                                     id="name-food-select"
                                     value={price}
-                                    type="string"
+                                    type="text"
                                     autoComplete="off"
                                     onChange={handleChangePrice}
                                     className="block px-0 w-[150px]   border-0 border-b-2 border-gray-200  dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200"

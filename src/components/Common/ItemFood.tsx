@@ -2,6 +2,7 @@ import { useAppDispatch } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
 import { VoucherIcon } from "@/components/Icon/VoucherIcon"
 import { useWindowDimensions } from "@/hooks"
+import { ToppingEntityList } from "@/models"
 import { handlePrice } from "@/utils"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import { Box, Stack, Tooltip, Typography } from "@mui/material"
@@ -15,11 +16,13 @@ interface propsData {
   idStore: number
   detail: string | null
   qSold: number
-  distance:number 
+  toppingList?: ToppingEntityList[]
+  idRes?: number
+  distance: number
   typeFoodEntityId: number
 }
 
-const ItemFood = (props: propsData) => {
+export const ItemFood = (props: propsData) => {
   const {
     idFood,
     nameStore,
@@ -28,9 +31,11 @@ const ItemFood = (props: propsData) => {
     imgFood,
     qSold,
     idStore,
+    toppingList,
     distance,
     detail,
     typeFoodEntityId,
+    idRes,
   } = props
 
   const { width } = useWindowDimensions()
@@ -43,13 +48,16 @@ const ItemFood = (props: propsData) => {
       price,
       quantity: 1,
       idStore,
-      distance:distance,
+      distance: distance,
       nameStore,
       imgFood,
-
     }
     enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
     dispatch(cartActions.addToCart(data))
+    console.log(idRes,toppingList)
+    if( idRes && toppingList){
+      dispatch(cartActions.setToppingRes({ id: idRes, listTopping: toppingList }))
+    }
   }
 
   return (
@@ -59,25 +67,26 @@ const ItemFood = (props: propsData) => {
           width < 500 && "flex gap-2"
         }`}
         sx={{
-          "&:hover .img-res": {
+          "&:hover .img-sour": {
             transform: "scale(1.05)",
           },
         }}
         onClick={handleAddToCart}
       >
-        <Box className=" min-w-[140px] min-h-[100px]">
+        <Box className=" min-w-[100px] min-h-[100px]">
           <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
-            <Box
-              className={`img-res`}
-              sx={{
+            <img
+              className={`img-sour`}
+              src={imgFood || "/assets/no_img.jpg"}
+              alt="Food Image"
+              style={{
                 transition: "all 0.3s",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
+                objectFit: "cover",
                 width: "100%",
                 height: width < 500 ? "100%" : "18vh",
-                backgroundImage: `url(${imgFood})`,
               }}
-            ></Box>
+              loading="lazy"
+            />
           </Box>
         </Box>
         <Box
@@ -85,23 +94,17 @@ const ItemFood = (props: propsData) => {
             width < 500 ? "justify-between mt-[0px] pl-1" : "mt-[8px]"
           }`}
         >
-          <span
+          <p
             className={`capitalize ${
               width < 500
                 ? width < 350
-                  ? "text-base font-medium"
+                  ? "text-base font-medium line-clamp-2"
                   : " text-lg font-medium"
                 : "text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold"
             }`}
-            style={{
-              overflow: "hidden",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2, // Số dòng tối đa
-            }}
           >
             {foodName}
-          </span>
+          </p>
           {width < 500 ? (
             <>
               <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-[14px]">
@@ -119,12 +122,8 @@ const ItemFood = (props: propsData) => {
                 justifyContent="space-between"
                 alignItems="flex-end"
               >
-                <span
-                  className={`text-[15px] ${
-                    width < 500 ? "font-semibold" : "text-gray-400"
-                  }`}
-                >
-                  {handlePrice(price)} VND
+                <span className={`text-[15px] font-semibold`}>
+                  {handlePrice(price)} ₫
                 </span>
                 <Box className="cursor-pointer hover:opacity-90">
                   <AddCircleIcon
@@ -145,12 +144,9 @@ const ItemFood = (props: propsData) => {
                 >
                   {nameStore}
                 </Typography>
-                <Typography
-                  className="text-gray-400 "
-                  sx={{ fontSize: "13px" }}
-                >
-                  {handlePrice(price)} VND
-                </Typography>
+                <span className="font-semibold" style={{ fontSize: "13px" }}>
+                  {handlePrice(price)} ₫
+                </span>
               </Box>
               <Box
                 sx={{
@@ -177,5 +173,3 @@ const ItemFood = (props: propsData) => {
     </Tooltip>
   )
 }
-
-export default ItemFood

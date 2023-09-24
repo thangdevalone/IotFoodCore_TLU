@@ -1,6 +1,3 @@
-import foodsApis from "@/api/foodsApi"
-import { StoreDetailData } from "@/models"
-import React, { useEffect, memo, ChangeEvent } from "react"
 import adminApi from "@/api/adminApi"
 import {
   ArrowBackIosNew,
@@ -19,10 +16,10 @@ import {
   Paper,
   Stack,
   Tab,
-  Tabs,
-  MenuItem,
+  Tabs
 } from "@mui/material"
 import { useSnackbar } from "notistack"
+import React, { ChangeEvent, memo, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 const UpdateSupplier = ({ id }: { id: string }) => {
   const [file, setFile] = React.useState<File | null>()
@@ -41,7 +38,7 @@ const UpdateSupplier = ({ id }: { id: string }) => {
   const { enqueueSnackbar } = useSnackbar()
   useEffect(() => {
     const fetchData = async () => {
-      const response = await foodsApis.getDetailStore(+id)
+      const response = await adminApi.getDetailStore(+id)
       if (response?.status) {
         setRestaurantName(response?.data?.restaurantName)
         setAddress(response?.data?.address)

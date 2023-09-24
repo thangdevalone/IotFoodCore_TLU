@@ -7,6 +7,7 @@ import { handlePrice } from "@/utils"
 import { useAppDispatch } from "@/app/hooks"
 import { cartActions } from "../CartSlice"
 import { useWindowDimensions } from "@/hooks"
+import { useSnackbar } from "notistack"
 
 export interface propsData {
   item: CartItemData
@@ -18,10 +19,12 @@ const CartItem = (props: propsData) => {
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
   const handleAdd = () => {
+    if(quantity>=15) return
     setQuantity((prev) => +prev + 1)
     dispatch(cartActions.addToCart(item))
   }
-
+  const {enqueueSnackbar}=useSnackbar()
+  
   const handleRemove = () => {
     if (quantity === 1) {
       dispatch(cartActions.removerCart(item))
@@ -32,10 +35,21 @@ const CartItem = (props: propsData) => {
   }
 
   const handleOnChangeInput = (value: number) => {
+    if(quantity>15){
+      setQuantity(15)
+    }
     setQuantity(value)
   }
-
+  React.useEffect(()=>{
+    if(quantity>15){
+      enqueueSnackbar("Không thể mua quá 15 sản phẩm",{variant:"error"})
+    }
+  },[quantity])
   const handleSetQuantity = (value: number) => {
+    if(quantity>15){
+      setQuantity(15)
+      return
+    }
     if (value === 0) {
       dispatch(cartActions.removerCart(item))
     } else {

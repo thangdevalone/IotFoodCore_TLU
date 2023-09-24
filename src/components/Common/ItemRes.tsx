@@ -5,27 +5,22 @@ import { Box, Stack, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 
 interface propsData {
-  idFood: number
-  nameStore: string
-  foodName?: any | string
-  price: number
-  star?: number
-  time?: number
-  distance?: string
-  imgFood: string
-  idStore: number
+  nameRes: string
+  star: number
+  distance: number
+  idRes:number
+  imgRes: string
+  detail:string
 }
 
-const ItemRes = (props: propsData) => {
+export const ItemRes = (props: propsData) => {
   const {
-    idFood,
-    nameStore,
-    foodName,
-    price,
+    nameRes,
+    imgRes,
     star,
+    detail,
+    idRes,
     distance,
-    imgFood,
-    idStore,
   } = props
 
   const navigate = useNavigate()
@@ -35,42 +30,44 @@ const ItemRes = (props: propsData) => {
   }
   return (
     <Box
-      className="w-[100%]  cursor-pointer"
-      onClick={() => handleRouter(idFood)}
+    sx={{
+      "&:hover .img-res": {
+        transform: "scale(1.05)",
+      },
+    }}
+      className="w-[100%]  box-border    cursor-pointer"
+      onClick={() => handleRouter(idRes)}
     >
-      <Box
-        className="w-[100%] h-[23vh] rounded-md object-cover"
-        sx={{
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundImage: `url(${imgFood})`,
-        }}
-      ></Box>
+      <Box className=" w-[100%] h-[23vh]">
+          <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
+            <Box
+              className={`img-res`}
+              sx={{
+                
+                transition: "all 0.3s",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                width: "100%",
+                height: "100%",
+                backgroundImage: `url(${imgRes || "/assets/no_img.jpg"})`,
+              }}
+            ></Box>
+          </Box>
+        </Box>
       <Stack className="mt-[8px]">
         <span className="text-lg font-semibold capitalize whitespace-nowrap overflow-hidden overflow-ellipsis">
-          {nameStore}
+          {nameRes}
         </span>
-        {price && (
-          <Box className="flex gap-5 capitalize items-center ">
-            {foodName && (
-              <Typography sx={{ fontSize: !nameStore ? "16px" : "14px" }}>
-                {foodName}
-              </Typography>
-            )}
-            <Typography className="text-gray-400 " sx={{ fontSize: "14px" }}>
-              {handlePrice(price)} VND
-            </Typography>
-          </Box>
-        )}
+        <p className="text-sm text-slate-400 whitespace-nowrap overflow-hidden overflow-ellipsis">
+          {detail || " "}
+        </p>
         <Box className="flex gap-10 items-center mt-1 ">
           <Box className="flex gap-2">
             <Box className="flex items-center justify-center gap-2">
               <AccessTimeRoundedIcon />
-              {distance && (
                 <Typography sx={{ fontSize: "14px" }}>
                   {Math.floor(Number(distance) * 12)} phút
                 </Typography>
-              )}
             </Box>
             •
             <Typography
@@ -102,4 +99,4 @@ const ItemRes = (props: propsData) => {
   )
 }
 
-export default ItemRes
+
