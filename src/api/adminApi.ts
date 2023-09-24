@@ -194,6 +194,10 @@ const adminApi = {
     const url = `ADMIN/paging-user?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  getDetailStore(id: number) {
+    const url = `ADMIN/get-detail-res?id=${id}`
+    return axiosClient.post(url)
+  },
 }
 
 export default adminApi

@@ -133,7 +133,7 @@ export function CartDrawer(props: CardDrawerProps) {
                     <div key={data.id}>
                       <div>
                         <div className="font-medium text-xl">{data.name}</div>
-                        {/* <ToppingAccord toppingEntity={}/> */}
+                        <ToppingAccord toppingEntity={data.toppingEntityList || []}/>
                         <CartList items={data.items} />
                       </div>
                       <Stack

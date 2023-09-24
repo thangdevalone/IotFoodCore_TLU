@@ -8,7 +8,14 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from "@mui/material/AccordionDetails"
 import Typography from "@mui/material/Typography"
 import { ToppingEntityList } from "@/models"
-import { Checkbox, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
+import {
+  Checkbox,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material"
 import { handlePrice } from "@/utils"
 
 const Accordion = styled((props: AccordionProps) => (
@@ -17,6 +24,9 @@ const Accordion = styled((props: AccordionProps) => (
   border: `1px solid ${theme.palette.divider}`,
   "&:not(:last-child)": {
     borderBottom: 0,
+  },
+  "&.MuiAccordion-root": {
+    width: "100%",
   },
   "&:before": {
     display: "none",
@@ -58,20 +68,20 @@ export function ToppingAccord({ toppingEntity }: ToppingAccordProps) {
     (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? panel : false)
     }
-    const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = React.useState([0])
 
-    const handleToggle = (value: number) => () => {
-      const currentIndex = checked.indexOf(value);
-      const newChecked = [...checked];
-  
-      if (currentIndex === -1) {
-        newChecked.push(value);
-      } else {
-        newChecked.splice(currentIndex, 1);
-      }
-  
-      setChecked(newChecked);
-    };
+  const handleToggle = (value: number) => () => {
+    const currentIndex = checked.indexOf(value)
+    const newChecked = [...checked]
+
+    if (currentIndex === -1) {
+      newChecked.push(value)
+    } else {
+      newChecked.splice(currentIndex, 1)
+    }
+
+    setChecked(newChecked)
+  }
   return (
     <div>
       {toppingEntity.map((item: ToppingEntityList, index) => (
@@ -80,37 +90,42 @@ export function ToppingAccord({ toppingEntity }: ToppingAccordProps) {
           onChange={handleChange(`topping${index}`)}
         >
           <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-            <Typography>{item.title} {item.requi && "(Bắt buộc)"}</Typography>
+            <Typography>
+              {item.title} {item.requi && "(Bắt buộc)"}
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
-          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {item.itemList.map((value,index) => {
-        const labelId = `checkbox-list-label-${value.name}`;
-        return (
-          <ListItem
-            key={value.name}
-            disablePadding
-            secondaryAction={
-              <span>{handlePrice(value.price)} ₫</span>
-            }
-
-          >
-            <ListItemButton role={undefined} onClick={handleToggle(index)} dense>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={checked.indexOf(index) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': value.name }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={value.name} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+            <List
+              sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            >
+              {item.itemList.map((value, index) => {
+                const labelId = `checkbox-list-label-${value.name}`
+                return (
+                  <ListItem
+                    key={value.name}
+                    disablePadding
+                    secondaryAction={<span>{handlePrice(value.price)} ₫</span>}
+                  >
+                    <ListItemButton
+                      role={undefined}
+                      onClick={handleToggle(index)}
+                      dense
+                    >
+                      <ListItemIcon>
+                        <Checkbox
+                          edge="start"
+                          checked={checked.indexOf(index) !== -1}
+                          tabIndex={-1}
+                          disableRipple
+                          inputProps={{ "aria-labelledby": value.name }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText id={labelId} primary={value.name} />
+                    </ListItemButton>
+                  </ListItem>
+                )
+              })}
+            </List>
           </AccordionDetails>
         </Accordion>
       ))}

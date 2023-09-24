@@ -28,7 +28,7 @@ export function Footer(props: FooterProps) {
       <div className="container-base base-pd">
         <Grid sx={{ mb: 4 }} container spacing={2}>
           <Grid item xs={3}>
-            <img src="/assets/tlufood.png" style={{ width: "200px" }} />
+            <img src="/assets/tlufood.png" style={{ width: "200px",marginTop:"16px" }} />
           </Grid>
           <Grid item xs={3}>
             <Box
@@ -48,7 +48,7 @@ export function Footer(props: FooterProps) {
                   }}
                 >
                   <Link to={"https://github.com/thangdevalone"} target="_blank">
-                    thangdevalone (PM,FE)
+                    thangdevalone (FE)
                   </Link>
                 </Typography>
                 <Typography
