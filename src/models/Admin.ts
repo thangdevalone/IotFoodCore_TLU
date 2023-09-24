@@ -10,9 +10,9 @@ export interface ProductRoot {
   data: ProductItem[]
 }
 
-export interface UserRoot {
+export interface EmployeeRoot {
   totalRow: number
-  loginResponDtos: EmployeeItem[]
+  data: EmployeeItem[]
 }
 
 export interface RestaurantRoot {
@@ -54,15 +54,15 @@ export interface TypeRestaurant {
   id: number
   restaurantName: string
   quantitySold: number
-  timeStart:string
-  timeClose:string
+  timeStart: string
+  timeClose: string
   distance: number
   phoneNumber: string
   address: string
   imgRes: string
   time: null
   detail: string
-  star:number
+  star: number
 }
 export interface EmployeeItem {
   id: number
@@ -74,4 +74,24 @@ export interface EmployeeItem {
   msv: string
 }
 
+export interface RoleUser {
+  id: number
+  createDate: any
+  status: any
+  authority: string
+}
 
+export interface UserItem {
+  id: number
+  role: RoleUser[]
+  token: any
+  sdt: string
+  accountName: string
+  imgUser: string
+  msv: string
+}
+
+export interface UserRoot {
+  totalRow: number
+  loginResponDtos: EmployeeItem[]
+}

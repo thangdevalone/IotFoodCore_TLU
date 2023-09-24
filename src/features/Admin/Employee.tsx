@@ -1,25 +1,8 @@
 import adminApi from "@/api/adminApi"
-
-import { useEffect, useMemo, useRef, useState } from "react"
-import Switch from "@mui/material/Switch"
 import History from "@/Router/History"
-import { EmployeeItem, ProductRoot, UserRoot } from "@/models"
-import { formatCurrencyVND } from "@/utils"
-import {
-  Delete,
-  Settings,
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material"
-import {
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Typography,
-  InputAdornment,
-  Input,
-} from "@mui/material"
+import { EmployeeItem, EmployeeRoot } from "@/models"
+import { Delete, Settings } from "@mui/icons-material"
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material"
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -28,6 +11,7 @@ import {
   type MRT_SortingState,
 } from "material-react-table"
 import queryString from "query-string"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
 
@@ -73,9 +57,9 @@ export function Employee() {
       History.push({ search: updatedSearchParams.toString() })
       try {
         const res = await adminApi.getPagingEmployee(pagination)
-        const response = res.data as UserRoot
-        setEmployee(response.loginResponDtos)
-        setRowCount(response.loginResponDtos.length)
+        const response = res.data as EmployeeRoot
+        setEmployee(response.data)
+        setRowCount(response.totalRow)
       } catch (error) {
         setIsError(true)
         console.error(error)
