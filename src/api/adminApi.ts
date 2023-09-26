@@ -194,6 +194,10 @@ const adminApi = {
     const url = `ADMIN/paging-user?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  getBill(page: PageConfig, status: string) {
+    const url = `ADMIN/get-bill?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}&orderStatus=${status}`
+    return axiosClient.post(url)
+  },
 }
 
 export default adminApi

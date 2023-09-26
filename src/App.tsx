@@ -17,24 +17,19 @@ import { User } from "./features/User"
 import { ChangePassword } from "./features/User/ChangePassword"
 import { Address } from "./features/User/Address"
 import { useEffect } from "react"
+import FoodByType from "./features/FoodByType"
 function App() {
   const theme = useTheme()
   useEffect(() => {
     const VERSION = localStorage.getItem("APP_VERSION")
     console.log(import.meta.env.VITE_APP_VERSION)
     if (VERSION) {
-      if (VERSION !==import.meta.env.VITE_APP_VERSION) {
+      if (VERSION !== import.meta.env.VITE_APP_VERSION) {
         localStorage.clear()
-        localStorage.setItem(
-          "APP_VERSION",
-          import.meta.env.VITE_APP_VERSION,
-        )
+        localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
       }
     } else {
-      localStorage.setItem(
-        "APP_VERSION",
-        import.meta.env.VITE_APP_VERSION,
-      )
+      localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
     }
   }, [])
   return (
@@ -67,6 +62,7 @@ function App() {
           <Route path="/store" element={<Store />}>
             <Route path="get-all-store" element={<GetAllStore />} />
             <Route path="detail-store/:idStore" element={<DetailStore />} />
+            <Route path="type-food/:idTypeFood" element={<FoodByType />} />
           </Route>
           <Route path="/search" element={<SearchList />}></Route>
           <Route element={<ProtectAuth />}>

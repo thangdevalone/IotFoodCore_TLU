@@ -271,14 +271,14 @@ function NewProduct(props: NewProductProps) {
                 </div>
                 <div>
                   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <Tabs
-                      value={tabs}
-                      onChange={handleChange}
-                      aria-label="basic tabs example"
-                    >
-                      <Tab label="Thông tin sản phẩm" {...a11yProps(0)} />
-                    </Tabs>
-                  </Box>
+                      <Tabs
+                        value={tabs}
+                        onChange={handleChange}
+                        aria-label="basic tabs example"
+                      >
+                        <Tab label="Thông tin sản phẩm" {...a11yProps(0)} />
+                      </Tabs>
+                    </Box>
                   <div hidden={tabs !== 0}>
                     {tabs === 0 && (
                       <Box sx={{ padding: "20px 15px" }}>
