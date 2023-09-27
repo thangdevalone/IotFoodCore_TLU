@@ -95,3 +95,28 @@ export interface UserRoot {
   totalRow: number
   loginResponDtos: EmployeeItem[]
 }
+
+export interface InvoiceRoot {
+  id: number
+  createAt: string
+  orderStatus: string
+  nameRestaurant: string
+  shipFee: number
+  finishTime: any
+  foodResponseBills: FoodResponseBill[]
+}
+
+export interface FoodResponseBill {
+  foodId: number
+  nameFood: string
+  priceFood: number
+  quantity: number
+  nameRes: string
+  resId: number
+  itemList: ItemTopping[]
+}
+
+export interface ItemTopping {
+  name: string
+  price: number
+}

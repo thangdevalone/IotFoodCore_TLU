@@ -17,6 +17,7 @@ import UpdateType from "@/features/Admin/components/UpdateType"
 import NewTopping from "@/features/Admin/components/NewTopping"
 import UpdateProduct from "@/features/Admin/components/UpdateProduct"
 import UpdateCustomer from "@/features/Admin/components/UpdateCustomer"
+import Invoice from "@/features/Admin/Invoice"
 
 const WelComeAdmin = () => {
   return (
@@ -109,6 +110,7 @@ export default function Admin() {
           <Route path="/expand-food" element={<NewTopping />} />
           <Route path="/new" element={<FormRouter />} />
           <Route path="/update" element={<FormUpdate />} />
+          <Route path="/invoice" element={<Invoice />} />
         </Routes>
       </Box>
     </Box>

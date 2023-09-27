@@ -12,10 +12,9 @@ const GetAllStore = (props: propsData) => {
   const [data, setData] = React.useState<RestaurantData[]>([])
   const navigate = useNavigate()
 
-  const handleDetail = (id: number) => {
-    // console.log(id);
-    navigate(`/store/detail-store/${id}`)
-  }
+  // const handleDetail = (id: number) => {
+  //   navigate(`/store/detail-store/${id}`)
+  // }
 
   React.useEffect(() => {
     const fetchData = async () => {

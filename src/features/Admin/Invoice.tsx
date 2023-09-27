@@ -1,10 +1,18 @@
-import History from "@/Router/History"
 import adminApi from "@/api/adminApi"
-import { SupplierFields } from "@/constants"
-import { RestaurantRoot, TypeRestaurant } from "@/models"
-import { formatCurrencyKM } from "@/utils"
+import { useEffect, useMemo, useRef, useState } from "react"
+import History from "@/Router/History"
+import { InvoiceRoot, FoodResponseBill, ItemTopping } from "@/models"
+import { formatCurrencyVND, handlePrice } from "@/utils"
 import { Delete, Settings } from "@mui/icons-material"
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material"
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -12,44 +20,53 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
 } from "material-react-table"
-import { useSnackbar } from "notistack"
-import { useEffect, useMemo, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { ReactSpreadsheetImport } from "react-spreadsheet-import"
+import queryString from "query-string"
+import { useLocation, useNavigate } from "react-router-dom"
 import SettingMenu from "./components/SettingMenu"
+import { enqueueSnackbar, useSnackbar } from "notistack"
 
-export function Supplier() {
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  }
+}
+
+interface Data {}
+
+const Invoice = () => {
+  const location = useLocation() // Get the current location object
+  const queryParams = queryString.parse(location.search) // Parse query parameters from the location
   const navigate = useNavigate()
-  const [restaurant, setRestaurant] = useState<TypeRestaurant[]>([])
+  const [invoice, setInvoice] = useState<InvoiceRoot[]>([])
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
   const [rowCount, setRowCount] = useState(0)
-
+  const { enqueueSnackbar } = useSnackbar()
   //table state
+  const [status, setStatus] = useState<string>("PENDING")
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [sorting, setSorting] = useState<MRT_SortingState>([])
-  const [open, setOpen] = useState(false)
-  const [isDel, setIsDel] = useState(false)
-  const [isOpenImport, setIsOpenImport] = useState(false)
-  const { enqueueSnackbar } = useSnackbar()
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
-
+  const [isDel, setIsDel] = useState(false)
+  const [open, setOpen] = useState(false)
   const settingRef = useRef<HTMLButtonElement>(null)
+  const [tabs, setTabs] = useState(0)
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
-
   const handleSelectRows = (row: any) => {
+    console.log(row)
     const idData = row.map((item: any) => item.original.id)
     ;(async () => {
       try {
-        await adminApi.deleteStore(idData)
+        await adminApi.deleteFood(idData)
         enqueueSnackbar("Xóa thành công", { variant: "success" })
         setIsDel((item) => !item)
       } catch (error) {
@@ -58,9 +75,14 @@ export function Supplier() {
       }
     })()
   }
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const tabLabels = ["PENDING", "PROCESSING", "DELIVERED", "CANCELED"]
+    setStatus(tabLabels[newValue])
+    setTabs(newValue)
+  }
   useEffect(() => {
     const fetchData = async () => {
-      if (!restaurant.length) {
+      if (!invoice.length) {
         setIsLoading(true)
       } else {
         setIsRefetching(true)
@@ -71,14 +93,12 @@ export function Supplier() {
       updatedSearchParams.set("filters", JSON.stringify(columnFilters ?? []))
       updatedSearchParams.set("globalFilter", globalFilter ?? "")
       updatedSearchParams.set("sorting", JSON.stringify(sorting ?? []))
-
-      // Update the location object with the new search parameters
       History.push({ search: updatedSearchParams.toString() })
       try {
-        const res = await adminApi.getAllResFoods(pagination)
-        const myRestaurant = res.data as RestaurantRoot
-        setRestaurant(myRestaurant.responList)
-        setRowCount(myRestaurant.totalRow)
+        const res = await adminApi.getBill(pagination, status)
+        const myInvoice = res.data as InvoiceRoot[]
+        setInvoice(myInvoice)
+        setRowCount(myInvoice.length)
       } catch (error) {
         setIsError(true)
         console.error(error)
@@ -98,64 +118,90 @@ export function Supplier() {
     pagination.pageIndex,
     pagination.pageSize,
     sorting,
+    status,
   ])
 
-  const columns = useMemo<MRT_ColumnDef<TypeRestaurant>[]>(
+  const columns = useMemo<MRT_ColumnDef<InvoiceRoot>[]>(
     () => [
       { accessorKey: "id", header: "ID" },
-      { accessorKey: "restaurantName", header: "Tên nhà cung cấp" },
+      { accessorKey: "nameRestaurant", header: "Tên cửa hàng" },
+      // {
+      //   accessorKey: "foodResponseBills",
+      //   header: "Số lượng",
+      //   Cell: ({ cell }) => {
+      //     const totalQuantity = cell?.row.original.foodResponseBills.reduce(
+      //       (total: number, foodResponseBill: any) => {
+      //         return total + foodResponseBill.quantity
+      //       },
+      //       0,
+      //     )
+      //     return totalQuantity
+      //   },
+      // },
       {
-        accessorKey: "imgRes",
-        header: "Ảnh",
-        Cell: ({ cell }) => (
-          <img
-            src={cell.getValue<string>()}
-            className="w-[70px] h-[70px] object-cover"
-          />
-        ),
+        accessorKey: "shipFee",
+        header: "Phí ship",
+        Cell: ({ cell }) => `${handlePrice(+cell.getValue<string>())} VND `,
       },
-      { accessorKey: "star", header: "Đánh giá" },
       {
-        accessorKey: "distance",
-        header: "Khoảng cách",
-        Cell: ({ cell }) => formatCurrencyKM(cell.getValue<string>()),
+        accessorKey: "foodResponseBills",
+        header: "Tổng đơn hàng",
+        Cell: ({ cell }) => {
+          console.log(cell)
+          const totalAmount = cell?.row.original.foodResponseBills.reduce(
+            (total: number, foodResponseBill: any) => {
+              return (
+                total + foodResponseBill.priceFood * foodResponseBill.quantity
+              )
+            },
+            0,
+          )
+          return `${handlePrice(totalAmount)} VND`
+        },
       },
-      { accessorKey: "phoneNumber", header: "Số điện thoại" },
-      { accessorKey: "address", header: "Địa chỉ" },
     ],
     [],
   )
-  const onClose = () => {
-    setIsOpenImport(false)
-  }
-  // Called after user completes the flow. Provides data array, where data keys matches your field keys.
-  const onSubmit = (data: any) => {
-    console.log(data)
-  }
   return (
     <Box sx={{ height: "100%" }}>
-      <SettingMenu
-        anchorRef={settingRef}
-        setIsOpenImport={setIsOpenImport}
-        open={open}
-        setOpen={setOpen}
-      />
-      <ReactSpreadsheetImport
-        isOpen={isOpenImport}
-        onClose={onClose}
-        onSubmit={onSubmit}
-        fields={SupplierFields}
-      />
+      <Stack
+        direction="row"
+        sx={{ alignContent: "center", marginLeft: 2 }}
+        spacing={2}
+      >
+        <Box>
+          <Typography
+            sx={{
+              height: "100%",
+              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Trạng thái đơn hàng :
+          </Typography>
+        </Box>
+        <Tabs
+          value={tabs}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="PENDING" {...a11yProps(0)} />
+          <Tab label="PROCESSING" {...a11yProps(1)} />
+          <Tab label="DELIVERED" {...a11yProps(2)} />
+          <Tab label="CANCELED" {...a11yProps(3)} />
+        </Tabs>
+      </Stack>
       <MaterialReactTable
         muiTablePaperProps={{ sx: { height: "100%" } }}
         muiTableContainerProps={{ sx: { height: "calc(100% - 112px)" } }}
         columns={columns}
-        data={restaurant}
+        data={invoice}
         enableRowSelection
         manualFiltering
+        manualPagination
         muiTableBodyRowProps={({ row }) => ({
-          onClick: () =>
-            navigate(`/admin/update?form=supplier/${row.original.id}`),
+          onClick: () => {},
           sx: { cursor: "pointer" },
         })}
         manualSorting
@@ -175,19 +221,20 @@ export function Supplier() {
         })}
         renderTopToolbarCustomActions={({ table }) => (
           <Stack direction="row" alignItems="center">
-            <Button
+            {/* <Button
               disabled={isLoading}
               sx={{ mr: "10px" }}
               variant="contained"
               onClick={() => {
-                navigate("/admin/new?form=store")
+                navigate("/admin/new?form=product")
               }}
             >
               Tạo
             </Button>
             <Typography sx={{ fontSize: "18px", fontWeight: 500, mr: "10px" }}>
-              Nhà cung cấp
+              Sản phẩm
             </Typography>
+
             <IconButton
               ref={settingRef}
               onClick={handleToggle}
@@ -207,19 +254,20 @@ export function Supplier() {
               >
                 <Delete fontSize="small" htmlColor="black" />
               </IconButton>
-            )}
+            )} */}
           </Stack>
         )}
         onColumnFiltersChange={setColumnFilters}
         onGlobalFilterChange={setGlobalFilter}
-        onSortingChange={setSorting}
         onPaginationChange={setPagination}
+        onSortingChange={setSorting}
         rowCount={rowCount}
         enableStickyHeader
         state={{
           columnFilters,
           globalFilter,
           isLoading,
+          pagination,
           showAlertBanner: isError,
           showProgressBars: isRefetching,
           sorting,
@@ -228,3 +276,5 @@ export function Supplier() {
     </Box>
   )
 }
+
+export default Invoice

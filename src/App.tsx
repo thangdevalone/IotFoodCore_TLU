@@ -22,6 +22,7 @@ import { useEffect } from "react"
 import User from "./features/User"
 import { UserOrders } from "./features/User/Orders"
 import Checkout from "./features/Checkout"
+import FoodByType from "./features/FoodByType"
 function App() {
   const theme = useTheme()
   useEffect(() => {
@@ -62,6 +63,7 @@ function App() {
           <Route path="/store" element={<Store />}>
             <Route path="get-all-store" element={<GetAllStore />} />
             <Route path="detail-store/:idStore" element={<DetailStore />} />
+            <Route path="type-food/:idTypeFood" element={<FoodByType />} />
           </Route>
           <Route path="/search" element={<SearchList />}></Route>
           <Route path="/checkout" element={<ProtectCheckout />} />
