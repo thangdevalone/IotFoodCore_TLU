@@ -24,7 +24,7 @@ const dataQuestion = [
   {
     question: "IotFood tính phí giao đồ ăn như thế nào?",
     answer:
-      "Phí giao hàng của chúng tôi chỉ trong tầm giá từ 3-15 nghìn theo khoảng cách khoảng cách càng xa thì phí giao càng lớn kèm với hóa đơn nhiều sản phẩm thì giá ship cũng sẽ tăng. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn hằng ngày.",
+      "Phí giao hàng của chúng tôi chỉ trong tầm giá từ 3-20 nghìn theo khoảng cách khoảng cách càng xa thì phí giao càng lớn kèm với hóa đơn nhiều sản phẩm thì giá ship cũng sẽ tăng. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn hằng ngày.",
   },
   {
     question: "IotFood hoạt động như nào?",

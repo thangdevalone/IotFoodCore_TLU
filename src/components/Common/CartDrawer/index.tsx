@@ -17,6 +17,7 @@ import CartList from "./Components/CartList"
 import "./style_drawer.css"
 import { CartItemData, Order } from "@/models"
 import { ToppingAccord } from ".."
+import { useNavigate } from "react-router-dom"
 
 export interface CardDrawerProps {}
 
@@ -59,8 +60,9 @@ export function CartDrawer(props: CardDrawerProps) {
 
 
   }, [dataStore])
-  const handleAddOrder = () => {
-    const order: Order | {} = {}
+  const navigate=useNavigate()
+  const handlePay = () => {
+    navigate("/checkout")
   }
   const { width } = useWindowDimensions()
   return (
@@ -214,7 +216,8 @@ export function CartDrawer(props: CardDrawerProps) {
                   <Box className="w-full">
                     <CustomButton
                       fullWidth
-                      onClick={handleAddOrder}
+                      disabled={!user}
+                      onClick={handlePay}
                       sx={{
                         background: "var(--color-df-1)",
                         color: "white",
@@ -230,7 +233,7 @@ export function CartDrawer(props: CardDrawerProps) {
                         },
                       }}
                     >
-                      {user ? "Đặt hàng" : "Đăng nhập để đặt hàng"}
+                      {user ? "Xem chi tiết đơn hàng" : "Đăng nhập để đặt hàng"}
                     </CustomButton>
                   </Box>
                 </Box>

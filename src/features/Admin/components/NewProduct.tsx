@@ -274,7 +274,7 @@ function NewProduct(props: NewProductProps) {
                     <Tabs
                       value={tabs}
                       onChange={handleChange}
-                      aria-label="basic tabs example"
+                      aria-label="product tabs example"
                     >
                       <Tab label="Thông tin sản phẩm" {...a11yProps(0)} />
                     </Tabs>

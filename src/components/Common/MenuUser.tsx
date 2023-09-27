@@ -33,6 +33,10 @@ export function MenuUser(props: MenuUserProps) {
     handleClose()
     navigate("/admin")
   }
+  const handleOrders= ()=>{
+    handleClose()
+    navigate("/user/orders")
+  }
   return (
     <Menu
       anchorEl={anchorEl}
@@ -86,7 +90,7 @@ export function MenuUser(props: MenuUserProps) {
         </MenuItem>
       )}
       <Divider />
-      <MenuItem onClick={handleClose}>
+      <MenuItem onClick={handleOrders}>
         <ListItemIcon>
           <ReceiptOutlined fontSize="small" />
         </ListItemIcon>

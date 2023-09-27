@@ -12,17 +12,18 @@ import {
     MenuList,
     Paper
 } from "@mui/material"
-import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 export interface MenuProps {}
 
 export function Menu(props: MenuProps) {
-  const user = useInforUser()
-  console.log(user?.accountName)
+  const location=useLocation()
+  const path = location.pathname.split('/')[2]; // Lấy địa chỉ URL hiện tạ
   const navigate = useNavigate()
   return (
     <div>
       <Paper
-        sx={{ width: 220, background: "transparent", mr: 4, py: 4 }}
+        sx={{ width: 220, background: "transparent", mr: 4, py: 2 }}
         elevation={0}
       >
         <MenuList>
@@ -31,7 +32,7 @@ export function Menu(props: MenuProps) {
               navigate("profile")
             }}
             sx={{borderRadius:"10px",padding:"10px 15px",marginBottom:"1px"}}
-            selected={true}
+            selected={path==="profile"}
           >
             <ListItemIcon>
               <Person
@@ -46,6 +47,8 @@ export function Menu(props: MenuProps) {
               navigate("changePassword")
             }}
             sx={{borderRadius:"10px",padding:"10px 15px",marginBottom:"1px"}}
+            selected={path==="changePassword"}
+
           >
             <ListItemIcon>
               <Lock  sx={{ color: "var(--color-df-1)" }} />
@@ -57,6 +60,8 @@ export function Menu(props: MenuProps) {
               navigate("orders")
             }}
             sx={{borderRadius:"10px",padding:"10px 15px",marginBottom:"1px"}}
+            selected={path==="orders"}
+            
           >
             <ListItemIcon>
               <Assignment
