@@ -11,7 +11,7 @@ export function PagingFood(props: RecommendFoodProps) {
   const [data, setData] = React.useState<foodData[]>([])
   const [pageIndex, setPageIndex] = React.useState<number>(0)
   const [hasMore, setHasMore] = React.useState<boolean>(true)
-  let i = 0
+
   const fetchData = async () => {
     const response = await foodsApis.pagingFood({
       pageIndex,
@@ -27,7 +27,6 @@ export function PagingFood(props: RecommendFoodProps) {
         setPageIndex(pageIndex + 1)
       }
     }
-    console.log(i)
   }
 
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null)
