@@ -28,7 +28,7 @@ const InvoiceAdmin = () => {
   const location = useLocation() // Get the current location object
   const queryParams = queryString.parse(location.search) // Parse query parameters from the location
   const navigate = useNavigate()
-  const [invoice, setInvoice] = useState<InvoiceRoot[]>([])
+  const [invoice, setInvoice] = useState<Invoice[]>([])
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
@@ -88,16 +88,13 @@ const InvoiceAdmin = () => {
         if (status === "ALL") {
           const res = await adminApi.getBill(pagination, null)
           const myInvoice = res.data as InvoiceRoot
-          console.log(myInvoice)
-          // setInvoice(myInvoice)
-          // setRowCount(myInvoice.length)
+          setInvoice(myInvoice.data)
+          setRowCount(myInvoice.totalRow)
         } else {
           const res = await adminApi.getBill(pagination, status)
           const myInvoice = res.data as InvoiceRoot
-          console.log(myInvoice)
-
-          // setInvoice(myInvoice)
-          // setRowCount(myInvoice)
+          setInvoice(myInvoice.data)
+          setRowCount(myInvoice.totalRow)
         }
       } catch (error) {
         setIsError(true)
@@ -110,7 +107,6 @@ const InvoiceAdmin = () => {
       setIsRefetching(false)
     }
     fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     columnFilters,
     globalFilter,
@@ -193,6 +189,52 @@ const InvoiceAdmin = () => {
           <Tab label="CANCELED" {...a11yProps(4)} />
         </Tabs>
       </Stack>
+      <MaterialReactTable
+        muiTablePaperProps={{ sx: { height: "100%" } }}
+        muiTableContainerProps={{ sx: { height: "calc(100% - 112px)" } }}
+        columns={columns}
+        data={invoice}
+        enableRowSelection
+        manualFiltering
+        manualPagination
+        muiTableBodyRowProps={({ row }) => ({
+          onClick: () => {},
+          sx: { cursor: "pointer" },
+        })}
+        manualSorting
+        muiToolbarAlertBannerProps={
+          isError
+            ? {
+                color: "error",
+                children: "Error loading data",
+              }
+            : undefined
+        }
+        positionToolbarAlertBanner="bottom"
+        muiLinearProgressProps={({ isTopToolbar }) => ({
+          sx: {
+            display: isTopToolbar ? "block" : "none", //hide bottom progress bar
+          },
+        })}
+        renderTopToolbarCustomActions={({ table }) => (
+          <Stack direction="row" alignItems="center"></Stack>
+        )}
+        onColumnFiltersChange={setColumnFilters}
+        onGlobalFilterChange={setGlobalFilter}
+        onPaginationChange={setPagination}
+        onSortingChange={setSorting}
+        rowCount={rowCount}
+        enableStickyHeader
+        state={{
+          columnFilters,
+          globalFilter,
+          isLoading,
+          pagination,
+          showAlertBanner: isError,
+          showProgressBars: isRefetching,
+          sorting,
+        }}
+      />
     </Box>
   )
 }
