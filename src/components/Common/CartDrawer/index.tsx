@@ -62,6 +62,7 @@ export function CartDrawer(props: CardDrawerProps) {
   }, [dataStore])
   const navigate=useNavigate()
   const handlePay = () => {
+    toggleDrawer()
     navigate("/checkout")
   }
   const { width } = useWindowDimensions()

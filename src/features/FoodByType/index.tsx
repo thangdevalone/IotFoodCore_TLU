@@ -31,7 +31,7 @@ const FoodByType = () => {
   return (
     <Box className="flex flex-col gap-5 container-base base-pd">
       <BreadcrumbsCommon items={breadcrumbItems} />
-      <Grid container spacing={{ xs: 0, sm: 1, md: 2, lg: 3 }}>
+      <Grid container sx={{pb:4}} spacing={{ xs: 0, sm: 1, md: 2, lg: 3 }}>
         {data?.map((item) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <ItemFood

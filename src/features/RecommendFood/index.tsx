@@ -43,7 +43,7 @@ export function RecommendFood(props: RecommendFoodProps) {
   return (
     <>
     <Box
-      className="flex "
+      className="flex"
       sx={{
         margin: `${
           width <= 750
