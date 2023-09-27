@@ -1,42 +1,39 @@
-import foodsApis from "@/api/foodsApi"
-import { ItemRes } from "@/components/Common"
-import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
-import { SkeletonCustom } from "@/components/Common/Skeleton"
-import { RestaurantData, ResFood } from "@/models"
-import { Box, Grid } from "@mui/material"
 import * as React from "react"
+import foodsApis from "@/api/foodsApi"
+import { ItemFood } from "@/components/Common"
+import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
+import { Box, Grid } from "@mui/material"
+import { SkeletonCustom } from "../../components/Common/Skeleton"
+import { FoodRoot, foodData } from "@/models"
 import InfiniteScroll from "react-infinite-scroll-component"
 
-export interface propsData {}
-
-const GetAllStore = (props: propsData) => {
-  const [data, setData] = React.useState<RestaurantData[]>([])
+const AllFood = () => {
+  const breadcrumbItems = [{ name: "Tất cả món ăn", link: "/" }]
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [data, setData] = React.useState<foodData[]>([])
   const [pageIndex, setPageIndex] = React.useState<number>(0)
   const [hasMore, setHasMore] = React.useState<boolean>(true)
-  const scrollContainerRef = React.useRef<HTMLDivElement | null>(null)
 
   const fetchData = async () => {
-    try {
-      const response = await foodsApis.pagingRes({
-        pageIndex,
-        pageSize: 10,
-      })
-      if (response?.status) {
-        const myFood = response.data as ResFood
-        const newData = [...data, ...myFood.responList]
-        setData(newData)
-        setIsLoading(true)
-        if (newData.length >= myFood.totalRow) {
-          setHasMore(false)
-        } else {
-          setPageIndex(pageIndex + 1)
-        }
+    const response = await foodsApis.pagingFood({
+      pageIndex,
+      pageSize: 10,
+    })
+    if (response?.status) {
+      const myFood = response.data as FoodRoot
+      const newData = [...data, ...myFood.data]
+      setData(newData)
+      setIsLoading(true)
+      if (newData.length >= myFood.totalRow) {
+        setHasMore(false)
+      } else {
+        setPageIndex(pageIndex + 1)
       }
-    } catch (err) {
-      console.log(err)
     }
   }
+
+  const scrollContainerRef = React.useRef<HTMLDivElement | null>(null)
+
   React.useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -61,8 +58,6 @@ const GetAllStore = (props: propsData) => {
     }
   }, [hasMore])
 
-  const breadcrumbItems = [{ name: "Cửa hàng", link: "/" }]
-
   return (
     <Box className="flex flex-col gap-5 container-base base-pd">
       <BreadcrumbsCommon items={breadcrumbItems} />
@@ -75,7 +70,7 @@ const GetAllStore = (props: propsData) => {
         <Grid container spacing={{ xs: 0, sm: 1, md: 2, lg: 3 }}>
           {!isLoading ? (
             <>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
                 <Grid item xs={12} sm={4} md={4} lg={3} key={index + item}>
                   <SkeletonCustom />
                 </Grid>
@@ -85,13 +80,18 @@ const GetAllStore = (props: propsData) => {
             <>
               {data?.map((item) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-                  <ItemRes
-                    imgRes={item.imgRes}
-                    nameRes={item.restaurantName}
-                    distance={item.distance}
+                  <ItemFood
+                    idFood={item.id}
                     detail={item.detail}
-                    star={item.star}
-                    idRes={item.id}
+                    imgFood={item.imgFood}
+                    idRes={item.restaurantEntityId}
+                    foodName={item.foodName}
+                    price={item.price}
+                    distance={item.distance || 0}
+                    qSold={item.quantityPurchased || 0}
+                    nameStore={item.nameRestaurantFood}
+                    idStore={item.restaurantEntityId}
+                    typeFoodEntityId={item.typeFoodEntityId}
                   />
                 </Grid>
               ))}
@@ -103,4 +103,4 @@ const GetAllStore = (props: propsData) => {
   )
 }
 
-export default GetAllStore
+export default AllFood

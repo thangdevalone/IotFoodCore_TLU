@@ -200,8 +200,13 @@ const adminApi = {
     return axiosClient.post(url)
   },
 
-  getBill(page: PageConfig, status: string) {
-    const url = `ADMIN/get-bill?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}&orderStatus=${status}`
+
+  getBill(page: PageConfig, status: string | null) {
+    if (status) {
+      const url = `ADMIN/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}&orderStatus=${status}`
+      return axiosClient.post(url)
+    }
+    const url = `ADMIN/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}`
     return axiosClient.post(url)
   },
 }

@@ -14,9 +14,9 @@ export interface HomeProps {}
 
 export function Home(props: HomeProps) {
   const { width } = useWindowDimensions()
-  React.useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+  // React.useEffect(() => {
+  //   window.scrollTo(0, 0)
+  // }, [])
 
   return (
     <Box className="relative">

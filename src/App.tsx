@@ -23,6 +23,7 @@ import User from "./features/User"
 import { UserOrders } from "./features/User/Orders"
 import Checkout from "./features/Checkout"
 import FoodByType from "./features/FoodByType"
+import AllFood from "./features/AllFood"
 function App() {
   const theme = useTheme()
   useEffect(() => {
@@ -46,7 +47,6 @@ function App() {
             element={
               <>
                 <Home />
-                {/* <Chat /> */}
               </>
             }
           />
@@ -62,6 +62,7 @@ function App() {
           </Route>
           <Route path="/store" element={<Store />}>
             <Route path="get-all-store" element={<GetAllStore />} />
+            <Route path="get-all-food" element={<AllFood />} />
             <Route path="detail-store/:idStore" element={<DetailStore />} />
             <Route path="type-food/:idTypeFood" element={<FoodByType />} />
           </Route>
