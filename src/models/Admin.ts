@@ -97,6 +97,10 @@ export interface UserRoot {
 }
 
 export interface InvoiceRoot {
+  totalRow: number
+  data: Invoice[]
+}
+export interface Invoice {
   id: number
   createAt: string
   orderStatus: string

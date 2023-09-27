@@ -1,18 +1,8 @@
-import adminApi from "@/api/adminApi"
-import { useEffect, useMemo, useRef, useState } from "react"
 import History from "@/Router/History"
-import { InvoiceRoot, FoodResponseBill, ItemTopping } from "@/models"
-import { formatCurrencyVND, handlePrice } from "@/utils"
-import { Delete, Settings } from "@mui/icons-material"
-import {
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material"
+import adminApi from "@/api/adminApi"
+import { InvoiceRoot, Invoice } from "@/models"
+import { handlePrice } from "@/utils"
+import { Box, Stack, Tab, Tabs, Typography } from "@mui/material"
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -20,10 +10,10 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
 } from "material-react-table"
+import { useSnackbar } from "notistack"
 import queryString from "query-string"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import SettingMenu from "./components/SettingMenu"
-import { enqueueSnackbar, useSnackbar } from "notistack"
 
 function a11yProps(index: number) {
   return {
@@ -34,7 +24,7 @@ function a11yProps(index: number) {
 
 interface Data {}
 
-const Invoice = () => {
+const InvoiceAdmin = () => {
   const location = useLocation() // Get the current location object
   const queryParams = queryString.parse(location.search) // Parse query parameters from the location
   const navigate = useNavigate()
@@ -76,7 +66,7 @@ const Invoice = () => {
     })()
   }
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    const tabLabels = ["PENDING", "PROCESSING", "DELIVERED", "CANCELED"]
+    const tabLabels = ["ALL", "PENDING", "PROCESSING", "DELIVERED", "CANCELED"]
     setStatus(tabLabels[newValue])
     setTabs(newValue)
   }
@@ -95,10 +85,20 @@ const Invoice = () => {
       updatedSearchParams.set("sorting", JSON.stringify(sorting ?? []))
       History.push({ search: updatedSearchParams.toString() })
       try {
-        const res = await adminApi.getBill(pagination, status)
-        const myInvoice = res.data as InvoiceRoot[]
-        setInvoice(myInvoice)
-        setRowCount(myInvoice.length)
+        if (status === "ALL") {
+          const res = await adminApi.getBill(pagination, null)
+          const myInvoice = res.data as InvoiceRoot
+          console.log(myInvoice)
+          // setInvoice(myInvoice)
+          // setRowCount(myInvoice.length)
+        } else {
+          const res = await adminApi.getBill(pagination, status)
+          const myInvoice = res.data as InvoiceRoot
+          console.log(myInvoice)
+
+          // setInvoice(myInvoice)
+          // setRowCount(myInvoice)
+        }
       } catch (error) {
         setIsError(true)
         console.error(error)
@@ -121,7 +121,7 @@ const Invoice = () => {
     status,
   ])
 
-  const columns = useMemo<MRT_ColumnDef<InvoiceRoot>[]>(
+  const columns = useMemo<MRT_ColumnDef<Invoice>[]>(
     () => [
       { accessorKey: "id", header: "ID" },
       { accessorKey: "nameRestaurant", header: "Tên cửa hàng" },
@@ -186,95 +186,15 @@ const Invoice = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="PENDING" {...a11yProps(0)} />
-          <Tab label="PROCESSING" {...a11yProps(1)} />
-          <Tab label="DELIVERED" {...a11yProps(2)} />
-          <Tab label="CANCELED" {...a11yProps(3)} />
+          <Tab label="ALL" {...a11yProps(0)} />
+          <Tab label="PENDING" {...a11yProps(1)} />
+          <Tab label="PROCESSING" {...a11yProps(2)} />
+          <Tab label="DELIVERED" {...a11yProps(3)} />
+          <Tab label="CANCELED" {...a11yProps(4)} />
         </Tabs>
       </Stack>
-      <MaterialReactTable
-        muiTablePaperProps={{ sx: { height: "100%" } }}
-        muiTableContainerProps={{ sx: { height: "calc(100% - 112px)" } }}
-        columns={columns}
-        data={invoice}
-        enableRowSelection
-        manualFiltering
-        manualPagination
-        muiTableBodyRowProps={({ row }) => ({
-          onClick: () => {},
-          sx: { cursor: "pointer" },
-        })}
-        manualSorting
-        muiToolbarAlertBannerProps={
-          isError
-            ? {
-                color: "error",
-                children: "Error loading data",
-              }
-            : undefined
-        }
-        positionToolbarAlertBanner="bottom"
-        muiLinearProgressProps={({ isTopToolbar }) => ({
-          sx: {
-            display: isTopToolbar ? "block" : "none", //hide bottom progress bar
-          },
-        })}
-        renderTopToolbarCustomActions={({ table }) => (
-          <Stack direction="row" alignItems="center">
-            {/* <Button
-              disabled={isLoading}
-              sx={{ mr: "10px" }}
-              variant="contained"
-              onClick={() => {
-                navigate("/admin/new?form=product")
-              }}
-            >
-              Tạo
-            </Button>
-            <Typography sx={{ fontSize: "18px", fontWeight: 500, mr: "10px" }}>
-              Sản phẩm
-            </Typography>
-
-            <IconButton
-              ref={settingRef}
-              onClick={handleToggle}
-              size="small"
-              sx={{ mr: "5px" }}
-            >
-              <Settings htmlColor="black" fontSize="small" />
-            </IconButton>
-
-            {table.getSelectedRowModel().rows.length > 0 && (
-              <IconButton
-                size="small"
-                sx={{ mr: "5px" }}
-                onClick={() =>
-                  handleSelectRows(table.getSelectedRowModel().rows)
-                }
-              >
-                <Delete fontSize="small" htmlColor="black" />
-              </IconButton>
-            )} */}
-          </Stack>
-        )}
-        onColumnFiltersChange={setColumnFilters}
-        onGlobalFilterChange={setGlobalFilter}
-        onPaginationChange={setPagination}
-        onSortingChange={setSorting}
-        rowCount={rowCount}
-        enableStickyHeader
-        state={{
-          columnFilters,
-          globalFilter,
-          isLoading,
-          pagination,
-          showAlertBanner: isError,
-          showProgressBars: isRefetching,
-          sorting,
-        }}
-      />
     </Box>
   )
 }
 
-export default Invoice
+export default InvoiceAdmin

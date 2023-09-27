@@ -8,20 +8,13 @@ interface propsData {
   nameRes: string
   star: number
   distance: number
-  idRes:number
+  idRes: number
   imgRes: string
-  detail:string
+  detail: string
 }
 
 export const ItemRes = (props: propsData) => {
-  const {
-    nameRes,
-    imgRes,
-    star,
-    detail,
-    idRes,
-    distance,
-  } = props
+  const { nameRes, imgRes, star, detail, idRes, distance } = props
 
   const navigate = useNavigate()
 
@@ -30,30 +23,29 @@ export const ItemRes = (props: propsData) => {
   }
   return (
     <Box
-    sx={{
-      "&:hover .img-res": {
-        transform: "scale(1.05)",
-      },
-    }}
-      className="w-[100%]  box-border    cursor-pointer"
+      sx={{
+        "&:hover .img-res": {
+          transform: "scale(1.05)",
+        },
+      }}
+      className="w-[100%] box-border cursor-pointer"
       onClick={() => handleRouter(idRes)}
     >
       <Box className=" w-[100%] h-[23vh]">
-          <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
-            <Box
-              className={`img-res`}
-              sx={{
-                
-                transition: "all 0.3s",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                width: "100%",
-                height: "100%",
-                backgroundImage: `url(${imgRes || "/assets/no_img.jpg"})`,
-              }}
-            ></Box>
-          </Box>
+        <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
+          <Box
+            className={`img-res`}
+            sx={{
+              transition: "all 0.3s",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+              width: "100%",
+              height: "100%",
+              backgroundImage: `url(${imgRes || "/assets/no_img.jpg"})`,
+            }}
+          ></Box>
         </Box>
+      </Box>
       <Stack className="mt-[8px]">
         <span className="text-lg font-semibold capitalize whitespace-nowrap overflow-hidden overflow-ellipsis">
           {nameRes}
@@ -65,9 +57,9 @@ export const ItemRes = (props: propsData) => {
           <Box className="flex gap-2">
             <Box className="flex items-center justify-center gap-2">
               <AccessTimeRoundedIcon />
-                <Typography sx={{ fontSize: "14px" }}>
-                  {Math.floor(Number(distance) * 12)} phút
-                </Typography>
+              <Typography sx={{ fontSize: "14px" }}>
+                {Math.floor(Number(distance) * 12)} phút
+              </Typography>
             </Box>
             •
             <Typography
@@ -98,5 +90,3 @@ export const ItemRes = (props: propsData) => {
     </Box>
   )
 }
-
-
