@@ -19,7 +19,7 @@ const CartItem = (props: propsData) => {
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
   const handleAdd = () => {
-    if(quantity>=15) return
+    if(quantity>=10) return
     setQuantity((prev) => +prev + 1)
     dispatch(cartActions.addToCart(item))
   }
@@ -35,19 +35,19 @@ const CartItem = (props: propsData) => {
   }
 
   const handleOnChangeInput = (value: number) => {
-    if(quantity>15){
-      setQuantity(15)
+    if(quantity>10){
+      setQuantity(10)
     }
     setQuantity(value)
   }
   React.useEffect(()=>{
-    if(quantity>15){
-      enqueueSnackbar("Không thể mua quá 15 sản phẩm",{variant:"error"})
+    if(quantity>10){
+      enqueueSnackbar("Không thể mua quá 10 sản phẩm",{variant:"error"})
     }
   },[quantity])
   const handleSetQuantity = (value: number) => {
-    if(quantity>15){
-      setQuantity(15)
+    if(quantity>10){
+      setQuantity(10)
       return
     }
     if (value === 0) {
