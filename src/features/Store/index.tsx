@@ -39,6 +39,7 @@ const GetAllStore = (props: propsData) => {
   }
   React.useEffect(() => {
     window.scrollTo(0, 0)
+    fetchData()
   }, [])
 
   React.useEffect(() => {
@@ -72,7 +73,7 @@ const GetAllStore = (props: propsData) => {
         hasMore={hasMore}
         loader={<h4>Loading...</h4>}
       >
-        <Grid container spacing={{ xs: 0, sm: 1, md: 2, lg: 3 }}>
+        <Grid className="pb-10" container spacing={{ xs: 2, sm: 2, md: 2, lg: 3 }}>
           {!isLoading ? (
             <>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (

@@ -61,7 +61,7 @@ const SearchList = () => {
   return (
     <Box >
       <Header sx={{ backgroundColor: "white" }} isWhiteLogo={false} />
-      <Box sx={{boxShadow:setterShadow?"0 4px 2px -2px rgba(0, 0, 0, 0.2)":"none" }} className="z-[100] pb-2 w-full bg-white  sticky top-[80px] ">
+      <Box sx={{boxShadow:setterShadow?"0 4px 2px -2px rgba(0, 0, 0, 0.2)":"none" }} className={`z-[100] pb-2 w-full bg-white  sticky ${width<500?"top-[60px]":"top-[80px] "}`}>
       <Box  className="w-[100%] container-base base-pd flex items-center justify-center gap-3">
         <input
           className="appearance-none border-2 flex-5 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
@@ -112,7 +112,7 @@ const SearchList = () => {
       </Box>
       
       <Box
-        className="mt-[30px] py-10"
+        className={`${width<500?"mt-[10px]":"mt-[30px]"} py-10`}
         sx={{
           backgroundColor: "rgb(240, 242, 245)",
           minHeight: "calc(100vh - 80px)",

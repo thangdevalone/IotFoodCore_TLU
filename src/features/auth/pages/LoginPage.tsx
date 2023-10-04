@@ -31,16 +31,13 @@ export function LoginPage(props: LoginPageProps) {
   const dispatch = useAppDispatch()
   const schema = yup.object().shape({
     username: yup.string().required("Cần nhập mã sinh viên"),
-    password: yup
-      .string()
-      .required("Cần nhập mật khẩu")
+    password: yup.string().required("Cần nhập mật khẩu"),
   })
 
   const form = useForm<LoginForm>({
     resolver: yupResolver(schema),
   })
   const handleLogin: SubmitHandler<LoginForm> = (data) => {
-  
     dispatch(authActions.login(data))
   }
   useEffect(() => {
@@ -50,23 +47,26 @@ export function LoginPage(props: LoginPageProps) {
       })
     }
   }, [actionAuth])
-  
 
-useEffect(() => {
-  document.body.style.overflow = "hidden"; // Set overflow to hidden when the component mounts
+  useEffect(() => {
+    document.body.style.overflow = "hidden" // Set overflow to hidden when the component mounts
 
-  return () => {
-    document.body.style.overflow = "hidden scroll"; // Reset overflow to hidden when the component unmounts
-  };
-}, []);
-  const navigate=useNavigate()
-  const handleHome=()=>{
-    navigate('/')
+    return () => {
+      document.body.style.overflow = "hidden scroll" // Reset overflow to hidden when the component unmounts
+    }
+  }, [])
+  const navigate = useNavigate()
+  const handleHome = () => {
+    navigate("/")
   }
   return (
     <div className="container-cs w-screen relative h-screen flex items-center justify-center">
-      <IconButton onClick={handleHome} sx={{position:"absolute"}} className="top-[15px] left-[15px]">
-        <ArrowBack htmlColor="white"/>
+      <IconButton
+        onClick={handleHome}
+        sx={{ position: "absolute" }}
+        className="top-[15px] left-[15px]"
+      >
+        <ArrowBack htmlColor="white" />
       </IconButton>
       {logging && (
         <LinearProgress
@@ -105,7 +105,7 @@ useEffect(() => {
                 position: "absolute",
                 top: "15px",
                 width: "100px",
-                transform:"translateX(-50%)",
+                transform: "translateX(-50%)",
                 left: "50%",
               }}
               src="/assets/tlufood_b.png"
@@ -158,7 +158,6 @@ useEffect(() => {
                 >
                   <InputField label="Mã sinh viên" name="username" />
                   <PasswordField label="Mật khẩu" name="password" />
-                
 
                   <Button
                     size="large"
@@ -191,7 +190,9 @@ useEffect(() => {
               <Link style={{ color: "blue" }} to="/forgot">
                 Quên mật khẩu?
               </Link>
+
               <Typography variant="body2" color="text.secondary">
+                Form by{" "}
                 <Link
                   color="inherit"
                   style={{ textDecoration: "underline" }}

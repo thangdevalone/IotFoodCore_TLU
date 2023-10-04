@@ -9,7 +9,10 @@ export interface ProductRoot {
   totalRow: number
   data: ProductItem[]
 }
-
+export interface VoucherRoot {
+  totalRow: number
+  data: VoucherItem[]
+}
 export interface EmployeeRoot {
   totalRow: number
   data: EmployeeItem[]
@@ -73,7 +76,17 @@ export interface EmployeeItem {
   imgUser: string
   msv: string
 }
-
+export interface VoucherItem {
+  id?: number
+  createDate?: string
+  status?: boolean
+  discount: number
+  expired: string
+  detail: string
+  idVoucher: string
+  quantity: number
+  title: string
+}
 export interface RoleUser {
   id: number
   createDate: any
