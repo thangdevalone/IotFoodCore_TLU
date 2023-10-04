@@ -54,9 +54,11 @@ export const ItemFood = (props: propsData) => {
     }
     enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
     dispatch(cartActions.addToCart(data))
-    console.log(idRes,toppingList)
-    if( idRes && toppingList){
-      dispatch(cartActions.setToppingRes({ id: idRes, listTopping: toppingList }))
+    console.log(idRes, toppingList)
+    if (idRes && toppingList) {
+      dispatch(
+        cartActions.setToppingRes({ id: idRes, listTopping: toppingList }),
+      )
     }
   }
 
@@ -73,7 +75,11 @@ export const ItemFood = (props: propsData) => {
         }}
         onClick={handleAddToCart}
       >
-        <Box className=" min-w-[100px] min-h-[100px]">
+        <Box
+          className={`min-w-[100px] min-h-[100px] ${
+            width < 500 && "max-h-[120px] max-w-[150px]"
+          }`}
+        >
           <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
             <img
               className={`img-sour`}
@@ -91,30 +97,31 @@ export const ItemFood = (props: propsData) => {
         </Box>
         <Box
           className={`flex flex-col w-full overflow-hidden pd-1 ${
-            width < 500 ? "justify-between mt-[0px] pl-1" : "mt-[8px]"
+            width < 500
+              ? "justify-between mt-[0px] pl-1 min-w-[120px]"
+              : "mt-[8px]"
           }`}
         >
-          <p
-            className={`capitalize ${
-              width < 500
-                ? width < 350
-                  ? "text-base font-medium line-clamp-2"
-                  : " text-lg font-medium"
-                : "text-lg whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold"
-            }`}
-          >
-            {foodName}
-          </p>
           {width < 500 ? (
             <>
-              <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-[14px]">
-                {nameStore}
-              </span>
-              {width > 450 && (
+              <div>
+                <p
+                  className={`capitalize ${
+                    width < 500
+                      ? width < 350
+                        ? "text-base font-medium line-clamp-2"
+                        : " text-lg font-medium"
+                      : "text-lg line-clamp-1 font-semibold"
+                  }`}
+                >
+                  {foodName}
+                </p>
+                <span className="line-clamp-1 text-[14px]">{nameStore}</span>
+
                 <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-[14px] text-gray-400">
-                  {detail}
+                  {detail ? detail : <span className="mt-1 block">Đã bán: {qSold}</span>}
                 </span>
-              )}
+              </div>
 
               <Stack
                 flexDirection="row"
@@ -137,6 +144,17 @@ export const ItemFood = (props: propsData) => {
             </>
           ) : (
             <>
+              <p
+                className={`capitalize ${
+                  width < 500
+                    ? width < 350
+                      ? "text-base font-medium line-clamp-2"
+                      : " text-lg font-medium"
+                    : "text-lg line-clamp-1 font-semibold"
+                }`}
+              >
+                {foodName}
+              </p>
               <Box className="flex mt-[1px] capitalize gap-5 items-center">
                 <Typography
                   className="whitespace-nowrap flex-1 overflow-hidden overflow-ellipsis"

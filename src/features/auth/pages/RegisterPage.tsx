@@ -159,7 +159,9 @@ export function RegisterPage(props: RegisterPageProps) {
                 label={
                   <span>
                     Tôi đã đọc và đồng ý với{" "}
-                    <span
+                    <a
+                      target="_blank"
+                      href="https://docs.google.com/document/d/1AzgImd9LS0Vs1wTFTgnxc51V4ETVlph7FeryDaOox_M/edit?usp=sharing"
                       style={{
                         color: "blue",
                         textDecoration: "underline",
@@ -167,7 +169,7 @@ export function RegisterPage(props: RegisterPageProps) {
                       }}
                     >
                       Điều khoản và Chính sách bảo mật
-                    </span>
+                    </a>
                   </span>
                 }
               />

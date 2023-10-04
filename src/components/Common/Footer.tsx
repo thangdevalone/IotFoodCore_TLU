@@ -115,7 +115,7 @@ export function Footer(props: FooterProps) {
               <Stack direction="column" spacing={1}>
                 <Typography sx={{ "&:hover": { textDecoration: "underline" } }}>
                   <Link
-                    to={"https://www.facebook.com/giang.bui.3511"}
+                    to={"https://docs.google.com/document/d/1AzgImd9LS0Vs1wTFTgnxc51V4ETVlph7FeryDaOox_M/edit?usp=sharing"}
                     target="_blank"
                   >
                     Điều khoản và Chính sách bảo mật
