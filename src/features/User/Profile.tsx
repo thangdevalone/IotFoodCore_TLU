@@ -76,6 +76,7 @@ export function Profile(props: ProfileProps) {
                   variant="outlined"
                   fullWidth
                   margin="normal"
+                  disabled={true}
                   value={formData.msv}
                   onChange={handleInputChange}
                 />

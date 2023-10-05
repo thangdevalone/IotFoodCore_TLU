@@ -137,3 +137,19 @@ export interface ItemTopping {
   name: string
   price: number
 }
+
+export interface BillUser {
+  id: number
+  createAt: string
+  orderStatus: string
+  nameRestaurant?: string
+  shipFee: number
+  finishTime: any
+  accountId: number
+  foodResponseBills: FoodResponseBill[]
+}
+
+export interface RootBillUser {
+  totalRow: number
+  data: BillUser[]
+}

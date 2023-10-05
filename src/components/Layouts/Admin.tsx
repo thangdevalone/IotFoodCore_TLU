@@ -19,6 +19,7 @@ import { Route, Routes, useLocation } from "react-router-dom"
 import { HeaderAdmin } from "../Common/HeaderAdmin"
 import { Voucher } from "@/features/Admin/Voucher"
 import NewVoucher from "@/features/Admin/components/NewVoucher"
+import UpdateVoucher from "@/features/Admin/components/UpdateVoucher"
 
 const WelComeAdmin = () => {
   return (
@@ -84,6 +85,8 @@ const FormUpdate = () => {
         return <UpdateProduct id={id} />
       case "customer":
         return <UpdateCustomer id={id} />
+      case "voucher":
+        return <UpdateVoucher id={id} />
       default:
         return null
     }

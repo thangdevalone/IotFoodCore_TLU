@@ -183,11 +183,14 @@ const adminApi = {
       },
     })
   },
+  updateVoucher(data: VoucherItem) {
+    const url = "ADMIN/update-voucher"
+    return axiosClient.put(url, data)
+  },
   deleteFood(foodArray: Array<number>) {
     const url = "ADMIN/delete-food"
     return axiosClient.post(url, foodArray)
   },
-
   deleteVoucher(foodArray: Array<number>) {
     const url = "ADMIN/delete-voucher"
     return axiosClient.post(url, foodArray)
@@ -214,13 +217,16 @@ const adminApi = {
     return axiosClient.post(url)
   },
 
-
   getBill(page: PageConfig, status: string | null) {
     if (status) {
       const url = `ADMIN/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}&orderStatus=${status}`
       return axiosClient.post(url)
     }
     const url = `ADMIN/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}`
+    return axiosClient.post(url)
+  },
+  getDetailVoucher(id: number) {
+    const url = `ADMIN/get-detail-voucher?id=${id}`
     return axiosClient.post(url)
   },
 }
