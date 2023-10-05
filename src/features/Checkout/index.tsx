@@ -1,18 +1,28 @@
-import { useAppSelector } from "@/app/hooks"
-import { Header, ToppingAccord } from "@/components/Common"
-import { iDataStore } from "@/components/Common/CartDrawer/CartSlice"
+import userApi from "@/api/userApi"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
+import { Header, ToppingAccord, VoucherDesign } from "@/components/Common"
+import { cartActions, iDataStore } from "@/components/Common/CartDrawer/CartSlice"
 import CartList from "@/components/Common/CartDrawer/Components/CartList"
 import { CustomButton } from "@/components/Custom/CustomButon"
-import { handlePrice } from "@/utils"
+import { BillConfig, BillFoodRequest, VoucherItem, VoucherRoot } from "@/models"
+import { handleDiscount, handlePrice } from "@/utils"
 import {
+  Close,
   CreditCard,
+  Done,
   KeyboardArrowRight,
   LocalAtmOutlined,
 } from "@mui/icons-material"
 import {
   Box,
   Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
+  IconButton,
   InputLabel,
   ListItemIcon,
   ListItemText,
@@ -22,7 +32,8 @@ import {
   Stack,
   TextField,
 } from "@mui/material"
-import { ChangeEvent, useState } from "react"
+import { useSnackbar } from "notistack"
+import { ChangeEvent, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export interface CheckoutProps {}
@@ -31,17 +42,167 @@ export default function Checkout(props: CheckoutProps) {
   const cart = useAppSelector((state) => state.cart)
   const [noteShip, setNoteShip] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("cash")
-  const handleAddOrder = () => {
-    console.log(cart)
-  }
-  const navigate=useNavigate()
+  const [vouchers, setVouchers] = useState<VoucherItem[]>([])
+  const [loading, setLoading] = useState(false)
+  const shipFee =
+    cart.totalShip && cart.voucherUse
+      ? handleDiscount(
+          cart.totalShip,
+          cart.voucherUse.discount,
+          cart.voucherUse.code,
+        )
+      : cart.totalShip
+  const navigate = useNavigate()
   const handleChange = (event: SelectChangeEvent) => {
     setPaymentMethod(event.target.value as string)
   }
+  const [open, setOpen] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+  const dispatch=useAppDispatch()
+  const handleAddOrder = () => {
+    const bill: BillConfig = {
+      totalAmount: 0,
+      shipFee: 0,
+      billFoodRequests: [],
+    }
+    if (cart.voucherUse) {
+      bill["codeVoucher"] = cart.voucherUse.code
+    }
+    bill["shipFee"] = shipFee || 0
+    const listBill: BillFoodRequest[] = []
+    cart.dataStore.forEach((element) => {
+      element.items.forEach((item) => {
+        listBill.push({ foodId: item.idFood, quantity: item.quantity })
+      })
+    })
+    bill["billFoodRequests"] = listBill
+    bill["totalAmount"] = cart.totalAmount || 0
+    bill["note"] = noteShip
 
+    console.log(bill)
+    ;(async () => {
+      try {
+        setLoading(true)
+
+        await userApi.addOrder(bill)
+        enqueueSnackbar("Đặt hàng thành công. Bấm vào đơn mua để xem", {
+          variant: "success",
+        })
+        setLoading(false)
+        setOpenConfirm(false)
+        dispatch(cartActions.resetCart())
+      } catch (error) {
+        console.log(error)
+        enqueueSnackbar("Đặt hàng thất bại. Thử lại", { variant: "error" })
+        setLoading(false)
+      }
+    })()
+  }
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+  const handleClickOpenConfirm = () => {
+    setOpenConfirm(true)
+  }
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false)
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const res = await userApi.getAllVoucher({ pageIndex: 0, pageSize: 10 })
+        const resData = res.data as VoucherRoot
+        setVouchers(resData.data)
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [])
   return (
     <Box>
       <Header sx={{ backgroundColor: "white" }} isWhiteLogo={false} />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        sx={{ "& .MuiPaper-root": { width: "90%", minWidth: "650px" } }}
+      >
+        <DialogTitle>
+          <Stack
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <span>Chọn ưu đãi có sẵn</span>
+            <Box>
+              <IconButton onClick={handleClose}>
+                <Close />
+              </IconButton>
+            </Box>
+          </Stack>
+        </DialogTitle>
+        <DialogContent
+          sx={{ backgroundColor: "#D3D3D3", paddingTop: "20px !important" }}
+        >
+          {vouchers.map((item) => (
+            <VoucherDesign
+              key={item.id}
+              data={item}
+              handleClose={handleClose}
+            />
+          ))}
+        </DialogContent>
+      </Dialog>
+      <Dialog open={openConfirm} onClose={handleCloseConfirm}>
+        <DialogTitle>Bạn chắn chắn muốn đặt hàng?</DialogTitle>
+        <DialogContent>
+          <b>Lưu ý:</b> Bạn chỉ có thể hủy đơn hàng trước khi đơn hàng được{" "}
+          <b>xác nhận hoặc đang giao</b> nên hãy thật chắc chắn
+          trước khi đặt hàng.
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleCloseConfirm}
+            variant="outlined"
+            sx={{
+              borderColor: "#ef7692",
+              color: "#ef7692",
+              "&:hover": {
+                borderColor: "#ef7692",
+                color: "#ef7692",
+              },
+            }}
+          >
+            Hủy
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={
+              loading ? (
+                <CircularProgress size={20} sx={{ color: "white" }} />
+              ) : (
+                <Done />
+              )
+            }
+            onClick={handleAddOrder}
+            sx={{
+              backgroundColor: "var(--color-df-1)",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "var(--color-df-1)",
+              },
+            }}
+          >
+            Tôi chắc chắn
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div className="bg-white h-[80px] w-screen text-black flex items-center justify-center mt-[80px] font-semibold text-2xl border-t">
         Thanh toán
       </div>
@@ -53,10 +214,12 @@ export default function Checkout(props: CheckoutProps) {
         className="py-4"
       >
         <div
-          style={{ width: "100%", maxWidth: "1000px", margin: "0 auto"}}
-          className={`base-pd ${!cart.dataStore?.length && "flex justify-center"}`}
+          style={{ width: "100%", maxWidth: "1000px", margin: "0 auto" }}
+          className={`base-pd ${
+            !cart.dataStore?.length && "flex justify-center"
+          }`}
         >
-          {cart.dataStore?.length>0 ? (
+          {cart.dataStore?.length > 0 ? (
             <>
               <div className="w-[100%] mb-4 bg-white">
                 <p className="px-6 py-3 border-b-[2px] font-semibold border-gray-300">
@@ -69,18 +232,22 @@ export default function Checkout(props: CheckoutProps) {
                     </p>
                     <p className="font-semibold">{cart.timeDeliver}</p>
                   </div>
-                  <Stack direction={{md:"row",xs:"column"}} alignItems={{xs:"center"}} className="mt-3 px-4 py-3" spacing={3}>
-             
-                      <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1052.9831793255769!2d105.81523017582998!3d20.976219020638982!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135acef8ad5350f%3A0x89435a3528118ff5!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBUaMSDbmcgTG9uZw!5e0!3m2!1svi!2s!4v1695782480925!5m2!1svi!2s"
-                        width="100%"
-                        height="250"
-                        style={{ border: 0 }}
-                        allowFullScreen={false}
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                      ></iframe>
-           
+                  <Stack
+                    direction={{ md: "row", xs: "column" }}
+                    alignItems={{ xs: "center" }}
+                    className="mt-3 px-4 py-3"
+                    spacing={3}
+                  >
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1052.9831793255769!2d105.81523017582998!3d20.976219020638982!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135acef8ad5350f%3A0x89435a3528118ff5!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBUaMSDbmcgTG9uZw!5e0!3m2!1svi!2s!4v1695782480925!5m2!1svi!2s"
+                      width="100%"
+                      height="250"
+                      style={{ border: 0 }}
+                      allowFullScreen={false}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+
                     <div className="w-full">
                       <TextField
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -185,13 +352,24 @@ export default function Checkout(props: CheckoutProps) {
                     <Box className="flex justify-between items-center text-sm mb-1">
                       <span className="">Tổng phí vận chuyển:</span>
                       <span className="font-medium">
-                        {handlePrice(cart.totalShip)} ₫
+                        {cart.voucherUse && (
+                          <span className="line-through text-gray-400 mr-2">
+                            {handlePrice(cart.totalShip)} ₫
+                          </span>
+                        )}{" "}
+                        {handlePrice(shipFee)} ₫
                       </span>
                     </Box>
                     <Box className="flex justify-between items-center text-sm mb-1">
                       <span className="">Tổng hóa đơn:</span>
                       <span className="font-medium">
-                        {handlePrice(cart.totalPrice)} ₫
+                        {cart.voucherUse && (
+                          <span className="line-through text-gray-400 mr-2">
+                            {handlePrice(cart.totalPrice)} ₫
+                          </span>
+                        )}{" "}
+                        {handlePrice((shipFee || 0) + (cart.totalAmount || 0))}{" "}
+                        ₫
                       </span>
                     </Box>
                   </div>
@@ -236,7 +414,9 @@ export default function Checkout(props: CheckoutProps) {
                         <ListItemIcon>
                           <CreditCard fontSize="small" />
                         </ListItemIcon>
-                        <ListItemText>Thanh toán online (Không có sẵn)</ListItemText>
+                        <ListItemText>
+                          Thanh toán online (Không có sẵn)
+                        </ListItemText>
                       </MenuItem>
                     </Select>
                   </FormControl>
@@ -247,14 +427,22 @@ export default function Checkout(props: CheckoutProps) {
                   <p>Ưu đãi</p>{" "}
                   <Button
                     endIcon={<KeyboardArrowRight />}
+                    onClick={handleClickOpen}
                     sx={{ color: "var(--color-df-2)" }}
                   >
                     Chọn ưu đãi{" "}
                   </Button>
                 </div>
+                <div className="px-6 flex flex-col items-center bg-[#D3D3D3] py-5">
+                  {cart.voucherUse ? (
+                    <VoucherDesign data={cart.voucherUse} />
+                  ) : (
+                    "Chưa có mã nào được áp dụng"
+                  )}
+                </div>
               </div>
               <div
-                className="fixed bottom-0 left-0  w-screen h-[15vh] max-h-[90px] bg-white"
+                className="fixed bottom-0 left-0 z-[1200] w-screen h-[15vh] max-h-[90px] bg-white"
                 style={{ boxShadow: "0 -4px 5px 0px rgba(0, 0, 0, 0.2)" }}
               >
                 <div
@@ -268,12 +456,17 @@ export default function Checkout(props: CheckoutProps) {
                   <p className="text-xl">
                     Tổng hóa đơn:{" "}
                     <span className="font-semibold">
-                      {handlePrice(cart.totalPrice)} ₫
+                      {cart.voucherUse && (
+                        <span className="line-through text-gray-400 mr-2">
+                          {handlePrice(cart.totalPrice)} ₫
+                        </span>
+                      )}{" "}
+                      {handlePrice((shipFee || 0) + (cart.totalAmount || 0))} ₫
                     </span>
                   </p>
                   <CustomButton
                     fullWidth
-                    onClick={handleAddOrder}
+                    onClick={handleClickOpenConfirm}
                     sx={{
                       background: "var(--color-df-1)",
                       color: "white",
@@ -321,7 +514,7 @@ export default function Checkout(props: CheckoutProps) {
               <Box className="caption-tx" sx={{ color: "#9a9a9a" }}>
                 Thêm các mặt hàng vào giỏ hàng của bạn và đặt hàng tại đây
               </Box>
-              <Button onClick={()=>navigate("/")} variant="outlined">
+              <Button onClick={() => navigate("/")} variant="outlined">
                 Tiếp tục xem đồ ăn
               </Button>
             </Box>

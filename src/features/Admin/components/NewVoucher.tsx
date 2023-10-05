@@ -49,7 +49,7 @@ function NewVoucher(props: NewVoucherProps) {
       setLoadding(true)
       try {
         const voucher: VoucherItem = {
-          idVoucher: idVoucher,
+          code: idVoucher,
           title: title,
           expired: dayjs(expired).format("YYYY-MM-DD"),
           detail: detail,

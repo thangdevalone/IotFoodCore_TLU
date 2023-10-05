@@ -83,7 +83,7 @@ export interface VoucherItem {
   discount: number
   expired: string
   detail: string
-  idVoucher: string
+  code: string
   quantity: number
   title: string
 }
@@ -118,7 +118,7 @@ export interface Invoice {
   createAt: string
   orderStatus: string
   nameRestaurant: string
-  shipFee: number
+  shipFee: number,
   finishTime: any
   foodResponseBills: FoodResponseBill[]
 }

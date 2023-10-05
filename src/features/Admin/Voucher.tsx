@@ -101,7 +101,7 @@ export function Voucher() {
   const columns = useMemo<MRT_ColumnDef<VoucherItem>[]>(
     () => [
       { accessorKey: "id", header: "ID" },
-      { accessorKey: "idVoucher", header: "Mã hóa đơn" },
+      { accessorKey: "code", header: "Mã hóa đơn" },
       { accessorKey: "title", header: "Tiêu đề" },
       { accessorKey: "detail", header: "mô tả" },
       {
