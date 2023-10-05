@@ -13,7 +13,7 @@ export default function User(props: UserProps) {
   }, [])
   return (
     <>
-      <Header sx={{ backgroundColor: "var(--color-layer-2)" }} />
+      <Header sx={{ backgroundColor: "var(--color-layer-2)" }} isWhiteLogo={true} />
       <div
         style={{ backgroundColor: "rgb(240, 242, 245)" }}
         className="w-screen h-screen"
