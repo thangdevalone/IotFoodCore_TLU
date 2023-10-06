@@ -16,10 +16,11 @@ export interface HeaderProps {
   sx?: { [index: string]: string }
   className?: string
   isWhiteLogo?: boolean
+  theme?:string
 }
 
 export function Header(props: HeaderProps) {
-  const { sx, className, isWhiteLogo = true } = props
+  const { sx, className, isWhiteLogo = true,theme="default" } = props
   const user = useInforUser()
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
@@ -92,9 +93,9 @@ export function Header(props: HeaderProps) {
               src={
                 !isWhiteLogo
                   ? "/assets/tlufood_b.png"
-                  : mobile && setterBg
+                  : (mobile && setterBg) || theme==="red"
                   ? "/assets/tlufood.png"
-                  : mobile
+                  : mobile 
                   ? "/assets/tlufood_b.png"
                   : "/assets/tlufood.png"
               }

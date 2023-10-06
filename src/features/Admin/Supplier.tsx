@@ -18,7 +18,6 @@ import { useNavigate } from "react-router-dom"
 import { ReactSpreadsheetImport } from "react-spreadsheet-import"
 import SettingMenu from "./components/SettingMenu"
 
-
 export function Supplier() {
   const navigate = useNavigate()
   const [restaurant, setRestaurant] = useState<TypeRestaurant[]>([])
@@ -33,7 +32,7 @@ export function Supplier() {
   const [sorting, setSorting] = useState<MRT_SortingState>([])
   const [open, setOpen] = useState(false)
   const [isDel, setIsDel] = useState(false)
-  const [isOpenImport,setIsOpenImport]=useState(false)
+  const [isOpenImport, setIsOpenImport] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
@@ -105,31 +104,48 @@ export function Supplier() {
     () => [
       { accessorKey: "id", header: "ID" },
       { accessorKey: "restaurantName", header: "Tên nhà cung cấp" },
-      { accessorKey: "imgRes", header: "Ảnh" ,Cell:({cell})=><img src={cell.getValue<string>()} className="w-[70px] h-[70px] object-cover" />},
-
+      {
+        accessorKey: "imgRes",
+        header: "Ảnh",
+        Cell: ({ cell }) => (
+          <img
+            src={cell.getValue<string>()}
+            className="w-[70px] h-[70px] object-cover"
+          />
+        ),
+      },
       { accessorKey: "star", header: "Đánh giá" },
-
       {
         accessorKey: "distance",
         header: "Khoảng cách",
         Cell: ({ cell }) => formatCurrencyKM(cell.getValue<string>()),
       },
       { accessorKey: "phoneNumber", header: "Số điện thoại" },
-      { accessorKey: "address", header: "Địa chỉ" }
+      { accessorKey: "address", header: "Địa chỉ" },
     ],
     [],
   )
-  const onClose= () => {
+  const onClose = () => {
     setIsOpenImport(false)
   }
   // Called after user completes the flow. Provides data array, where data keys matches your field keys.
-  const  onSubmit= (data:any)=> {
+  const onSubmit = (data: any) => {
     console.log(data)
   }
   return (
     <Box sx={{ height: "100%" }}>
-      <SettingMenu anchorRef={settingRef} setIsOpenImport={setIsOpenImport} open={open} setOpen={setOpen} />
-      <ReactSpreadsheetImport isOpen={isOpenImport} onClose={onClose} onSubmit={onSubmit} fields={SupplierFields} />
+      <SettingMenu
+        anchorRef={settingRef}
+        setIsOpenImport={setIsOpenImport}
+        open={open}
+        setOpen={setOpen}
+      />
+      <ReactSpreadsheetImport
+        isOpen={isOpenImport}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        fields={SupplierFields}
+      />
       <MaterialReactTable
         muiTablePaperProps={{ sx: { height: "100%" } }}
         muiTableContainerProps={{ sx: { height: "calc(100% - 112px)" } }}
@@ -170,7 +186,7 @@ export function Supplier() {
               Tạo
             </Button>
             <Typography sx={{ fontSize: "18px", fontWeight: 500, mr: "10px" }}>
-              Nhà cung cấp  
+              Nhà cung cấp
             </Typography>
             <IconButton
               ref={settingRef}

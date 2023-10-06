@@ -34,6 +34,10 @@ const foodsApis = {
     const url = `auth/paging-food-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+  pagingRes(page: PageConfig) {
+    const url = `auth/paging-res?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
+    return axiosClient.post(url)
+  },
 }
 
 export default foodsApis

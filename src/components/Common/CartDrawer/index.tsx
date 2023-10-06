@@ -17,13 +17,20 @@ import CartList from "./Components/CartList"
 import "./style_drawer.css"
 import { CartItemData, Order } from "@/models"
 import { ToppingAccord } from ".."
+import { useNavigate } from "react-router-dom"
 
 export interface CardDrawerProps {}
 
 export function CartDrawer(props: CardDrawerProps) {
-  const { open, dataStore, timeDeliver, lengthFood,totalPrice,totalAmount,totalShip } = useAppSelector(
-    (state) => state.cart,
-  )
+  const {
+    open,
+    dataStore,
+    timeDeliver,
+    lengthFood,
+    totalPrice,
+    totalAmount,
+    totalShip,
+  } = useAppSelector((state) => state.cart)
   const user = useInforUser()
   const iOS =
     typeof navigator !== "undefined" &&
@@ -35,7 +42,7 @@ export function CartDrawer(props: CardDrawerProps) {
   React.useEffect(() => {
     if (!dataStore) return
     let sum = 0
-    let ship=0
+    let ship = 0
     dataStore?.forEach((store) => {
       let amount = 0
       store.items.forEach((item) => {
@@ -49,18 +56,18 @@ export function CartDrawer(props: CardDrawerProps) {
           0,
         ),
       )
-      ship+=shipFee
-      dispatch(cartActions.setAmount({id:store.id,amount:amount}))
-      dispatch(cartActions.setShipFee({id:store.id,shipFee:shipFee}))
+      ship += shipFee
+      dispatch(cartActions.setAmount({ id: store.id, amount: amount }))
+      dispatch(cartActions.setShipFee({ id: store.id, shipFee: shipFee }))
     })
     dispatch(cartActions.setTotalAmount(sum))
     dispatch(cartActions.setTotalShip(ship))
-    dispatch(cartActions.setTotalPrice(sum+ship))
-
-
+    dispatch(cartActions.setTotalPrice(sum + ship))
   }, [dataStore])
-  const handleAddOrder = () => {
-    const order: Order | {} = {}
+  const navigate = useNavigate()
+  const handlePay = () => {
+    toggleDrawer()
+    navigate("/checkout")
   }
   const { width } = useWindowDimensions()
   return (
@@ -124,7 +131,7 @@ export function CartDrawer(props: CardDrawerProps) {
                   style={{
                     padding: "24px",
                     overflow: "hidden auto",
-                    height: "calc(100% - 200px)",
+                    height: "calc(100% - 245px)",
                     width: "100%",
                   }}
                   spacing={3}
@@ -133,7 +140,9 @@ export function CartDrawer(props: CardDrawerProps) {
                     <div key={data.id}>
                       <div>
                         <div className="font-medium text-xl">{data.name}</div>
-                        <ToppingAccord toppingEntity={data.toppingEntityList || []}/>
+                        <ToppingAccord
+                          toppingEntity={data.toppingEntityList || []}
+                        />
                         <CartList items={data.items} />
                       </div>
                       <Stack
@@ -150,21 +159,24 @@ export function CartDrawer(props: CardDrawerProps) {
                       >
                         <Stack direction="column">
                           <span>Tổng</span>
-                          {user ? (
+                        
                             <p>Phí vận chuyển</p>
-                          ) : (
-                            <p>
-                              Phí vận chuyển sẽ được hiển thị khi bạn đăng nhập
-                            </p>
-                          )}
+
                         </Stack>
                         <Stack direction="column">
                           <span className="text-end">
                             {handlePrice(data.amount)} ₫
                           </span>
-                          <span className="text-end">{handlePrice(data.shipFee)} ₫</span>
+                          <span className="text-end">
+                            {handlePrice(data.shipFee)} ₫
+                          </span>
                           <div className="border border-gray-400 my-[2px]"></div>
-                          <span className="text-end font-semibold">{handlePrice((data.shipFee ||0)+(data.amount ||0))} ₫</span>
+                          <span className="text-end font-semibold">
+                            {handlePrice(
+                              (data.shipFee || 0) + (data.amount || 0),
+                            )}{" "}
+                            ₫
+                          </span>
                         </Stack>
                       </Stack>
                     </div>
@@ -179,6 +191,7 @@ export function CartDrawer(props: CardDrawerProps) {
                       width < 400 && "flex flex-row items-center"
                     }`}
                   >
+                    <p className="text-sm py-2"><b>Lưu ý:</b> Xem chi tiết đơn hàng để dùng mã ưu đãi</p>
                     <label
                       htmlFor="timeDeliver"
                       className="block mb-2 w-full text-sm font-medium text-gray-900 dark:text-white"
@@ -189,32 +202,30 @@ export function CartDrawer(props: CardDrawerProps) {
                       id="timeDeliver"
                       defaultValue={timeDeliver}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        dispatch(
-                          cartActions.setTimeDeliver(
-                            e.target.value as
-                              | "10:00 AM"
-                              | "11:15 AM"
-                              | "12:15 AM",
-                          ),
-                        )
+                        dispatch(cartActions.setTimeDeliver(e.target.value))
                       }}
                       className={`bg-gray-50 border appearance-none custom-select border-gray-300 text-black rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ${
                         width < 400 ? "max-w-[150px] ml-2  p-2" : "p-2.5"
                       }`}
                     >
                       <option value="10:00 AM">10:00 AM</option>
+                      <option value="10:30 AM">10:30 AM</option>
                       <option value="11:15 AM">11:15 AM</option>
-                      <option value="12:15 AM">12:15 AM</option>
+                      <option value="11:45 AM">11:45 AM</option>
+                      <option value="12:30 AM">12:30 AM</option>
                     </select>
                   </div>
                   <Box className="flex justify-between items-center text-xl mb-3">
                     <span className="">Tổng tiền :</span>
-                    <span className="font-medium">{handlePrice(totalPrice)} ₫</span>
+                    <span className="font-medium">
+                      {handlePrice(totalPrice)} ₫
+                    </span>
                   </Box>
                   <Box className="w-full">
                     <CustomButton
                       fullWidth
-                      onClick={handleAddOrder}
+                      disabled={!user}
+                      onClick={handlePay}
                       sx={{
                         background: "var(--color-df-1)",
                         color: "white",
@@ -230,7 +241,7 @@ export function CartDrawer(props: CardDrawerProps) {
                         },
                       }}
                     >
-                      {user ? "Đặt hàng" : "Đăng nhập để đặt hàng"}
+                      {user ? "Xem chi tiết đơn hàng" : "Đăng nhập để đặt hàng"}
                     </CustomButton>
                   </Box>
                 </Box>

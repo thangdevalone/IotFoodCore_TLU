@@ -9,12 +9,13 @@ import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import "swiper/css"
 import { Swiper, SwiperSlide } from "swiper/react"
-
+import { SkeletonCustom } from "../../components/Common/Skeleton"
 
 export interface RecommendRestaurantProps {}
 
 export function RecommendRestaurant(props: RecommendRestaurantProps) {
   const [data, setData] = React.useState<RestaurantData[]>([])
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const swiperRef = React.useRef<any>(null)
   const navigate = useNavigate()
   const slidePrev = () => {
@@ -34,6 +35,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
       const response = await foodsApis.getRecommendRestaurants()
       if (response?.status) {
         setData(response?.data)
+        setIsLoading(true)
       }
     }
     fetchData()
@@ -50,7 +52,11 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
         className="flex"
         sx={{
           margin: `${
-            width <= 750 ? "0 20px" : width <= 900 ? "0 40px" : "0px 0px 20px 0px"
+            width <= 750
+              ? "0 20px"
+              : width <= 900
+              ? "0 40px"
+              : "0px 0px 20px 0px"
           }`,
         }}
       >
@@ -82,18 +88,30 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           allowTouchMove={true}
           ref={swiperRef}
         >
-          {data?.map((item, index) => (
-            <SwiperSlide  key={index + item?.id}>
-              <ItemRes
-                imgRes={item.imgRes}
-                nameRes={item.restaurantName}
-                distance={item.distance}
-                detail={item.detail}
-                star={item.star}
-                idRes={item.id}
-              />
-            </SwiperSlide>
-          ))}
+          {!isLoading ? (
+            <>
+              {[1, 2, 3, 4].map((item, index) => (
+                <SwiperSlide key={index + item}>
+                  <SkeletonCustom />
+                </SwiperSlide>
+              ))}
+            </>
+          ) : (
+            <>
+              {data?.map((item, index) => (
+                <SwiperSlide key={index + item?.id}>
+                  <ItemRes
+                    imgRes={item.imgRes}
+                    nameRes={item.restaurantName}
+                    distance={item.distance}
+                    detail={item.detail}
+                    star={item.star}
+                    idRes={item.id}
+                  />
+                </SwiperSlide>
+              ))}
+            </>
+          )}
         </Swiper>
         {width > 900 && (
           <Box className="flex items-center justify-center ml-[5px]">
@@ -103,7 +121,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
           </Box>
         )}
       </Box>
-      <Stack alignItems="center" >
+      <Stack alignItems="center">
         <Box className="container-base base-pd">
           <CustomButton
             fullWidth

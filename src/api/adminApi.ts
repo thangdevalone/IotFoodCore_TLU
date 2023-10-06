@@ -1,9 +1,14 @@
+import { VoucherItem } from './../models/Admin';
 import { ExpandFood } from "./../models/Topping"
 import { PageConfig } from "./../models/Config"
 import axiosClient from "./axiosClient"
 const adminApi = {
   getAllProducts(page: PageConfig) {
     const url = `ADMIN/paging-food-admin?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
+    return axiosClient.post(url)
+  },
+  getAllVoucher(page: PageConfig) {
+    const url = `ADMIN/paging-voucher?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
   search(param: string | null, apiHandle: string) {
@@ -26,6 +31,10 @@ const adminApi = {
   },
   addTopping(data: ExpandFood) {
     const url = "ADMIN/add-topping"
+    return axiosClient.post(url, data)
+  },
+  addVoucher(data: VoucherItem) {
+    const url = "ADMIN/add-voucher"
     return axiosClient.post(url, data)
   },
   addRestaurant(
@@ -174,8 +183,16 @@ const adminApi = {
       },
     })
   },
+  updateVoucher(data: VoucherItem) {
+    const url = "ADMIN/update-voucher"
+    return axiosClient.put(url, data)
+  },
   deleteFood(foodArray: Array<number>) {
     const url = "ADMIN/delete-food"
+    return axiosClient.post(url, foodArray)
+  },
+  deleteVoucher(foodArray: Array<number>) {
+    const url = "ADMIN/delete-voucher"
     return axiosClient.post(url, foodArray)
   },
   deleteType(typeArray: Array<number>) {
@@ -194,8 +211,22 @@ const adminApi = {
     const url = `ADMIN/paging-user?pageSize=${page.pageSize}&pageIndex=${page.pageIndex}`
     return axiosClient.post(url)
   },
+
   getDetailStore(id: number) {
     const url = `ADMIN/get-detail-res?id=${id}`
+    return axiosClient.post(url)
+  },
+
+  getBill(page: PageConfig, status: string | null) {
+    if (status) {
+      const url = `ADMIN/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}&orderStatus=${status}`
+      return axiosClient.post(url)
+    }
+    const url = `ADMIN/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}`
+    return axiosClient.post(url)
+  },
+  getDetailVoucher(id: number) {
+    const url = `ADMIN/get-detail-voucher?id=${id}`
     return axiosClient.post(url)
   },
 }

@@ -1,22 +1,25 @@
-import { Box, Stack } from "@mui/material"
-import { useEffect } from "react"
-import { Outlet, Route, Routes, useLocation } from "react-router-dom"
-import { HeaderAdmin } from "../Common/HeaderAdmin"
 import { Product, Quote, Supplier } from "@/features/Admin"
-import { ToolbarAdmin } from "../Common"
-import { Employee } from "@/features/Admin/Employee"
 import { Customer } from "@/features/Admin/Customer"
-import NewProduct from "@/features/Admin/components/NewProduct"
-import NewEmployee from "@/features/Admin/components/NewEmployee"
-import NewType from "@/features/Admin/components/NewType"
+import { Employee } from "@/features/Admin/Employee"
+import Invoice from "@/features/Admin/Invoice"
 import TypeProduct from "@/features/Admin/TypeProduct"
-import queryString from "query-string"
+import NewEmployee from "@/features/Admin/components/NewEmployee"
+import NewProduct from "@/features/Admin/components/NewProduct"
 import NewStore from "@/features/Admin/components/NewSupplier"
+import NewTopping from "@/features/Admin/components/NewTopping"
+import NewType from "@/features/Admin/components/NewType"
+import UpdateCustomer from "@/features/Admin/components/UpdateCustomer"
+import UpdateProduct from "@/features/Admin/components/UpdateProduct"
 import UpdateSupplier from "@/features/Admin/components/UpdateSupplier"
 import UpdateType from "@/features/Admin/components/UpdateType"
-import NewTopping from "@/features/Admin/components/NewTopping"
-import UpdateProduct from "@/features/Admin/components/UpdateProduct"
-import UpdateCustomer from "@/features/Admin/components/UpdateCustomer"
+import { Box, Stack } from "@mui/material"
+import queryString from "query-string"
+import { useEffect } from "react"
+import { Route, Routes, useLocation } from "react-router-dom"
+import { HeaderAdmin } from "../Common/HeaderAdmin"
+import { Voucher } from "@/features/Admin/Voucher"
+import NewVoucher from "@/features/Admin/components/NewVoucher"
+import UpdateVoucher from "@/features/Admin/components/UpdateVoucher"
 
 const WelComeAdmin = () => {
   return (
@@ -59,6 +62,8 @@ const FormRouter = () => {
       return <NewStore />
     case "employee":
       return <NewEmployee />
+    case "voucher":
+        return <NewVoucher />
     default:
       return null
   }
@@ -80,6 +85,8 @@ const FormUpdate = () => {
         return <UpdateProduct id={id} />
       case "customer":
         return <UpdateCustomer id={id} />
+      case "voucher":
+        return <UpdateVoucher id={id} />
       default:
         return null
     }
@@ -109,6 +116,8 @@ export default function Admin() {
           <Route path="/expand-food" element={<NewTopping />} />
           <Route path="/new" element={<FormRouter />} />
           <Route path="/update" element={<FormUpdate />} />
+          <Route path="/invoice" element={<Invoice />} />
+          <Route path="/voucher" element={<Voucher />} />
         </Routes>
       </Box>
     </Box>

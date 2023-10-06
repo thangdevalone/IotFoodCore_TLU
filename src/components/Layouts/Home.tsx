@@ -14,13 +14,13 @@ export interface HomeProps {}
 
 export function Home(props: HomeProps) {
   const { width } = useWindowDimensions()
-  React.useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+  // React.useEffect(() => {
+  //   window.scrollTo(0, 0)
+  // }, [])
 
   return (
-    <Box className="relative" >
-      <Header/>
+    <Box className="relative">
+      <Header />
       {width > 750 && <Banner />}
       <section className="container-base search-food">
         <SearchFood />
@@ -33,7 +33,7 @@ export function Home(props: HomeProps) {
       <section className="recommend-store">
         <RecommendRestaurant />
       </section>
-      {width<501&& <div className="line-1"></div>}
+      {width < 501 && <div className="line-1"></div>}
       <p className="base-tx base-pd mb-[24px]">
         Các món bán chạy nhất tại{" "}
         <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
@@ -41,13 +41,18 @@ export function Home(props: HomeProps) {
       <section className="recommend-store">
         <RecommendFood />
       </section>
-      {width<501&& <div className="line-1"></div>}
+      {width < 501 && <div className="line-1"></div>}
       {width < 501 && (
         <>
           <p className="base-tx base-pd mb-[24px]">Các món bán hiện tại</p>
-          <section className={"container-base base-pd type-food"}>
-            <PagingFood />
-          </section>
+          <Box
+            className="h-[auto] py-5"
+            sx={{ backgroundColor: " rgb(240, 242, 245)" }}
+          >
+            <section className={"container-base base-pd type-food"}>
+              <PagingFood />
+            </section>
+          </Box>
         </>
       )}
       {width >= 600 && (

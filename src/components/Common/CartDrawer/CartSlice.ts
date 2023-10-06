@@ -1,32 +1,34 @@
-import { CartItemData, ToppingEntityList } from "@/models"
+import { CartItemData, ToppingEntityList, VoucherItem } from "@/models"
 import { handlePriceShip } from "@/utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface iDataStore {
   items: CartItemData[]
   name: string
-  distance:number
-  shipFee?:number
-  amount?:number
+  distance: number
+  shipFee?: number
+  amount?: number
   id: number
   toppingEntityList?: ToppingEntityList[]
 }
 export interface CardState {
   totalPrice?: number | undefined
-  totalAmount?:number | undefined
-  totalShip?:number | undefined
+  totalAmount?: number | undefined
+  totalShip?: number | undefined
   open: boolean
   lengthFood: number
   dataStore: iDataStore[] | []
-  timeDeliver: "10:00 AM" | "11:15 AM" | "12:15 AM"
+  voucherUse: VoucherItem | undefined
+  timeDeliver: string
 }
 const initialState: CardState = {
   totalPrice: undefined,
   open: false,
-  totalShip:undefined,
-  totalAmount:undefined,
+  totalShip: undefined,
+  totalAmount: undefined,
   lengthFood: 0,
   dataStore: [],
+  voucherUse: undefined,
   timeDeliver: "11:15 AM",
 }
 
@@ -34,35 +36,61 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    resetCart(state) {
+      state.totalPrice = undefined
+      state.totalShip = undefined
+      state.totalAmount = undefined
+      state.lengthFood = 0
+      state.dataStore = []
+      state.voucherUse = undefined
+    },
+    addVoucherUse(state, action: PayloadAction<VoucherItem>) {
+      state.voucherUse = action.payload
+    },
+    removeVoucherUse(state) {
+      state.voucherUse = undefined
+    },
     toggleCart(state) {
       state.open = !state.open
     },
     setTotalPrice(state, action: PayloadAction<number>) {
       state.totalPrice = action.payload
     },
-    setTimeDeliver(
-      state,
-      action: PayloadAction<"10:00 AM" | "11:15 AM" | "12:15 AM">,
-    ) {
+    setTimeDeliver(state, action: PayloadAction<string>) {
       state.timeDeliver = action.payload
     },
-    setTotalShip(state,action:PayloadAction<number>){
-      state.totalShip=action.payload
+    setTotalShip(state, action: PayloadAction<number>) {
+      state.totalShip = action.payload
     },
-    setTotalAmount(state,action:PayloadAction<number>){
-      state.totalAmount=action.payload
+    setTotalAmount(state, action: PayloadAction<number>) {
+      state.totalAmount = action.payload
     },
-    setShipFee(state,action:PayloadAction<{id:number,shipFee:number}>){
-      state.dataStore[state.dataStore.findIndex((data:iDataStore)=>data.id===action.payload.id)].shipFee=action.payload.shipFee
+    setShipFee(state, action: PayloadAction<{ id: number; shipFee: number }>) {
+      state.dataStore[
+        state.dataStore.findIndex(
+          (data: iDataStore) => data.id === action.payload.id,
+        )
+      ].shipFee = action.payload.shipFee
     },
-     setAmount(state,action:PayloadAction<{id:number,amount:number}>){
-      state.dataStore[state.dataStore.findIndex((data:iDataStore)=>data.id===action.payload.id)].amount=action.payload.amount
+    setAmount(state, action: PayloadAction<{ id: number; amount: number }>) {
+      state.dataStore[
+        state.dataStore.findIndex(
+          (data: iDataStore) => data.id === action.payload.id,
+        )
+      ].amount = action.payload.amount
     },
-    setToppingRes(state,action:PayloadAction<{id:number,listTopping:ToppingEntityList[]}>){
-      state.dataStore[state.dataStore.findIndex((data:iDataStore)=>data.id===action.payload.id)].toppingEntityList=action.payload.listTopping
+    setToppingRes(
+      state,
+      action: PayloadAction<{ id: number; listTopping: ToppingEntityList[] }>,
+    ) {
+      state.dataStore[
+        state.dataStore.findIndex(
+          (data: iDataStore) => data.id === action.payload.id,
+        )
+      ].toppingEntityList = action.payload.listTopping
     },
     addToCart(state, action: PayloadAction<CartItemData>) {
-      const { idFood, name, quantity, type, nameStore, idStore,distance } =
+      const { idFood, name, quantity, type, nameStore, idStore, distance } =
         action.payload
       if (state.dataStore.length) {
         const existingStore = state.dataStore.find(
@@ -106,7 +134,7 @@ const cartSlice = createSlice({
             {
               id: idStore,
               name: nameStore,
-              distance:distance,
+              distance: distance,
               items: [action.payload],
             },
           ]
@@ -117,7 +145,7 @@ const cartSlice = createSlice({
           {
             id: idStore,
             name: nameStore,
-            distance:distance,
+            distance: distance,
             items: [action.payload],
           },
         ]

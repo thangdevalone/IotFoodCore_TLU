@@ -9,7 +9,10 @@ export interface ProductRoot {
   totalRow: number
   data: ProductItem[]
 }
-
+export interface VoucherRoot {
+  totalRow: number
+  data: VoucherItem[]
+}
 export interface EmployeeRoot {
   totalRow: number
   data: EmployeeItem[]
@@ -73,7 +76,17 @@ export interface EmployeeItem {
   imgUser: string
   msv: string
 }
-
+export interface VoucherItem {
+  id?: number
+  createDate?: string
+  status?: boolean
+  discount: number
+  expired: string
+  detail: string
+  code: string
+  quantity: number
+  title: string
+}
 export interface RoleUser {
   id: number
   createDate: any
@@ -94,4 +107,49 @@ export interface UserItem {
 export interface UserRoot {
   totalRow: number
   loginResponDtos: EmployeeItem[]
+}
+
+export interface InvoiceRoot {
+  totalRow: number
+  data: Invoice[]
+}
+export interface Invoice {
+  id: number
+  createAt: string
+  orderStatus: string
+  nameRestaurant: string
+  shipFee: number,
+  finishTime: any
+  foodResponseBills: FoodResponseBill[]
+}
+
+export interface FoodResponseBill {
+  foodId: number
+  nameFood: string
+  priceFood: number
+  quantity: number
+  nameRes: string
+  resId: number
+  itemList: ItemTopping[]
+}
+
+export interface ItemTopping {
+  name: string
+  price: number
+}
+
+export interface BillUser {
+  id: number
+  createAt: string
+  orderStatus: string
+  nameRestaurant?: string
+  shipFee: number
+  finishTime: any
+  accountId: number
+  foodResponseBills: FoodResponseBill[]
+}
+
+export interface RootBillUser {
+  totalRow: number
+  data: BillUser[]
 }
