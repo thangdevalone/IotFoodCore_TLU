@@ -55,6 +55,7 @@ function NewVoucher(props: NewVoucherProps) {
           detail: detail,
           quantity: quantity,
           discount: discount,
+
         }
         console.log(voucher)
         await adminApi.addVoucher(voucher)

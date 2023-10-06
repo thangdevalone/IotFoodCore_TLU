@@ -77,9 +77,9 @@ export interface EmployeeItem {
   msv: string
 }
 export interface VoucherItem {
-  id: number
-  createDate: string
-  status: boolean
+  id?: number
+  createDate?: string
+  status?: boolean
   discount: number
   expired: string
   detail: string
