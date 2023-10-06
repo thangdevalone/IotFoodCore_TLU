@@ -1,8 +1,6 @@
 import userApi from "@/api/userApi"
 import { BillUser, PageConfig, RootBillUser } from "@/models"
 import { Box, Divider, Pagination, Tab, Tabs } from "@mui/material"
-import { type MRT_PaginationState } from "material-react-table"
-import { useSnackbar } from "notistack"
 import queryString from "query-string"
 import * as React from "react"
 import { useEffect, useRef, useState } from "react"
@@ -22,7 +20,7 @@ export function UserOrders(props: UserOrdersProps) {
   const navigate = useNavigate()
   const [invoice, setInvoice] = useState<BillUser[]>([])
   const [rowCount, setRowCount] = useState(0)
-  const { enqueueSnackbar } = useSnackbar()
+
   //table state
   const [status, setStatus] = useState<string>("ALL")
   const [pagination, setPagination] = useState<PageConfig>({
@@ -31,7 +29,6 @@ export function UserOrders(props: UserOrdersProps) {
   })
   const [isDel, setIsDel] = useState(false)
   const [open, setOpen] = useState(false)
-  const settingRef = useRef<HTMLButtonElement>(null)
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
@@ -90,8 +87,9 @@ export function UserOrders(props: UserOrdersProps) {
         <Box>
           <Tabs
             value={tabs}
+            variant="scrollable"
+            scrollButtons="auto"
             onChange={handleChange}
-            aria-label="product tabs example"
           >
             <Tab label="Tất cả" {...a11yProps(0)} />
             <Tab label="Chờ xác nhận" {...a11yProps(1)} />

@@ -131,7 +131,7 @@ export function CartDrawer(props: CardDrawerProps) {
                   style={{
                     padding: "24px",
                     overflow: "hidden auto",
-                    height: "calc(100% - 200px)",
+                    height: "calc(100% - 245px)",
                     width: "100%",
                   }}
                   spacing={3}

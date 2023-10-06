@@ -1,11 +1,17 @@
 import userApi from "@/api/userApi"
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { Header, ToppingAccord, VoucherDesign } from "@/components/Common"
-import { cartActions, iDataStore } from "@/components/Common/CartDrawer/CartSlice"
+import {
+  cartActions,
+  iDataStore,
+} from "@/components/Common/CartDrawer/CartSlice"
 import CartList from "@/components/Common/CartDrawer/Components/CartList"
 import { CustomButton } from "@/components/Custom/CustomButon"
+import { SOCKET_URL } from "@/constants"
+import { useInforUser, useToken } from "@/hooks"
 import { BillConfig, BillFoodRequest, VoucherItem, VoucherRoot } from "@/models"
 import { handleDiscount, handlePrice } from "@/utils"
+
 import {
   Close,
   CreditCard,
@@ -35,15 +41,20 @@ import {
 import { useSnackbar } from "notistack"
 import { ChangeEvent, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-
+import SockJS from "sockjs-client"
+import * as Stomp from "stompjs"
 export interface CheckoutProps {}
 
 export default function Checkout(props: CheckoutProps) {
+  const token = useToken()
   const cart = useAppSelector((state) => state.cart)
   const [noteShip, setNoteShip] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("cash")
   const [vouchers, setVouchers] = useState<VoucherItem[]>([])
   const [loading, setLoading] = useState(false)
+  const [clientStomp, setClientStomp] = useState<Stomp.Client | null>(null)
+  const headers = { Authorization: `Bearer ${token}` }
+
   const shipFee =
     cart.totalShip && cart.voucherUse
       ? handleDiscount(
@@ -52,6 +63,7 @@ export default function Checkout(props: CheckoutProps) {
           cart.voucherUse.code,
         )
       : cart.totalShip
+
   const navigate = useNavigate()
   const handleChange = (event: SelectChangeEvent) => {
     setPaymentMethod(event.target.value as string)
@@ -59,7 +71,7 @@ export default function Checkout(props: CheckoutProps) {
   const [open, setOpen] = useState(false)
   const [openConfirm, setOpenConfirm] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
-  const dispatch=useAppDispatch()
+  const dispatch = useAppDispatch()
   const handleAddOrder = () => {
     const bill: BillConfig = {
       totalAmount: 0,
@@ -79,24 +91,17 @@ export default function Checkout(props: CheckoutProps) {
     bill["billFoodRequests"] = listBill
     bill["totalAmount"] = cart.totalAmount || 0
     bill["note"] = noteShip
-
-    console.log(bill)
     ;(async () => {
-      try {
         setLoading(true)
+        // await userApi.addOrder(bill)
+        if (clientStomp) {
+          clientStomp.send("/app/add-bill", headers, JSON.stringify(bill))
 
-        await userApi.addOrder(bill)
-        enqueueSnackbar("Đặt hàng thành công. Bấm vào đơn mua để xem", {
-          variant: "success",
-        })
+        }
+        
         setLoading(false)
-        setOpenConfirm(false)
-        dispatch(cartActions.resetCart())
-      } catch (error) {
-        console.log(error)
-        enqueueSnackbar("Đặt hàng thất bại. Thử lại", { variant: "error" })
-        setLoading(false)
-      }
+       
+      
     })()
   }
   const handleClickOpen = () => {
@@ -113,18 +118,93 @@ export default function Checkout(props: CheckoutProps) {
   const handleCloseConfirm = () => {
     setOpenConfirm(false)
   }
-
+  const user=useInforUser()
   useEffect(() => {
     ;(async () => {
       try {
-        const res = await userApi.getAllVoucher({ pageIndex: 0, pageSize: 10 })
-        const resData = res.data as VoucherRoot
-        setVouchers(resData.data)
+        const res = await userApi.getAllVoucher()
+        setVouchers(res.data as VoucherItem[])
       } catch (error) {
         console.log(error)
       }
     })()
+    var socket = new SockJS(SOCKET_URL)
+    var client = Stomp.over(socket)
+    client.debug = () => {
+      return
+    }
+    client.connect(
+      headers,
+      () => {
+        // Hàm callback khi kết nối thành công
+        console.log("Connected to WebSocket")
+        setClientStomp(client)
+      },
+      (error) => {
+        // Hàm callback khi có lỗi kết nối
+        console.error("WebSocket connection error:", error)
+      },
+    )
+    return () => {
+      if (clientStomp) {
+        clientStomp.disconnect(() => {
+          return
+        })
+      }
+    }
   }, [])
+  useEffect(() => {
+    if (clientStomp) {
+      // Đăng ký để lắng nghe các tin nhắn từ máy chủ
+      
+      clientStomp.subscribe(
+        "/topic/add-bill",
+        (message) => {
+          const data = JSON.parse(message.body)
+          console.log(data.body.usernameSend,user?.msv,data,message)
+          if(data.body.usernameSend===user?.msv){
+            if(data.statusCodeValue===400){
+              enqueueSnackbar("Hết mã rồi tình yêu ơi", {variant:"error"})
+            }
+            else{
+              enqueueSnackbar("Đặt hàng thành công. Bấm vào đơn mua để xem",{variant:"success"})
+              const newVoucher = data.body.data as VoucherItem[]
+              setVouchers(newVoucher)
+              setOpenConfirm(false)
+              dispatch(cartActions.resetCart())
+              if (cart.dataStore.length > 0 && newVoucher) {
+                const newVoucherUse = newVoucher.find(
+                  (item) =>
+                    item.code === cart.voucherUse?.code &&
+                    item.quantity !== cart.voucherUse?.quantity,
+                )
+                if (newVoucherUse) {
+                  dispatch(cartActions.addVoucherUse(newVoucherUse))
+                }
+              }
+            }
+          }else{
+            const newVoucher = data.body.data as VoucherItem[]
+            setVouchers(newVoucher)
+            if ( cart.dataStore.length > 0 && newVoucher) {
+              const newVoucherUse = newVoucher.find(
+                (item) =>
+                  item.code === cart.voucherUse?.code &&
+                  item.quantity !== cart.voucherUse?.quantity,
+              )
+              if (newVoucherUse) {
+                dispatch(cartActions.addVoucherUse(newVoucherUse))
+              }
+            }
+          }
+          
+
+          
+        },
+        headers,
+      )
+    }
+  }, [clientStomp])
   return (
     <Box>
       <Header sx={{ backgroundColor: "white" }} isWhiteLogo={false} />
@@ -150,7 +230,7 @@ export default function Checkout(props: CheckoutProps) {
         <DialogContent
           sx={{ backgroundColor: "#D3D3D3", paddingTop: "20px !important" }}
         >
-          {vouchers.map((item) => (
+          {vouchers?.map((item) => (
             <VoucherDesign
               key={item.id}
               data={item}
@@ -163,8 +243,8 @@ export default function Checkout(props: CheckoutProps) {
         <DialogTitle>Bạn chắn chắn muốn đặt hàng?</DialogTitle>
         <DialogContent>
           <b>Lưu ý:</b> Bạn chỉ có thể hủy đơn hàng trước khi đơn hàng được{" "}
-          <b>xác nhận hoặc đang giao</b> nên hãy thật chắc chắn
-          trước khi đặt hàng.
+          <b>xác nhận hoặc đang giao</b> nên hãy thật chắc chắn trước khi đặt
+          hàng.
         </DialogContent>
         <DialogActions>
           <Button

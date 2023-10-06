@@ -14,7 +14,7 @@ export default function User(props: UserProps) {
   }, [])
   return (
     <>
-      <Header sx={{ backgroundColor: "var(--color-layer-2)" }} isWhiteLogo={true} />
+      <Header sx={{ backgroundColor: "var(--color-layer-2)" }} theme="red" />
       <div
         style={{
           backgroundColor: "rgb(240, 242, 245)",
