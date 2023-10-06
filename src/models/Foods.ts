@@ -1,4 +1,3 @@
-import { ProductItem } from "."
 
 export interface TypeFoodsData {
   id: number

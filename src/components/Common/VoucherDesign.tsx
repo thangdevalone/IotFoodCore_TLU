@@ -1,4 +1,4 @@
-import { Button, Stack } from "@mui/material"
+import { Box, Button, Stack } from "@mui/material"
 import dayjs from "dayjs"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch } from "react-redux"
@@ -87,21 +87,102 @@ const RailMid = (props: { h: number }) => {
   )
 }
 
-const VoucherXS=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()=>void})=>{
-  const {data,pushVoucher,removeVoucher}=props
+const VoucherXS = (props: {
+  data?: VoucherItem
+  pushVoucher: () => void
+  removeVoucher: () => void
+}) => {
+  const { data, pushVoucher, removeVoucher } = props
+  const voucherUse = useAppSelector((state) => state.cart.voucherUse)
   return (
-    <div className="w-full mb-5 flex flex-row max-w-[350px] h-[100px]"   style={{ boxShadow: "rgba(0, 0, 0, 0.45) 0px 25px 20px -20px" }}>
-      <div className="bg-[#ef7692] flex items-center justify-center p-2 flex-1">
-        Free ship extra
+    <div
+      className="w-full mb-5 flex flex-row h-[150px] relative"
+      style={{ boxShadow: "rgba(0, 0, 0, 0.45) 0px 25px 20px -20px" }}
+    >
+      <div className="absolute top-1 left-[-4px] z-[2]">
+        <Box
+          className="py-1 px-1.5 text-xs bg-[var(--color-df-1)] text-white"
+          sx={{
+            "&:before": {
+              borderTop: "4px solid var(--color-df-1)",
+              borderLeft: "4px solid transparent",
+              position:"absolute",
+              display:"block",
+              content:'""',
+              top:"24px",
+              left:"0px"
+            },
+          }}
+        >
+          {data?.code}
+        </Box>
       </div>
-      <div className="bg-white flex-2"></div>
-
+      {data?.code.search("K") === -1 ? (
+        <div
+          style={{ background: "url('/imp/voucher.svg')" }}
+          className="flex  items-center justify-center w-[150px] h-[150px]"
+        >
+          <span
+            className="text-[#627D6A] text-xl font-bold translate-x-1 translate-y-[23px]"
+            style={{ fontFamily: "Lato', sans-serif" }}
+          >
+            {data?.discount}%
+          </span>
+        </div>
+      ) : (
+        <div
+          style={{ background: "url('/imp/discount.png')" }}
+          className="relative  w-[150px] h-[150px]"
+        >
+          <span className="text-[var(--color-df-1)] text-2xl font-bold">
+            {data?.discount}K
+          </span>
+        </div>
+      )}
+      <div className="bg-white flex flex-col justify-between text-[var(--color-df-1)] flex-1 py-3 px-4 w-[100%] h-[150px]">
+        <div>
+        <div className=" flex w-full text-xs justify-between">
+          <span>
+            HSD: {dayjs(data?.expired).format("DD/MM/YYYY") ===
+            dayjs(Date.now()).format("DD/MM/YYYY")
+              ? "23:59, hôm nay"
+              : dayjs(data?.expired).format("DD/MM/YYYY")}
+          </span>{" "}
+          <span>Còn lại: {data?.quantity}</span>
+        </div>
+        <p className=" text-base font-semibold line-clamp-1">{data?.title}</p>
+        <p className="text-xs mt-1 mb-2 line-clamp-3">{data?.detail}</p>
+        </div>
+        <div>
+          <Button
+            variant="contained"
+            startIcon={voucherUse?.code === data?.code && <Close />}
+            size="small"
+            onClick={() => {
+              voucherUse?.code === data?.code ? removeVoucher() : pushVoucher()
+            }}
+            sx={{
+              backgroundColor: "var(--color-df-1)",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "var(--color-df-1)",
+              },
+            }}
+          >
+            {voucherUse?.code === data?.code ? "Bỏ dùng" : "Dùng ngay"}
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
-const VoucherMD=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()=>void})=>{
-  const {data,pushVoucher,removeVoucher}=props
-  const {width}=useWindowDimensions()
+const VoucherMD = (props: {
+  data?: VoucherItem
+  pushVoucher: () => void
+  removeVoucher: () => void
+}) => {
+  const { data, pushVoucher, removeVoucher } = props
+  const { width } = useWindowDimensions()
   const voucherUse = useAppSelector((state) => state.cart.voucherUse)
   const voucherRef = useRef<HTMLDivElement>(null)
   const [more, setMore] = useState(false)
@@ -109,7 +190,7 @@ const VoucherMD=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()
   useEffect(() => {
     setH(voucherRef?.current?.clientHeight || 200)
   }, [more])
-  return(
+  return (
     <div
       ref={voucherRef}
       className="w-full max-w-[600px] mb-5 min-w-[400px] relative overflow-hidden"
@@ -129,18 +210,25 @@ const VoucherMD=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()
               "polygon(50% 0%, 100% 0, 100% 43%, 100% 76%, 100% 100%, 32% 100%, 21% 100%, 0 16%, 25% 0)",
           }}
         ></div>
-      ): <div
-      className="w-[350px] h-[350px] z-[450] bg-[#ef7692] absolute right-[-25px]"
-      style={{
-        clipPath:
-          "polygon(50% 0, 100% 0%, 51% 100%, 0% 100%)",
-      }}
-    ></div>}
+      ) : (
+        <div
+          className="w-[350px] h-[350px] z-[450] bg-[#ef7692] absolute right-[-50px]"
+          style={{
+            clipPath: "polygon(50% 0, 100% 0%, 51% 100%, 0% 100%)",
+          }}
+        ></div>
+      )}
       <div
         className="w-[300px] h-[300px] z-[450] bg-[#ef7692] absolute left-[-10px] bottom-[-70px]"
         style={{ clipPath: "polygon(0 43%, 0% 100%, 31% 100%)" }}
       ></div>
-      <Stack flexDirection="row" gap={2} className={`${width<650?"pl-8 pr-5":"pl-10 pr-6"} py-4  z-[1000] relative `}>
+      <Stack
+        flexDirection="row"
+        gap={2}
+        className={`${
+          width < 650 ? "pl-8 pr-5" : "pl-10 pr-6"
+        } py-4  z-[1000] relative `}
+      >
         <div className="flex flex-col flex-2">
           <p
             className="text-[#ef7692] text-4xl font-medium"
@@ -160,7 +248,7 @@ const VoucherMD=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()
             <Button
               onClick={() => setMore(!more)}
               variant="outlined"
-              size={width<580?"small":"medium"}
+              size={width < 580 ? "small" : "medium"}
               sx={{
                 borderColor: "#ef7692",
                 color: "#ef7692",
@@ -175,7 +263,7 @@ const VoucherMD=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()
             <Button
               variant="contained"
               startIcon={voucherUse?.code === data?.code && <Close />}
-              size={width<580?"small":"medium"}
+              size={width < 580 ? "small" : "medium"}
               onClick={() => {
                 voucherUse?.code === data?.code
                   ? removeVoucher()
@@ -206,7 +294,8 @@ const VoucherMD=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()
                 color: "white",
               }}
             >
-              {data?.discount}{data?.code.search("K")==-1?"%":"K"}
+              {data?.discount}
+              {data?.code.search("K") == -1 ? "%" : "K"}
             </p>
             <Stack>
               <p className="text-white text-sm">
@@ -225,7 +314,7 @@ const VoucherMD=(props:{data?: VoucherItem,pushVoucher:()=>void,removeVoucher:()
             </Stack>
           </div>
         ) : (
-          <Stack justifyContent="flex-end" >
+          <Stack justifyContent="flex-end">
             <p className="text-[var(--color-df-1)] text-sm">
               <span className="font-medium">Ngày hết hạn:</span>{" "}
               {dayjs(data?.expired).format("DD/MM/YYYY") ===
@@ -251,9 +340,8 @@ export function VoucherDesign(props: {
 }) {
   const dispatch = useDispatch()
   const { width } = useWindowDimensions()
- 
-  const data = props.data
 
+  const data = props.data
 
   const pushVoucher = () => {
     if (data) {
@@ -265,7 +353,19 @@ export function VoucherDesign(props: {
   }
   return (
     <>
-    {width>550?<VoucherMD data={data} pushVoucher={pushVoucher} removeVoucher={removeVoucher}/>:<VoucherXS data={data} pushVoucher={pushVoucher} removeVoucher={removeVoucher}/>}
+      {width > 550 ? (
+        <VoucherMD
+          data={data}
+          pushVoucher={pushVoucher}
+          removeVoucher={removeVoucher}
+        />
+      ) : (
+        <VoucherXS
+          data={data}
+          pushVoucher={pushVoucher}
+          removeVoucher={removeVoucher}
+        />
+      )}
     </>
   )
 }

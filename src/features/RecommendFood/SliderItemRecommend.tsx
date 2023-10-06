@@ -51,7 +51,7 @@ const SliderItemRecommend = (props: foodData) => {
         }}
         onClick={handleAddToCart}
       >
-        <Box className=" w-[100%] h-[23vh]">
+        <Box className=" w-[100%] h-[23vh] max-h-[200px]">
           <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
             <Box
               className={`img-res`}

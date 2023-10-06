@@ -24,7 +24,7 @@ const dataQuestion = [
   {
     question: "TluFood tính phí giao đồ ăn như thế nào?",
     answer:
-      "Phí giao hàng của chúng tôi chỉ trong tầm giá từ 3-20 nghìn theo khoảng cách khoảng cách càng xa thì phí giao càng lớn kèm với hóa đơn nhiều sản phẩm thì giá ship cũng sẽ tăng. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn hằng ngày.",
+      "Phí giao hàng của chúng tôi được tính theo công thức bí mật sao cho rẻ nhất, khoảng cách khoảng cách càng xa thì phí giao càng lớn kèm với hóa đơn nhiều sản phẩm thì giá ship cũng sẽ tăng. Ngoài ra chúng tôi vẫn cung cấp các ưu đãi miễn/giảm ship cho các bạn vào những dịp đặc biệt.",
   },
   {
     question: "TluFood hoạt động như nào?",

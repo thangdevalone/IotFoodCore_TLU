@@ -3,13 +3,11 @@ import { useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import "./App.css"
 import { LoadServer, NotFound } from "./components/Common"
-import Admin from "./components/Layouts/Admin"
 import { Home } from "./components/Layouts/Home"
 import { Store } from "./components/Layouts/ListItem"
 import {
-  ProtectAdmin,
   ProtectAuth,
-  ProtectCheckout,
+  ProtectCheckout
 } from "./components/ProtectRouter"
 import AllFood from "./features/AllFood"
 import DetailStore from "./features/DetailStore"
@@ -50,13 +48,11 @@ function App() {
             }
           />
 
-          <Route element={<ProtectAdmin />}>
-            <Route path="/admin/*" element={<Admin />} />
-          </Route>
+          
           <Route path="/" element={<Home />} />
           <Route path="/user/*" element={<User />}>
             <Route path="profile" element={<Profile />} />
-            <Route path="orders" element={<UserOrders />} />
+            <Route path="orders" element={<img src="/assets/404.svg"/>} />
             <Route path="changePassword" element={<ChangePassword />} />
           </Route>
           <Route path="/store" element={<Store />}>

@@ -100,12 +100,12 @@ export function UserOrders(props: UserOrdersProps) {
         </Box>
         <Box className="flex flex-col gap-4 ">
           {invoice.map((item) => (
-            <BillItem key={item.id} />
+            <BillItem key={item.id} data={item}/>
           ))}
           {rowCount > 0 && (
             <div className="flex items-center justify-center">
               <Pagination
-                count={Math.ceil(rowCount / 4)}
+                count={rowCount}
                 color="primary"
                 page={pagination.pageIndex + 1}
                 onChange={handleOnChangePaging}

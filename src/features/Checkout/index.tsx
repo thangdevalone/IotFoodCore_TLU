@@ -8,7 +8,7 @@ import {
 import CartList from "@/components/Common/CartDrawer/Components/CartList"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { SOCKET_URL } from "@/constants"
-import { useInforUser, useToken } from "@/hooks"
+import { useInforUser, useToken, useWindowDimensions } from "@/hooks"
 import { BillConfig, BillFoodRequest, VoucherItem, VoucherRoot } from "@/models"
 import { handleDiscount, handlePrice } from "@/utils"
 
@@ -72,6 +72,7 @@ export default function Checkout(props: CheckoutProps) {
   const [openConfirm, setOpenConfirm] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const dispatch = useAppDispatch()
+  const { width } = useWindowDimensions()
   const handleAddOrder = () => {
     const bill: BillConfig = {
       totalAmount: 0,
@@ -92,16 +93,13 @@ export default function Checkout(props: CheckoutProps) {
     bill["totalAmount"] = cart.totalAmount || 0
     bill["note"] = noteShip
     ;(async () => {
-        setLoading(true)
-        // await userApi.addOrder(bill)
-        if (clientStomp) {
-          clientStomp.send("/app/add-bill", headers, JSON.stringify(bill))
+      setLoading(true)
+      // await userApi.addOrder(bill)
+      if (clientStomp) {
+        clientStomp.send("/app/add-bill", headers, JSON.stringify(bill))
+      }
 
-        }
-        
-        setLoading(false)
-       
-      
+      setLoading(false)
     })()
   }
   const handleClickOpen = () => {
@@ -118,7 +116,7 @@ export default function Checkout(props: CheckoutProps) {
   const handleCloseConfirm = () => {
     setOpenConfirm(false)
   }
-  const user=useInforUser()
+  const user = useInforUser()
   useEffect(() => {
     ;(async () => {
       try {
@@ -148,7 +146,7 @@ export default function Checkout(props: CheckoutProps) {
     return () => {
       if (clientStomp) {
         clientStomp.disconnect(() => {
-          return
+          console.log("Disconnected from WebSocket")
         })
       }
     }
@@ -156,18 +154,19 @@ export default function Checkout(props: CheckoutProps) {
   useEffect(() => {
     if (clientStomp) {
       // Đăng ký để lắng nghe các tin nhắn từ máy chủ
-      
+
       clientStomp.subscribe(
         "/topic/add-bill",
         (message) => {
           const data = JSON.parse(message.body)
-          console.log(data.body.usernameSend,user?.msv,data,message)
-          if(data.body.usernameSend===user?.msv){
-            if(data.statusCodeValue===400){
-              enqueueSnackbar("Hết mã rồi tình yêu ơi", {variant:"error"})
-            }
-            else{
-              enqueueSnackbar("Đặt hàng thành công. Bấm vào đơn mua để xem",{variant:"success"})
+          console.log(data.body.usernameSend, user?.msv, data, message)
+          if (data.body.usernameSend === user?.msv) {
+            if (data.statusCodeValue === 400) {
+              enqueueSnackbar("Hết mã rồi tình yêu ơi", { variant: "error" })
+            } else {
+              enqueueSnackbar("Đặt hàng thành công. Bấm vào đơn mua để xem", {
+                variant: "success",
+              })
               const newVoucher = data.body.data as VoucherItem[]
               setVouchers(newVoucher)
               setOpenConfirm(false)
@@ -183,10 +182,10 @@ export default function Checkout(props: CheckoutProps) {
                 }
               }
             }
-          }else{
+          } else {
             const newVoucher = data.body.data as VoucherItem[]
             setVouchers(newVoucher)
-            if ( cart.dataStore.length > 0 && newVoucher) {
+            if (cart.dataStore.length > 0 && newVoucher) {
               const newVoucherUse = newVoucher.find(
                 (item) =>
                   item.code === cart.voucherUse?.code &&
@@ -197,21 +196,21 @@ export default function Checkout(props: CheckoutProps) {
               }
             }
           }
-          
-
-          
         },
         headers,
       )
     }
   }, [clientStomp])
+  const cssVoucherDialog=width<550?{width:"100vw",height:"100vh",maxHeight:"unset",margin:0,borderRadius:"unset"}:{width:"90%",maxWidth:"650px"}
   return (
     <Box>
       <Header sx={{ backgroundColor: "white" }} isWhiteLogo={false} />
       <Dialog
         open={open}
         onClose={handleClose}
-        sx={{ "& .MuiPaper-root": { width: "90%", minWidth: "650px" } }}
+        sx={{
+          "& .MuiPaper-root": cssVoucherDialog,
+        }}
       >
         <DialogTitle>
           <Stack
@@ -228,7 +227,7 @@ export default function Checkout(props: CheckoutProps) {
           </Stack>
         </DialogTitle>
         <DialogContent
-          sx={{ backgroundColor: "#D3D3D3", paddingTop: "20px !important" }}
+          sx={{ backgroundColor: "#D3D3D3", paddingTop: "20px !important",overflow:"hidden auto" }}
         >
           {vouchers?.map((item) => (
             <VoucherDesign

@@ -3,28 +3,28 @@ import { Box } from "@mui/material"
 import { Autoplay} from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
-
-import "swiper/css/autoplay"
 export interface BannerProps {}
 
 export function Banner(props: BannerProps) {
   return (
     <Box>
       <Swiper
-        autoplay={true}
-        speed={1100}
-        
+        autoplay={{
+          delay: 2000,
+          disableOnInteraction: false,
+        }}
+        speed={2000}
         modules={[Autoplay]}
         loop={true}
-        style={{ width: "100vw" }}
-        allowTouchMove={false}
+        style={{ width: "100vw" }}  
+
       >
         <SwiperSlide>
           <Box
             className="w-screen"
             sx={{
-              height: "52vh",
-              maxHeight:"450px",
+              height: "60vh",
+              maxHeight:"550px",
               minHeight:"350px",
               backgroundPosition: "center",
               backgroundSize: "cover",
@@ -36,12 +36,12 @@ export function Banner(props: BannerProps) {
           <Box
             className="w-screen"
             sx={{
-              height: "52vh",
-              maxHeight:"450px",
+              height: "60vh",
+              maxHeight:"550px",
               minHeight:"350px",
               backgroundPosition: "center",
               backgroundSize: "cover",
-              backgroundImage: "url('/assets/banner-5.jpg')",
+              backgroundImage: "url('/assets/banner-3.png')",
             }}
           ></Box>
         </SwiperSlide>
@@ -51,10 +51,10 @@ export function Banner(props: BannerProps) {
             sx={{
               backgroundPosition: "center",
               backgroundSize: "cover",
-              height: "52vh",
-              maxHeight:"450px",
+              height: "60vh",
+              maxHeight:"550px",
               minHeight:"350px",
-              backgroundImage: "url('/assets/banner-2.jpg')",
+              backgroundImage: "url('/assets/banner-2.png')",
             }}
           ></Box>
         </SwiperSlide>
@@ -62,8 +62,8 @@ export function Banner(props: BannerProps) {
           <Box
             className="w-screen"
             sx={{
-              height: "52vh",
-              maxHeight:"450px",
+              height: "60vh",
+              maxHeight:"550px",
               minHeight:"350px",
               backgroundPosition:"center",
               backgroundSize:"cover",

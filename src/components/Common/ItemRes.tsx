@@ -1,6 +1,4 @@
-import { handlePrice } from "@/utils"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded"
 import { Box, Stack, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 
@@ -15,9 +13,7 @@ interface propsData {
 
 export const ItemRes = (props: propsData) => {
   const { nameRes, imgRes, star, detail, idRes, distance } = props
-
   const navigate = useNavigate()
-
   const handleRouter = (id: number) => {
     navigate(`/store/detail-store/${id}`)
   }
@@ -31,7 +27,7 @@ export const ItemRes = (props: propsData) => {
       className="w-[100%] box-border cursor-pointer"
       onClick={() => handleRouter(idRes)}
     >
-      <Box className=" w-[100%] h-[23vh]">
+      <Box className=" w-[100%] h-[23vh] max-h-[200px]">
         <Box className="overflow-hidden rounded-md h-[100%] w-[100%]">
           <Box
             className={`img-res`}
@@ -58,7 +54,7 @@ export const ItemRes = (props: propsData) => {
             <Box className="flex items-center justify-center gap-2">
               <AccessTimeRoundedIcon />
               <Typography sx={{ fontSize: "14px" }}>
-                {Math.floor(Number(distance) * 12)} phút
+                {Math.floor(Number(distance) * 15)+20} phút
               </Typography>
             </Box>
             •

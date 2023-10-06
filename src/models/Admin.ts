@@ -137,15 +137,23 @@ export interface ItemTopping {
   name: string
   price: number
 }
-
+export interface VoucherResponseBill {
+  code: string
+  discount: number
+  expired: string
+  createDate: string
+}
 export interface BillUser {
   id: number
   createAt: string
   orderStatus: string
-  nameRestaurant?: string
+  nameRestaurant: any
   shipFee: number
   finishTime: any
   accountId: number
+  totalAmount: number
+  note: string
+  voucherResponseBill: VoucherResponseBill
   foodResponseBills: FoodResponseBill[]
 }
 

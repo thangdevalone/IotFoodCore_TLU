@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { authActions } from "@/features/auth/AuthSlice"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useInforUser } from "@/hooks"
 import {
   AccountCircleOutlined,
@@ -19,7 +19,7 @@ export interface MenuUserProps {
 export function MenuUser(props: MenuUserProps) {
   const { anchorEl, handleClose } = props
   const dispatch = useAppDispatch()
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const user = useInforUser()
   const handleLogOut = () => {
     handleClose()
@@ -27,13 +27,13 @@ export function MenuUser(props: MenuUserProps) {
   }
   const navUser = () => {
     handleClose()
-    navigate('/user/profile');
+    navigate("/user/profile")
   }
-  const handleAdmin= ()=>{
+  const handleAdmin = () => {
     handleClose()
-    navigate("/admin")
+    window.open("https://admin.food.labtlu.shop","_blank")
   }
-  const handleOrders= ()=>{
+  const handleOrders = () => {
     handleClose()
     navigate("/user/orders")
   }
@@ -81,13 +81,15 @@ export function MenuUser(props: MenuUserProps) {
         </ListItemIcon>
         Tài khoản
       </MenuItem>
-      {user?.role[0].authority==="ADMIN" && (
-        <MenuItem onClick={handleAdmin}>
-          <ListItemIcon>
-            <StorageOutlined fontSize="small" />
-          </ListItemIcon>
-          Trang quản trị
-        </MenuItem>
+      {user?.role[0].authority === "ADMIN" && (
+        
+          <MenuItem onClick={handleAdmin}>
+            <ListItemIcon>
+              <StorageOutlined fontSize="small" />
+            </ListItemIcon>
+            Trang quản trị
+          </MenuItem>
+
       )}
       <Divider />
       <MenuItem onClick={handleOrders}>
