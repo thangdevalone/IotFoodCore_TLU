@@ -1,3 +1,5 @@
+import { BillFoodRequest } from "."
+
 export interface Order {
   orderStatus: string
   totalAmount: number
@@ -6,13 +8,4 @@ export interface Order {
   billFoodRequests: BillFoodRequest[]
 }
 
-export interface BillFoodRequest {
-  foodId: number
-  quantity: number
-  itemList: ItemList[]
-}
 
-export interface ItemList {
-  name: string
-  price: number
-}

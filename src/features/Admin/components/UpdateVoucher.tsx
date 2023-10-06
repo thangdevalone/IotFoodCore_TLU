@@ -38,6 +38,8 @@ function UpdateVoucher({ id }: { id: string }) {
   const [quantity, setQuantity] = React.useState(0)
   const [expired, setExpired] = React.useState<any>(dayjs(Date.now()))
   const [title, setTitle] = React.useState("")
+  const [idD, setIdD] = React.useState("")
+  const [createDate, setCreateDate] = React.useState("")
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue)
@@ -48,14 +50,18 @@ function UpdateVoucher({ id }: { id: string }) {
       setLoading(true)
       try {
         const voucher: VoucherItem = {
-          idVoucher: idVoucher,
-          title: title,
-          expired: dayjs(expired).format("YYYY-MM-DD"),
+          code: idVoucher,
           detail: detail,
-          quantity: quantity,
           discount: discount,
+          expired: dayjs(expired).format("YYYY-MM-DD"),
+          quantity: quantity,
+          title: title,
+          id: +idD,
+          createDate,
+          status: true,
         }
-        await adminApi.updateVoucher(voucher)
+        const response = await adminApi.updateVoucher(voucher)
+        // console.log(response)
         setLoading(false)
         enqueueSnackbar("Sửa ưu đãi thành công", { variant: "success" })
         setIdVoucher("")
@@ -80,7 +86,7 @@ function UpdateVoucher({ id }: { id: string }) {
     const fetchData = async () => {
       try {
         const response = await adminApi.getDetailVoucher(+id)
-        console.log(response)
+        // console.log(response)
         if (response?.status) {
           setDiscount(response?.data?.discount)
           setIdVoucher(response?.data?.code)
@@ -88,6 +94,8 @@ function UpdateVoucher({ id }: { id: string }) {
           setQuantity(response?.data?.quantity)
           setExpired(dayjs(response?.data?.expired))
           setTitle(response?.data?.title)
+          setIdD(response?.data?.id)
+          setCreateDate(response?.data?.createDate)
         }
       } catch (err) {
         console.log(err)

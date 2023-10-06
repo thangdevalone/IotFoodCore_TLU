@@ -77,9 +77,9 @@ export interface EmployeeItem {
   msv: string
 }
 export interface VoucherItem {
-  id?: number
-  createDate?: string
-  status?: boolean
+  id: number
+  createDate: string
+  status: boolean
   discount: number
   expired: string
   detail: string
@@ -118,7 +118,7 @@ export interface Invoice {
   createAt: string
   orderStatus: string
   nameRestaurant: string
-  shipFee: number,
+  shipFee: number
   finishTime: any
   foodResponseBills: FoodResponseBill[]
 }
