@@ -1,4 +1,5 @@
 import { ThemeProvider, useTheme } from "@emotion/react"
+import { useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import "./App.css"
 import { LoadServer, NotFound } from "./components/Common"
@@ -10,20 +11,18 @@ import {
   ProtectAuth,
   ProtectCheckout,
 } from "./components/ProtectRouter"
+import AllFood from "./features/AllFood"
 import DetailStore from "./features/DetailStore"
+import FoodByType from "./features/FoodByType"
 import SearchList from "./features/SearchFood/components/SearchList"
 import GetAllStore from "./features/Store"
+import User from "./features/User"
+import { ChangePassword } from "./features/User/ChangePassword"
+import { UserOrders } from "./features/User/Orders"
+import { Profile } from "./features/User/Profile"
 import { AuthCard } from "./features/auth/pages/AuthCard"
 import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
-import { Profile } from "./features/User/Profile"
-import { ChangePassword } from "./features/User/ChangePassword"
-import { useEffect } from "react"
-import User from "./features/User"
-import { UserOrders } from "./features/User/Orders"
-import Checkout from "./features/Checkout"
-import FoodByType from "./features/FoodByType"
-import AllFood from "./features/AllFood"
 function App() {
   const theme = useTheme()
   useEffect(() => {

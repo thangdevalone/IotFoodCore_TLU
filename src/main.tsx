@@ -7,13 +7,8 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import NavigateSetter from "./Router/NavigateSetter"
 import { store } from "./app/store"
-import { io, Socket } from "socket.io-client";
 import "./index.css"
 const Container = () => {
-  const socket = useRef<Socket | undefined>();
-  useEffect(() => {
-    // socket.current = io("https://server-iot-food.onrender.com/ws-iotfood");
-  }, []);
   return (
     <Provider store={store}>
       <BrowserRouter>
