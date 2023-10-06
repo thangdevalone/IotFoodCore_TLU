@@ -1,4 +1,4 @@
-import { VoucherItem } from './../models/Admin';
+import { VoucherItem } from "./../models/Admin"
 import { ExpandFood } from "./../models/Topping"
 import { PageConfig } from "./../models/Config"
 import axiosClient from "./axiosClient"
