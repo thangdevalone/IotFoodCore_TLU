@@ -5,6 +5,7 @@ export type PageConfig={
 export interface BillConfig {
   totalAmount: number
   shipFee: number
+  finishTime:string
   note?:string
   codeVoucher?: string
   billFoodRequests: BillFoodRequest[]

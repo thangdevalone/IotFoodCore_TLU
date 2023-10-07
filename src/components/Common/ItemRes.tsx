@@ -54,7 +54,7 @@ export const ItemRes = (props: propsData) => {
             <Box className="flex items-center justify-center gap-2">
               <AccessTimeRoundedIcon />
               <Typography sx={{ fontSize: "14px" }}>
-                {Math.floor(Number(distance) * 15)+20} phút
+                {Math.floor(Number(distance) * 12)+15} phút
               </Typography>
             </Box>
             •
