@@ -1,8 +1,8 @@
 import { Header } from "@/components/Common"
+import { Box } from "@mui/material"
 import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { Menu } from "./Menu"
-import { Box } from "@mui/material"
 export interface UserProps {}
 
 export default function User(props: UserProps) {
@@ -23,7 +23,7 @@ export default function User(props: UserProps) {
         className="w-screen h-full"
       >
         <div className="flex pt-10 pb-12 container-base !mt-20 base-pd">
-          <Menu />
+  <Menu />
           <Box
             sx={{ width: 220, background: "transparent", mr: "100px", py: 2 }}
           ></Box>

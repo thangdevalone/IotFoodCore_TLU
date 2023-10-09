@@ -1,31 +1,68 @@
 export function handlePriceShip(km: number, sp: number): number {
+  let lastPrice = 0
   if (km <= 3) {
-    if (sp <= 3) {
-      return Math.floor(3500 * km + 4000 * sp)
+    if (sp === 1) {
+      lastPrice = Math.floor(3500 * km + 3500 * sp)
     }
-    if (sp<=6){
-      return Math.floor(3500*km+4500*sp)
+    if (sp === 3) {
+      lastPrice = Math.floor(3500 * km + 2500 * sp)
     }
-    if (sp<=10){
-      return Math.floor(3500*km+5000*sp)
+    if (sp <= 4) {
+      lastPrice =
+        Math.floor(3000 * km + 3000 * sp) > 15000
+          ? Math.floor(3000 * km + 2500 * sp)
+          : Math.floor(3000 * km + 3000 * sp)
+    }
+    if (sp <= 6) {
+      lastPrice =
+        Math.floor(3000 * km + 2700 * sp) > 20000
+          ? Math.floor(3000 * km + 2000 * sp)
+          : Math.floor(3000 * km + 2700 * sp)
+    }
+    if (sp <= 10) {
+      lastPrice =
+        Math.floor(3000 * km + 3500 * sp) > 25000
+          ? Math.floor(3000 * km + 3000 * sp)
+          : Math.floor(3000 * km + 3500 * sp)
     }
     if (sp > 10) {
-      return Math.floor(3500 * km + 5700 * sp)
+      lastPrice =
+        Math.floor(3000 * km + 3000 * sp) > 30000
+          ? Math.floor(3000 * km +2500 * sp)
+          : Math.floor(3500 * km + 3000 * sp)
     }
   }
   if (km <= 5) {
+    if (sp === 1) {
+      lastPrice = Math.floor(3500 * km + 3000 * sp)
+    }
+    if (sp === 1) {
+      lastPrice = Math.floor(3500 * km + 2700 * sp)
+    }
     if (sp <= 3) {
-      return Math.floor(4000 * km + 5500 * sp)
+      lastPrice =
+        Math.floor(3500 * km + 2700 * sp) > 15000
+          ? Math.floor(3500 * km + 2500 * sp)
+          : Math.floor(3500 * km + 2700 * sp)
     }
     if (sp <= 6) {
-      return Math.floor(4000 * km + 6000 * sp)
+      lastPrice =
+        Math.floor(3500 * km + 3000 * sp) > 20000
+          ? Math.floor(3500 * km + 2700 * sp)
+          : Math.floor(3500 * km + 3000 * sp)
     }
     if (sp <= 10) {
-      return Math.floor(3700 * km + 6500 * sp)
+      lastPrice =
+        Math.floor(3700 * km + 3200 * sp) > 25000
+          ? Math.floor(3700 * km + 2700 * sp)
+          : Math.floor(3700 * km + 3200 * sp)
     }
     if (sp > 10) {
-      return Math.floor(3700 * km + 7000 * sp)
+      lastPrice =
+        Math.floor(3700 * km + 3500 * sp) > 30000
+          ? Math.floor(3700 * km + 3000 * sp)
+          : Math.floor(3700 * km + 3500 * sp)
     }
   }
-  return Math.floor(5000 * km + 3000 * sp)
+  return lastPrice >= 40000 ? 35000:  lastPrice >= 35000 ?lastPrice*0.8: lastPrice
 }

@@ -8,8 +8,8 @@ import {
 import CartList from "@/components/Common/CartDrawer/Components/CartList"
 import { CustomButton } from "@/components/Custom/CustomButon"
 import { SOCKET_URL } from "@/constants"
-import { useInforUser, useToken, useWindowDimensions } from "@/hooks"
-import { BillConfig, BillFoodRequest, VoucherItem, VoucherRoot } from "@/models"
+import { useInforUser, useToken } from "@/hooks"
+import { BillConfig, BillFoodRequest, VoucherItem } from "@/models"
 import { handleDiscount, handlePrice } from "@/utils"
 
 import {
@@ -72,7 +72,7 @@ export default function Checkout(props: CheckoutProps) {
   const [openConfirm, setOpenConfirm] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const dispatch = useAppDispatch()
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const handleAddOrder = () => {
     const bill: BillConfig = {
       totalAmount: 0,
@@ -154,7 +154,6 @@ export default function Checkout(props: CheckoutProps) {
   useEffect(() => {
     if (clientStomp) {
       // Đăng ký để lắng nghe các tin nhắn từ máy chủ
-
       clientStomp.subscribe(
         "/topic/add-bill",
         (message) => {
@@ -203,7 +202,8 @@ export default function Checkout(props: CheckoutProps) {
   }, [clientStomp])
   const cssVoucherDialog=width<550?{width:"100vw",height:"100vh",maxHeight:"unset",margin:0,borderRadius:"unset"}:{width:"90%",maxWidth:"650px"}
   return (
-    <Box>
+    <>
+    {clientStomp?<Box>
       <Header sx={{ backgroundColor: "white" }} isWhiteLogo={false} />
       <Dialog
         open={open}
@@ -227,13 +227,12 @@ export default function Checkout(props: CheckoutProps) {
           </Stack>
         </DialogTitle>
         <DialogContent
-          sx={{ backgroundColor: "#D3D3D3", paddingTop: "20px !important",overflow:"hidden auto" }}
+          sx={{ backgroundColor: "#D3D3D3", padding: `${width>450?"20px 24px !important":"20px 10px !important"}`,overflow:"hidden auto" }}
         >
           {vouchers?.map((item) => (
             <VoucherDesign
               key={item.id}
               data={item}
-              handleClose={handleClose}
             />
           ))}
         </DialogContent>
@@ -501,7 +500,7 @@ export default function Checkout(props: CheckoutProps) {
                   </FormControl>
                 </div>
               </div>
-              <div className="w-[100%] mb-[90px] bg-white">
+              <div className="w-[100%] mb-[100px] bg-white">
                 <div className="px-6 flex flex-row justify-between items-center py-3 border-b-[2px] font-semibold border-gray-300">
                   <p>Ưu đãi</p>{" "}
                   <Button
@@ -521,18 +520,19 @@ export default function Checkout(props: CheckoutProps) {
                 </div>
               </div>
               <div
-                className="fixed bottom-0 left-0 z-[1200] w-screen h-[15vh] max-h-[90px] bg-white"
-                style={{ boxShadow: "0 -4px 5px 0px rgba(0, 0, 0, 0.2)" }}
+                className="fixed bottom-0 left-0 z-[1200] w-screen h-[15vh] py-3  bg-white"
+                style={{ boxShadow: "0 -4px 5px 0px rgba(0, 0, 0, 0.2)",maxHeight:`${width>600?"90px":"100px"}` }}
               >
                 <div
                   style={{
                     width: "100%",
                     maxWidth: "1000px",
                     margin: "0 auto",
+                    flexDirection:`${width>600?"row":"column"}`
                   }}
-                  className=" flex h-full items-center justify-between base-pd"
+                  className="flex h-full gap-1 items-center justify-between base-pd"
                 >
-                  <p className="text-xl">
+                  <p className={`${width>600?"text-xl":"text-lg"}`}>
                     Tổng hóa đơn:{" "}
                     <span className="font-semibold">
                       {cart.voucherUse && (
@@ -550,13 +550,12 @@ export default function Checkout(props: CheckoutProps) {
                       background: "var(--color-df-1)",
                       color: "white",
                       borderRadius: "6px",
-                      maxWidth: "250px",
+                      maxWidth: "300px",
                       minWidth: "150px",
                       fontSize: "15px",
                       height: "50px",
                       fontWeight: "600",
                       textTransform: "unset",
-
                       "&:hover": {
                         background: "var(--color-df-1)",
                         color: "white",
@@ -600,6 +599,7 @@ export default function Checkout(props: CheckoutProps) {
           )}
         </div>
       </div>
-    </Box>
+    </Box>:"Chờ chút nhé..."}
+    </>
   )
 }

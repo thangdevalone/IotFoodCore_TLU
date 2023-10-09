@@ -25,7 +25,7 @@ export function UserOrders(props: UserOrdersProps) {
   const [status, setStatus] = useState<string>("ALL")
   const [pagination, setPagination] = useState<PageConfig>({
     pageIndex: 0,
-    pageSize: 4,
+    pageSize: 5,
   })
   const [isDel, setIsDel] = useState(false)
   const [open, setOpen] = useState(false)
@@ -57,13 +57,13 @@ export function UserOrders(props: UserOrdersProps) {
           const response = await userApi.getBill(pagination, null)
           const myRes = response.data as RootBillUser
           setInvoice(myRes.data)
-          setRowCount(myRes.totalRow)
+          setRowCount(Math.ceil(myRes.totalRow/pagination.pageSize))
         } else {
           const response = await userApi.getBill(pagination, status)
           const myRes = response.data as RootBillUser
           console.log(myRes)
           setInvoice(myRes.data)
-          setRowCount(myRes.totalRow)
+          setRowCount(Math.ceil(myRes.totalRow/pagination.pageSize))
         }
       } catch (err) {
         console.log(err)
@@ -71,8 +71,6 @@ export function UserOrders(props: UserOrdersProps) {
     }
     fetchData()
   }, [status, pagination])
-
-  console.log(invoice)
 
   return (
     <>
@@ -93,7 +91,7 @@ export function UserOrders(props: UserOrdersProps) {
           >
             <Tab label="Tất cả" {...a11yProps(0)} />
             <Tab label="Chờ xác nhận" {...a11yProps(1)} />
-            <Tab label="Đã xác nhận" {...a11yProps(2)} />
+            <Tab label="Đang vận chuyển" {...a11yProps(2)} />
             <Tab label="Thành công" {...a11yProps(3)} />
             <Tab label="Đã hủy" {...a11yProps(4)} />
           </Tabs>

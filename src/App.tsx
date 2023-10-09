@@ -2,6 +2,8 @@ import { ThemeProvider, useTheme } from "@emotion/react"
 import { useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import "./App.css"
+import { useAppDispatch } from "./app/hooks"
+import { appActions } from "./appSlice"
 import { LoadServer, NotFound } from "./components/Common"
 import { Home } from "./components/Layouts/Home"
 import { Store } from "./components/Layouts/ListItem"
@@ -21,11 +23,27 @@ import { Profile } from "./features/User/Profile"
 import { AuthCard } from "./features/auth/pages/AuthCard"
 import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
 function App() {
   const theme = useTheme()
+  const dispatch=useAppDispatch()
+  useEffect(() => {
+    function handleResize() {
+      dispatch(appActions.setWidth(getWindowDimensions().width))
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   useEffect(() => {
     const VERSION = localStorage.getItem("APP_VERSION")
-    console.log(import.meta.env.VITE_APP_VERSION)
+    console.log(import.meta.env.VITE_APP_VERSION,VERSION !== import.meta.env.VITE_APP_VERSION)
     if (VERSION) {
       if (VERSION !== import.meta.env.VITE_APP_VERSION) {
         localStorage.clear()
@@ -35,6 +53,7 @@ function App() {
       localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
     }
   }, [])
+
   return (
     <ThemeProvider theme={theme}>
       <Routes>
@@ -52,7 +71,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/user/*" element={<User />}>
             <Route path="profile" element={<Profile />} />
-            <Route path="orders" element={<img src="/assets/404.svg"/>} />
+            <Route path="orders" element={<UserOrders/>} />
             <Route path="changePassword" element={<ChangePassword />} />
           </Route>
           <Route path="/store" element={<Store />}>

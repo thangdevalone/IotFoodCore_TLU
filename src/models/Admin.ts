@@ -146,7 +146,7 @@ export interface VoucherResponseBill {
 export interface BillUser {
   id: number
   createAt: string
-  orderStatus: string
+  orderStatus: "PENDING"| "PROCESSING"|"DELIVERED"|"CANCELED"
   nameRestaurant: any
   shipFee: number
   finishTime: any

@@ -1,7 +1,7 @@
 import foodsApis from "@/api/foodsApi"
+import { useAppSelector } from "@/app/hooks"
 import { ItemRes } from "@/components/Common"
 import { CustomButton } from "@/components/Custom/CustomButon"
-import { useWindowDimensions } from "@/hooks"
 import { RestaurantData } from "@/models/Foods"
 import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 import { Box, IconButton, Stack } from "@mui/material"
@@ -40,7 +40,7 @@ export function RecommendRestaurant(props: RecommendRestaurantProps) {
     }
     fetchData()
   }, [])
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
 
   const handleStore = () => {
     navigate("/store/get-all-store")

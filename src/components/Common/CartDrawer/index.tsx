@@ -1,23 +1,22 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
+import { CustomButton } from "@/components/Custom/CustomButon"
+import { useInforUser } from "@/hooks"
+import { CartItemData } from "@/models"
+import { handlePrice, handlePriceShip } from "@/utils"
+import { ArrowBackIosNew } from "@mui/icons-material"
 import {
   Box,
   Button,
   IconButton,
   Stack,
-  SwipeableDrawer,
-  Typography,
+  SwipeableDrawer
 } from "@mui/material"
-import { CustomButton } from "@/components/Custom/CustomButon"
-import { useInforUser, useWindowDimensions } from "@/hooks"
-import { handlePrice, handlePriceShip } from "@/utils"
-import { ArrowBackIosNew } from "@mui/icons-material"
 import * as React from "react"
+import { useNavigate } from "react-router-dom"
+import { ToppingAccord } from ".."
 import { cartActions, iDataStore } from "./CartSlice"
 import CartList from "./Components/CartList"
 import "./style_drawer.css"
-import { CartItemData, Order } from "@/models"
-import { ToppingAccord } from ".."
-import { useNavigate } from "react-router-dom"
 
 export interface CardDrawerProps {}
 
@@ -69,7 +68,7 @@ export function CartDrawer(props: CardDrawerProps) {
     toggleDrawer()
     navigate("/checkout")
   }
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   return (
     <div>
       <SwipeableDrawer
@@ -186,12 +185,13 @@ export function CartDrawer(props: CardDrawerProps) {
                   sx={{ padding: "10px 20px 5px 20px" }}
                   className="absolute bottom-3 border-t-2 border-gray-300 w-[100%] bg-white"
                 >
+                  <p className="text-sm py-2"><b>Lưu ý:</b> Xem chi tiết đơn hàng để dùng mã ưu đãi</p>
                   <div
                     className={`mb-4 ${
                       width < 400 && "flex flex-row items-center"
                     }`}
                   >
-                    <p className="text-sm py-2"><b>Lưu ý:</b> Xem chi tiết đơn hàng để dùng mã ưu đãi</p>
+                    
                     <label
                       htmlFor="timeDeliver"
                       className="block mb-2 w-full text-sm font-medium text-gray-900 dark:text-white"
@@ -234,7 +234,9 @@ export function CartDrawer(props: CardDrawerProps) {
                         height: "50px",
                         fontWeight: "600",
                         textTransform: "unset",
-
+                        "&.Mui-disabled":{
+                          color: "white",
+                        },
                         "&:hover": {
                           background: "var(--color-df-1)",
                           color: "white",
