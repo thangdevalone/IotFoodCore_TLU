@@ -45,7 +45,8 @@ export function PasswordField(props: PasswordFieldProps) {
           <OutlinedInput
             autoComplete="true"
             label={label}
-           {...field}
+            disabled={disabled}
+            {...field}
             type={showPassword ? "text" : "password"}
             endAdornment={
               <InputAdornment position="end">

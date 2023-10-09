@@ -5,10 +5,7 @@ import "./App.css"
 import { LoadServer, NotFound } from "./components/Common"
 import { Home } from "./components/Layouts/Home"
 import { Store } from "./components/Layouts/ListItem"
-import {
-  ProtectAuth,
-  ProtectCheckout
-} from "./components/ProtectRouter"
+import { ProtectAuth, ProtectCheckout } from "./components/ProtectRouter"
 import AllFood from "./features/AllFood"
 import DetailStore from "./features/DetailStore"
 import FoodByType from "./features/FoodByType"
@@ -21,6 +18,8 @@ import { Profile } from "./features/User/Profile"
 import { AuthCard } from "./features/auth/pages/AuthCard"
 import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
+import ForgotPassword from "./features/auth/pages/ForgotPassword"
+
 function App() {
   const theme = useTheme()
   useEffect(() => {
@@ -48,11 +47,10 @@ function App() {
             }
           />
 
-          
           <Route path="/" element={<Home />} />
           <Route path="/user/*" element={<User />}>
             <Route path="profile" element={<Profile />} />
-            <Route path="orders" element={<img src="/assets/404.svg"/>} />
+            <Route path="orders" element={<img src="/assets/404.svg" />} />
             <Route path="changePassword" element={<ChangePassword />} />
           </Route>
           <Route path="/store" element={<Store />}>
@@ -66,6 +64,7 @@ function App() {
           <Route element={<ProtectAuth />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot" element={<ForgotPassword />} />
             <Route path="/auth/the-sv" element={<AuthCard />} />
           </Route>
         </Route>

@@ -1,4 +1,6 @@
+import { InputField } from "@/components/FormControls"
 import { useInforUser } from "@/hooks"
+import { yupResolver } from "@hookform/resolvers/yup"
 import {
   Avatar,
   Box,
@@ -6,47 +8,103 @@ import {
   Container,
   Divider,
   Grid,
+  Dialog,
   TextField,
 } from "@mui/material"
-import { useRef, useState } from "react"
+import { InfoForm } from "@/models/InfoForm"
+import { FormProvider, SubmitHandler, set, useForm } from "react-hook-form"
+import * as yup from "yup"
+import * as React from "react"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import DialogContentText from "@mui/material/DialogContentText"
+import DialogTitle from "@mui/material/DialogTitle"
+import userApi from "@/api/userApi"
+import { useSnackbar } from "notistack"
+
 export interface ProfileProps {}
-type ExtendedFile = File & { preview: string }
+
 export function Profile(props: ProfileProps) {
   const user = useInforUser()
-  let imageRef = useRef<HTMLInputElement>(null)
-  const [formData, setFormData] = useState({
-    accountName: user?.accountName || "",
-    msv: user?.msv || "",
-    sdt: user?.sdt || "",
-    imgUser: user?.imgUser || "",
+  console.log(user)
+  const { enqueueSnackbar } = useSnackbar()
+  const [file, setFile] = React.useState<File | null>()
+  const imgRef = React.useRef<HTMLInputElement | null>(null)
+  const [imagePreview, setImagePreview] = React.useState<string>("")
+  const [verifyOtp, setVerifyOtp] = React.useState<boolean>(false)
+  const [otpValue, setOptValue] = React.useState<string>("")
+  const schema = yup.object().shape({
+    accountName: yup.string().required("Vui lòng nhập tên của bạn !"),
+    sdt: yup.string().required("Vui lòng nhập số điện thoại !"),
+    msv: yup.string().required("Vui lòng nhập mã sinh viên của bạn !"),
+    email: yup.string().email("Vui lòng nhập đúng định dạng !"),
   })
-  const handleImageChange = (e: any) => {
-    const file = e.target.files[0] as ExtendedFile
-    if (file) {
-      file.preview = URL.createObjectURL(file)
-      setFormData((prev) => {
-        return {
-          ...prev,
-          imgUser: file.preview,
-        }
-      })
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = event.target.files && event.target.files[0]
+    console.log(selectedImage)
+    if (selectedImage && event.target.files) {
+      setFile(event.target.files[0])
+      const reader = new FileReader()
+      reader.onload = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(selectedImage)
     }
   }
-  const handleInputChange = (event: any) => {
-    const { name, value } = event.target
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }))
+  const [open, setOpen] = React.useState(false)
+  const handleSendOtp = async (email: string) => {
+    try {
+      const response = await userApi.verifyEmail(email)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault()
-    // Do something with the form data, like registration
-    console.log("Form data:", formData)
+  const confirmOtp = async (otp: string) => {
+    try {
+      const response = await userApi.validate(otp)
+      console.log(response)
+      if (response.status) {
+        enqueueSnackbar("Xác thực gmail thành công !", {
+          variant: "success",
+        })
+        setOpen(false)
+      } else {
+        enqueueSnackbar("Xác thực gmail thất bại !", {
+          variant: "error",
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleConfirm = () => {
+    confirmOtp(otpValue)
+  }
+  const form = useForm<InfoForm>({
+    defaultValues: {
+      accountName: user?.accountName || "",
+      sdt: user?.sdt || "",
+      msv: user?.msv || "",
+      email: user?.email || "",
+    },
+    resolver: yupResolver(schema),
+  })
+
+  const handleSubmit: SubmitHandler<InfoForm> = (data) => {
+    if (data.email?.length && data.email !== user?.email) {
+      setOpen(true)
+      handleSendOtp(data.email)
+    }
+  }
+
   return (
-    <>
+    <div className="relative w-full">
       <div className="mb-5">
         <h1 className="text-18-500">Hồ Sơ Của Tôi</h1>
         <p className="text-[#999798]">
@@ -56,97 +114,88 @@ export function Profile(props: ProfileProps) {
       <Divider />
       <div className="flex mt-5">
         <Container className="!pl-0">
-          <form onSubmit={handleSubmit}>
-            <Grid container columnSpacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Tên"
-                  name="accountName"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  value={formData.accountName}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Mã sinh viên"
-                  name="msv"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  disabled={true}
-                  value={formData.msv}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Số điện thoại"
-                  name="sdt"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  value={formData.sdt}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Xác minh tài khoản"
-                  name="authority"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  value={"Chưa xác thực"}
-                  disabled={true}
-                />
-              </Grid>
-            </Grid>
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ marginTop: "20px" }}
+          <FormProvider {...form}>
+            <form
+              style={{ display: "flex", flexDirection: "column" }}
+              onSubmit={form.handleSubmit(handleSubmit)}
             >
-              Lưu
-            </Button>
-          </form>
+              <Grid container columnSpacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <InputField label="Tên của bạn" name="accountName" />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputField label="Mã sinh viên" name="msv" disabled />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputField label="Số điện thoại" name="sdt" />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputField label="Email" name="email" />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ marginTop: "20px" }}
+              >
+                Lưu
+              </Button>
+            </form>
+          </FormProvider>
         </Container>
         <Divider orientation="vertical" variant="middle" flexItem />
         <Box className="flex items-center justify-center flex-col w-[250px]">
           <input
+            ref={imgRef}
+            hidden={true}
             type="file"
-            style={{ display: "none" }}
-            ref={imageRef}
+            id="imageInput"
             onChange={handleImageChange}
-          />
+            name="imageInput"
+            accept="image/png, image/jpeg"
+          ></input>
           <Avatar
             variant="circular"
             alt="avatar"
             sx={{ width: "100px", height: "100px", mr: 1, mb: 3 }}
-            src={
-              formData.imgUser
-                ? formData.imgUser
-                : "https://www.hardiagedcare.com.au/wp-content/uploads/2019/02/default-avatar-profile-icon-vector-18942381.jpg"
-            }
+            src={imagePreview}
             onClick={() => {
-              imageRef.current?.click()
+              imgRef.current?.click()
             }}
           />
           <Button
             variant="outlined"
             color="primary"
             onClick={() => {
-              imageRef.current?.click()
+              imgRef.current?.click()
             }}
           >
             Chọn ảnh
           </Button>
         </Box>
       </div>
-    </>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Vui lòng kiểm tra gmail để lấy mã OTP</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="OTP"
+            type="email"
+            fullWidth
+            variant="standard"
+            style={{ width: "20vw" }}
+            value={otpValue}
+            onChange={(e) => setOptValue(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={handleConfirm}>Xác Nhận</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   )
 }
