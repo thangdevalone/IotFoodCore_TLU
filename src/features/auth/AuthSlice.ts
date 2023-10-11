@@ -57,7 +57,6 @@ const authSlice = createSlice({
     },
     // ...các action khác
   },
-  
 })
 
 export const authActions = authSlice.actions

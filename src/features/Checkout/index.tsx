@@ -239,7 +239,7 @@ export default function Checkout(props: CheckoutProps) {
       </Dialog>
       <Dialog open={openConfirm} onClose={handleCloseConfirm}>
         <DialogTitle>Bạn chắn chắn muốn đặt hàng?</DialogTitle>
-        <DialogContent>
+        <DialogContent className="py-4 px-5">
           <b>Lưu ý:</b> Bạn chỉ có thể hủy đơn hàng trước khi đơn hàng được{" "}
           <b>xác nhận hoặc đang giao</b> nên hãy thật chắc chắn trước khi đặt
           hàng.

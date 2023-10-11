@@ -46,7 +46,7 @@ const QuestionItem = (props: QuestionItemProps) => {
     <Stack direction="column">
       <p className="text-2xl font-bold">{question}</p>
       <p className="text-base mt-2">{answer}</p>
-      {last ?<div className="mb-[80px]"></div>: <Divider sx={{ margin: "30px 0 20px 0", borderWidth: "0.09rem" }} />}
+      {last ?<div className="mb-[50px]"></div>: <Divider sx={{ margin: "20px 0 10px 0", borderWidth: "0.09rem" }} />}
     </Stack>
   )
 }

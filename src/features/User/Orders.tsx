@@ -81,12 +81,15 @@ export function UserOrders(props: UserOrdersProps) {
         </p>
       </div>
       <Divider />
-      <div className="flex flex-col gap-5">
+      <div style={{minHeight:"calc(100% - 95px)"}} className="flex flex-col gap-5">
         <Box>
           <Tabs
             value={tabs}
             variant="scrollable"
             scrollButtons="auto"
+            sx={{"& .MuiTabs-scrollButtons.Mui-disabled": {
+              opacity: 0.3,
+            }}}
             onChange={handleChange}
           >
             <Tab label="Tất cả" {...a11yProps(0)} />
@@ -96,12 +99,12 @@ export function UserOrders(props: UserOrdersProps) {
             <Tab label="Đã hủy" {...a11yProps(4)} />
           </Tabs>
         </Box>
-        <Box className="flex flex-col gap-4 ">
+        <Box className="flex flex-1 justify-between flex-col gap-4 ">
           {invoice.map((item) => (
             <BillItem key={item.id} data={item}/>
           ))}
           {rowCount > 0 && (
-            <div className="flex items-center justify-center">
+            <div className="flex mt-1 items-center justify-center">
               <Pagination
                 count={rowCount}
                 color="primary"

@@ -17,10 +17,11 @@ export interface HeaderProps {
   className?: string
   isWhiteLogo?: boolean
   theme?:string
+  noItem?:boolean
 }
 
 export function Header(props: HeaderProps) {
-  const { sx, className, isWhiteLogo = true,theme="default" } = props
+  const { sx, className, isWhiteLogo = true,theme="default",noItem=false } = props
   const user = useInforUser()
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
@@ -104,7 +105,8 @@ export function Header(props: HeaderProps) {
             />
           </Link>
           <Stack direction={"row"} alignItems="center" position={"relative"}>
-            {width > 500 ? (
+            {!noItem && <>
+              {width > 500 ? (
               <Badge
                 color="secondary"
                 badgeContent={lengthFood}
@@ -269,6 +271,7 @@ export function Header(props: HeaderProps) {
               </div>
             )}
 
+            </>}
             {user ? (
               <>
                 <CustomButton

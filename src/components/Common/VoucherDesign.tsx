@@ -384,7 +384,6 @@ const VoucherMD = (props: {
   return (
     <>
       <Dialog
- 
         open={dialog}
         TransitionComponent={Transition}
         onClose={() => setDialog(false)}
@@ -392,7 +391,6 @@ const VoucherMD = (props: {
         <DialogTitle
           sx={{
             backgroundColor: "var(--color-df-1)",
-
             "& *": {
               color: "white",
             },

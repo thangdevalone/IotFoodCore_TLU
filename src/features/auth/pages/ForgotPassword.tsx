@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { InputField, PasswordField } from "@/components/FormControls"
-import { LoginForm } from "@/models"
+import { ForgotForm } from "@/models/ForgotForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { ArrowBack } from "@mui/icons-material"
 import {
@@ -17,40 +17,95 @@ import { useEffect } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 import * as yup from "yup"
-import { authActions } from "../AuthSlice"
-export interface LoginPageProps {}
-export function LoginPage(props: LoginPageProps) {
+import * as React from "react"
+import userApi from "@/api/userApi"
+
+const ForgotPassword = () => {
   const logging = useAppSelector((state) => state.auth.logging)
   const actionAuth = useAppSelector((state) => state.auth.actionAuth)
+  const [openOtp, setOpenOtp] = React.useState<boolean>(false)
+  const [openPassword, setOpenPassword] = React.useState<boolean>(false)
   const { enqueueSnackbar } = useSnackbar()
   const { width } = useAppSelector(state=>state.app)
   const dispatch = useAppDispatch()
   const schema = yup.object().shape({
     username: yup.string().required("Cần nhập mã sinh viên"),
-    password: yup.string().required("Cần nhập mật khẩu"),
+    otp: yup.string(),
+    newPassword: yup.string(),
   })
 
-  const form = useForm<LoginForm>({
+  const form = useForm<ForgotForm>({
     resolver: yupResolver(schema),
   })
-  const handleLogin: SubmitHandler<LoginForm> = (data) => {
-    dispatch(authActions.login(data))
-  }
-  useEffect(() => {
-    if (actionAuth == "Failed") {
-      enqueueSnackbar("Mã sinh viên hoặc mật khẩu không chính xác", {
-        variant: "error",
-      })
+  const handleSendOtp = async (name: string) => {
+    try {
+      const response = await userApi.forgotPassword(name)
+      if (response.status) setOpenOtp(true)
+    } catch (err) {
+      console.log(err)
     }
-  }, [actionAuth])
+  }
+  const handleConfirmOtp = async ({
+    username,
+    otp,
+  }: {
+    username: string
+    otp: string
+  }) => {
+    try {
+      const response = await userApi.finalOtpForgot({
+        username,
+        otp,
+      })
+      if (response.status) setOpenPassword(true)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const handleForgotPassword = async ({
+    otp,
+    newPassword,
+  }: {
+    otp: string
+    newPassword: string
+  }) => {
+    try {
+      const response = await userApi.finalPassword({ otp, newPassword })
+      console.log(response)
+      if (response.status) {
+        enqueueSnackbar("Cập nhật mật khẩu thành công", {
+          variant: "success",
+        })
+      } else {
+        enqueueSnackbar("Cập nhật mật khẩu không thành công", {
+          variant: "error",
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   useEffect(() => {
-    document.body.style.overflow = "hidden" // Set overflow to hidden when the component mounts
+    document.body.style.overflow = "hidden"
 
     return () => {
-      document.body.style.overflow = "hidden scroll" // Reset overflow to hidden when the component unmounts
+      document.body.style.overflow = "hidden scroll"
     }
   }, [])
+  const handleSubmit: SubmitHandler<ForgotForm> = (data) => {
+    if (openPassword) {
+      if (data.otp?.length && data.newPassword?.length) {
+        handleForgotPassword({ otp: data.otp, newPassword: data.newPassword })
+      }
+    }
+    if (openOtp && !openPassword) {
+      if (data.otp?.length) {
+        handleConfirmOtp({ otp: data.otp, username: data.username })
+      }
+    }
+    if (!openOtp && !openPassword) handleSendOtp(data.username)
+  }
   const navigate = useNavigate()
   const handleHome = () => {
     navigate("/")
@@ -141,37 +196,36 @@ export function LoginPage(props: LoginPageProps) {
             >
               <Box sx={{ marginBottom: "20px" }}>
                 <Typography variant="h4" sx={{ fontWeight: 500 }}>
-                  Đăng nhập
+                  Quên mật khẩu
                 </Typography>
                 <span style={{ color: "rgb(122, 122, 122)" }}>
-                  Hãy đăng nhập để tiếp tục
+                  Hãy nhập đủ thông tin dưới đây để cập nhập lại mật khẩu
                 </span>
               </Box>
               <FormProvider {...form}>
                 <form
                   style={{ display: "flex", flexDirection: "column" }}
-                  onSubmit={form.handleSubmit(handleLogin)}
+                  onSubmit={form.handleSubmit(handleSubmit)}
                 >
                   <InputField label="Mã sinh viên" name="username" />
-                  <PasswordField label="Mật khẩu" name="password" />
-
+                  {openOtp && <InputField label="Mã OTP" name="otp" />}
+                  {openPassword && (
+                    <PasswordField label="Mật khẩu" name="newPassword" />
+                  )}
                   <Button
                     size="large"
                     sx={{ marginTop: 1 }}
                     variant="contained"
                     type="submit"
-                    disabled={logging}
                   >
-                    Đăng nhập
+                    {!openOtp && !openPassword
+                      ? "Gửi OTP"
+                      : openOtp && !openPassword
+                      ? "Xác thực OTP"
+                      : "Cập nhật lại mật khẩu"}
                   </Button>
                 </form>
               </FormProvider>
-              <Typography sx={{ textAlign: "center", marginTop: "10px" }}>
-                Chưa có tài khoản?{" "}
-                <Link style={{ color: "blue" }} to="/register">
-                  Đăng kí
-                </Link>
-              </Typography>
             </Box>
             <Stack
               justifyContent={"space-between"}
@@ -183,18 +237,17 @@ export function LoginPage(props: LoginPageProps) {
                 padding: "0 20px 0px 20px",
               }}
             >
-              <Link style={{ color: "blue" }} to="/forgot">
-                Quên mật khẩu?
+              <Link style={{ color: "blue" }} to="/login">
+                Bạn đã có tài khoản?
               </Link>
-
               <Typography variant="body2" color="text.secondary">
                 Form by{" "}
                 <Link
                   color="inherit"
                   style={{ textDecoration: "underline" }}
-                  to="https://github.com/thangdevalone"
+                  to="https://github.com/haidaqn"
                 >
-                  @thangdevalone
+                  @haidaqn
                 </Link>{" "}
                 {new Date().getFullYear()}
               </Typography>
@@ -205,3 +258,5 @@ export function LoginPage(props: LoginPageProps) {
     </div>
   )
 }
+
+export default ForgotPassword
