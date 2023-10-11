@@ -27,6 +27,7 @@ const authSlice = createSlice({
     loginSuccess(state, action: PayloadAction<User>) {
       state.logging = false
       state.actionAuth = "Success"
+      // console.log(action.payload)
       state.currentUser = action.payload
     },
     loginFailed(state) {

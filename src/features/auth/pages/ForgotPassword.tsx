@@ -25,6 +25,7 @@ const ForgotPassword = () => {
   const actionAuth = useAppSelector((state) => state.auth.actionAuth)
   const [openOtp, setOpenOtp] = React.useState<boolean>(false)
   const [openPassword, setOpenPassword] = React.useState<boolean>(false)
+  const [otpRes, setOtpRes] = React.useState<string>("")
   const { enqueueSnackbar } = useSnackbar()
   const { width } = useAppSelector(state=>state.app)
   const dispatch = useAppDispatch()
@@ -45,33 +46,30 @@ const ForgotPassword = () => {
       console.log(err)
     }
   }
-  const handleConfirmOtp = async ({
-    username,
-    otp,
-  }: {
-    username: string
-    otp: string
-  }) => {
+  const handleConfirmOtp = async (otp: string) => {
     try {
-      const response = await userApi.finalOtpForgot({
-        username,
-        otp,
-      })
-      if (response.status) setOpenPassword(true)
+      const response = await userApi.finalOtpForgot(otp)
+      if (response.status) {
+        setOtpRes(response.data)
+        setOpenPassword(true)
+      }
     } catch (err) {
       console.log(err)
     }
   }
   const handleForgotPassword = async ({
-    otp,
     newPassword,
+    username,
   }: {
-    otp: string
     newPassword: string
+    username: string
   }) => {
     try {
-      const response = await userApi.finalPassword({ otp, newPassword })
-      console.log(response)
+      const response = await userApi.finalPassword({
+        otp: otpRes,
+        newPassword,
+        username,
+      })
       if (response.status) {
         enqueueSnackbar("Cập nhật mật khẩu thành công", {
           variant: "success",
@@ -96,12 +94,15 @@ const ForgotPassword = () => {
   const handleSubmit: SubmitHandler<ForgotForm> = (data) => {
     if (openPassword) {
       if (data.otp?.length && data.newPassword?.length) {
-        handleForgotPassword({ otp: data.otp, newPassword: data.newPassword })
+        handleForgotPassword({
+          newPassword: data.newPassword,
+          username: data.username,
+        })
       }
     }
     if (openOtp && !openPassword) {
       if (data.otp?.length) {
-        handleConfirmOtp({ otp: data.otp, username: data.username })
+        handleConfirmOtp(data.otp)
       }
     }
     if (!openOtp && !openPassword) handleSendOtp(data.username)
