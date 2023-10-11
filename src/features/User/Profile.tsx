@@ -101,6 +101,7 @@ export function Profile(props: ProfileProps) {
       handleSendOtp(data.email)
     }
   }
+  console.log("reload")
 
   return (
     <div className="relative w-full">
