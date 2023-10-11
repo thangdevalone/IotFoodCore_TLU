@@ -1,5 +1,5 @@
 // reducers/index.js
-import appReducer from '@/appSlice';
+import appReducer from '@/app/AppSlice';
 import cartReducer from '@/components/Common/CartDrawer/CartSlice';
 import chatReducer from '@/features/Chat/ChatSlice';
 import authReducer from '@/features/auth/AuthSlice';
