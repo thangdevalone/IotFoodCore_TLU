@@ -32,7 +32,7 @@ const initialState: CardState = {
   timeDeliver: "11:15 AM",
 }
 
-const cartSlice = createSlice({
+export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {

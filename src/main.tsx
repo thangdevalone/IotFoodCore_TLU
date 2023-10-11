@@ -9,21 +9,19 @@ import NavigateSetter from "./Router/NavigateSetter"
 import { persistor, store } from "./app/store"
 import "./index.css"
 import { PersistGate } from "redux-persist/integration/react"
+import storage from "redux-persist/lib/storage"
 const Container = () => {
   useEffect(() => {
-    ;(async () => {
       const VERSION = localStorage.getItem("APP_VERSION")
       console.log(VERSION, import.meta.env.VITE_APP_VERSION)
       if (VERSION) {
         if (VERSION != import.meta.env.VITE_APP_VERSION) {
-          await persistor.purge()
           localStorage.clear()
           localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
         }
       } else {
         localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
       }
-    })()
   }, [])
 
   return (

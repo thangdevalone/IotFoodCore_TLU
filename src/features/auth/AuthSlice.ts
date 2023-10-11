@@ -15,7 +15,7 @@ const initialState: AuthState = {
   currentUser: undefined,
 }
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
@@ -61,6 +61,5 @@ const authSlice = createSlice({
 })
 
 export const authActions = authSlice.actions
-
 const authReducer = authSlice.reducer
 export default authReducer
