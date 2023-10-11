@@ -1,5 +1,6 @@
 import { BillConfig, PageConfig } from "./../models/Config"
 import { ForgotPassword, ChangePassword } from "@/models/ForgotForm"
+import { UpdateInformationUser } from "@/models"
 import axiosClient from "./axiosClient"
 
 const userApi = {
@@ -34,18 +35,31 @@ const userApi = {
     const url = `user/validate-otp?otp=${otp}`
     return axiosClient.post(url)
   },
-  finalOtpForgot(data: ForgotPassword) {
-    // xác thực otp quên mật khẩu
+  finalOtpForgot(otp: string) {
     const url = "auth/validate-otp-forgot-pass"
-    return axiosClient.post(url, data)
+    return axiosClient.post(url, { otp: otp })
   },
   finalPassword(data: ChangePassword) {
-    const url = "user/change-password"
+    const url = "auth/change-password"
     return axiosClient.post(url, data)
   },
-  updateUserInformation() {
-    const url = ""
-    return axiosClient.post(url)
+  updateUserInformation(data: UpdateInformationUser) {
+    const formData = new FormData()
+    formData.append("password", data.password)
+    formData.append("newPassword", data.newPassword || "")
+    formData.append("img", data.img || "")
+    formData.append("sdt", data.sdt || "")
+    formData.append("accountName", data.accountName || "")
+    const url = "user/update-user-info"
+    return axiosClient.put(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  },
+  getUserInfo() {
+    const url = "user/get-user-info"
+    return axiosClient.get(url)
   },
 }
 export default userApi

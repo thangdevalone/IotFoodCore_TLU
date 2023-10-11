@@ -1,26 +1,25 @@
+import userApi from "@/api/userApi"
 import { InputField } from "@/components/FormControls"
 import { useInforUser } from "@/hooks"
+import { InfoForm } from "@/models/InfoForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
   Avatar,
   Box,
   Button,
   Container,
+  Dialog,
   Divider,
   Grid,
-  Dialog,
   TextField,
 } from "@mui/material"
-import { InfoForm } from "@/models/InfoForm"
-import { FormProvider, SubmitHandler, set, useForm } from "react-hook-form"
-import * as yup from "yup"
-import * as React from "react"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
-import DialogContentText from "@mui/material/DialogContentText"
 import DialogTitle from "@mui/material/DialogTitle"
-import userApi from "@/api/userApi"
 import { useSnackbar } from "notistack"
+import * as React from "react"
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
+import * as yup from "yup"
 
 export interface ProfileProps {}
 

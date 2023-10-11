@@ -11,5 +11,6 @@ export interface ForgotPassword {
 
 export interface ChangePassword {
   otp: string
+  username: string
   newPassword: string
 }

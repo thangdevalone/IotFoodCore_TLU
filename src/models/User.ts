@@ -15,3 +15,17 @@ export interface Role {
   status: any
   authority: string
 }
+
+export interface UpdatePassWord {
+  password: string
+  newPassword: string
+  passwordNewConfirm: string | null
+}
+
+export interface UpdateInformationUser {
+  password: string
+  newPassword: string
+  accountName: string | null
+  img: File | null
+  sdt: string | null
+}
