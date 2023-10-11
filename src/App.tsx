@@ -43,11 +43,11 @@ function App() {
   useEffect(() => {
     const VERSION = localStorage.getItem("APP_VERSION")
     console.log(
-      import.meta.env.VITE_APP_VERSION,
+      import.meta.env.VITE_APP_VERSION,VERSION,
       VERSION !== import.meta.env.VITE_APP_VERSION,
     )
     if (VERSION) {
-      if (VERSION !== import.meta.env.VITE_APP_VERSION) {
+      if (VERSION != import.meta.env.VITE_APP_VERSION) {
         localStorage.clear()
         localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
       }
