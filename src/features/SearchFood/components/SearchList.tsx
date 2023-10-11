@@ -9,7 +9,8 @@ import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import "../styles.module.css"
 
-import { useScroll, useWindowDimensions } from "@/hooks"
+import { useAppSelector } from "@/app/hooks"
+import { useScroll } from "@/hooks"
 import { Search } from "@mui/icons-material"
 
 const SearchList = () => {
@@ -59,7 +60,7 @@ const SearchList = () => {
       fetchData(queryParams.key)
     }
   }, [queryParams.key])
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const scrollY = useScroll()
   const setterShadow =
     scrollY >= 40 || (scrollY >= 50 && width < 500) ? true : false

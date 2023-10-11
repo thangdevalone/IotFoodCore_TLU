@@ -25,7 +25,7 @@ export function UserOrders(props: UserOrdersProps) {
   const [status, setStatus] = useState<string>("ALL")
   const [pagination, setPagination] = useState<PageConfig>({
     pageIndex: 0,
-    pageSize: 4,
+    pageSize: 5,
   })
   const [isDel, setIsDel] = useState(false)
   const [open, setOpen] = useState(false)
@@ -57,13 +57,13 @@ export function UserOrders(props: UserOrdersProps) {
           const response = await userApi.getBill(pagination, null)
           const myRes = response.data as RootBillUser
           setInvoice(myRes.data)
-          setRowCount(myRes.totalRow)
+          setRowCount(Math.ceil(myRes.totalRow/pagination.pageSize))
         } else {
           const response = await userApi.getBill(pagination, status)
           const myRes = response.data as RootBillUser
           console.log(myRes)
           setInvoice(myRes.data)
-          setRowCount(myRes.totalRow)
+          setRowCount(Math.ceil(myRes.totalRow/pagination.pageSize))
         }
       } catch (err) {
         console.log(err)
@@ -71,8 +71,6 @@ export function UserOrders(props: UserOrdersProps) {
     }
     fetchData()
   }, [status, pagination])
-
-  console.log(invoice)
 
   return (
     <>
@@ -83,27 +81,30 @@ export function UserOrders(props: UserOrdersProps) {
         </p>
       </div>
       <Divider />
-      <div className="flex flex-col gap-5">
+      <div style={{minHeight:"calc(100% - 95px)"}} className="flex flex-col gap-5">
         <Box>
           <Tabs
             value={tabs}
             variant="scrollable"
             scrollButtons="auto"
+            sx={{"& .MuiTabs-scrollButtons.Mui-disabled": {
+              opacity: 0.3,
+            }}}
             onChange={handleChange}
           >
             <Tab label="Tất cả" {...a11yProps(0)} />
             <Tab label="Chờ xác nhận" {...a11yProps(1)} />
-            <Tab label="Đã xác nhận" {...a11yProps(2)} />
+            <Tab label="Đang vận chuyển" {...a11yProps(2)} />
             <Tab label="Thành công" {...a11yProps(3)} />
             <Tab label="Đã hủy" {...a11yProps(4)} />
           </Tabs>
         </Box>
-        <Box className="flex flex-col gap-4 ">
+        <Box className="flex flex-1 justify-between flex-col gap-4 ">
           {invoice.map((item) => (
             <BillItem key={item.id} data={item}/>
           ))}
           {rowCount > 0 && (
-            <div className="flex items-center justify-center">
+            <div className="flex mt-1 items-center justify-center">
               <Pagination
                 count={rowCount}
                 color="primary"

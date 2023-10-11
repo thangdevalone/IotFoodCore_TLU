@@ -1,22 +1,19 @@
 import { Question, WhyChoose } from "@/features/About"
 import { Banner } from "@/features/Banner"
+import { PagingFood } from "@/features/PagingFood"
 import { RecommendFood } from "@/features/RecommendFood"
 import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 import { SearchFood } from "@/features/SearchFood"
 import TypeFood from "@/features/TypeFood"
-import { useWindowDimensions } from "@/hooks"
 import { Box } from "@mui/material"
-import React from "react"
 import { Footer, Header } from "../Common"
 import "./styles_home.css"
-import { PagingFood } from "@/features/PagingFood"
+import { useAppSelector } from "@/app/hooks"
 export interface HomeProps {}
 
 export function Home(props: HomeProps) {
-  const { width } = useWindowDimensions()
-  // React.useEffect(() => {
-  //   window.scrollTo(0, 0)
-  // }, [])
+  const { width } = useAppSelector(state=>state.app)
+
 
   return (
     <Box className="relative">

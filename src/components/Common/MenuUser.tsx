@@ -20,6 +20,7 @@ export function MenuUser(props: MenuUserProps) {
   const { anchorEl, handleClose } = props
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const {width}=useAppSelector(state=>state.app)
   const user = useInforUser()
   const handleLogOut = () => {
     handleClose()
@@ -27,7 +28,7 @@ export function MenuUser(props: MenuUserProps) {
   }
   const navUser = () => {
     handleClose()
-    navigate("/user/profile")
+    navigate(width>800?"/user/profile":"/user/account")
   }
   const handleAdmin = () => {
     handleClose()
@@ -97,12 +98,6 @@ export function MenuUser(props: MenuUserProps) {
           <ReceiptOutlined fontSize="small" />
         </ListItemIcon>
         Đơn mua
-      </MenuItem>
-      <MenuItem onClick={handleClose}>
-        <ListItemIcon>
-          <SettingsOutlined fontSize="small" />
-        </ListItemIcon>
-        Cài đặt
       </MenuItem>
       <MenuItem onClick={handleLogOut}>
         <ListItemIcon>

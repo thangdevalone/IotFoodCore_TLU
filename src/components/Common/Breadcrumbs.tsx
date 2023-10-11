@@ -1,7 +1,7 @@
-import * as React from "react"
-import Breadcrumbs from "@mui/material/Breadcrumbs"
+import { useAppSelector } from "@/app/hooks"
 import NavigateNextIcon from "@mui/icons-material/NavigateNext"
-import { useWindowDimensions } from "@/hooks"
+import Breadcrumbs from "@mui/material/Breadcrumbs"
+import * as React from "react"
 import { NavLink } from "react-router-dom"
 
 interface BreadcrumbItem {
@@ -14,8 +14,6 @@ interface BreadcrumbsCommonProps {
 }
 
 const BreadcrumbsCommon: React.FC<BreadcrumbsCommonProps> = ({ items }) => {
-  const { width } = useWindowDimensions()
-
   const defaultBreadcrumb = (
     <NavLink key="home" color="inherit" to="/">
       <span className={`${"text-base"} hover:text-blue-500 capitalize`}>

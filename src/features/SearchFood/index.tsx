@@ -1,15 +1,15 @@
-import { Box, Paper, Stack } from "@mui/material"
-import classes from "./styles.module.css"
+import { useAppSelector } from "@/app/hooks"
 import { CustomButton } from "@/components/Custom/CustomButon"
-import { useWindowDimensions } from "@/hooks"
+import { Box, Paper, Stack } from "@mui/material"
 import classNames from "classnames"
-import { useNavigate } from "react-router-dom"
-import React from "react"
 import { useSnackbar } from "notistack"
+import React from "react"
+import { useNavigate } from "react-router-dom"
+import classes from "./styles.module.css"
 export interface SearchFoodProps {}
 
 export function SearchFood(props: SearchFoodProps) {
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const [search, setSearch] = React.useState<string>("")

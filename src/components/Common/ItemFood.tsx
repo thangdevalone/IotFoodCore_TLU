@@ -1,7 +1,5 @@
-import { useAppDispatch } from "@/app/hooks"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
-import { VoucherIcon } from "@/components/Icon/VoucherIcon"
-import { useWindowDimensions } from "@/hooks"
 import { ToppingEntityList } from "@/models"
 import { handlePrice } from "@/utils"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
@@ -38,10 +36,17 @@ export const ItemFood = (props: propsData) => {
     idRes,
   } = props
 
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const dispatch = useAppDispatch()
   const { enqueueSnackbar } = useSnackbar()
+  const dataStore = useAppSelector((state) => state.cart.dataStore)
   const handleAddToCart = () => {
+    const store=dataStore.find(item=>item.id===idStore)
+    const food=store?.items.find(item=>item.idFood===idFood)
+    if(food &&food?.quantity>=10){
+      enqueueSnackbar("Không thể thêm quá 10 sản phẩm",{variant:"error"})
+      return
+    }
     const data = {
       idFood,
       name: foodName,
@@ -52,9 +57,9 @@ export const ItemFood = (props: propsData) => {
       nameStore,
       imgFood,
     }
-    enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
+    
     dispatch(cartActions.addToCart(data))
-    console.log(idRes, toppingList)
+    enqueueSnackbar("Bạn vừa thêm vào giỏ hàng", { variant: "success" })
     if (idRes && toppingList) {
       dispatch(
         cartActions.setToppingRes({ id: idRes, listTopping: toppingList }),
@@ -119,7 +124,11 @@ export const ItemFood = (props: propsData) => {
                 <span className="line-clamp-1 text-[14px]">{nameStore}</span>
 
                 <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-[14px] text-gray-400">
-                  {detail ? detail : <span className="mt-1 block">Đã bán: {qSold}</span>}
+                  {detail ? (
+                    detail
+                  ) : (
+                    <span className="mt-1 block">Đã bán: {qSold}</span>
+                  )}
                 </span>
               </div>
 

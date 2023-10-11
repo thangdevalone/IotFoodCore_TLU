@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { useInforUser, useScroll, useWindowDimensions } from "@/hooks"
+import { useInforUser, useScroll } from "@/hooks"
 import { handlePrice } from "@/utils"
 import { Avatar, Badge, Box, Stack, Typography } from "@mui/material"
+import useDetectScroll from "@smakss/react-scroll-direction"
 import classNames from "classnames"
 import { MouseEvent, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
@@ -11,16 +12,16 @@ import { BagBoldIcon, BagIcon, NotiIcon } from "../Icon"
 import { cartActions } from "./CartDrawer/CartSlice"
 import { MenuUser } from "./MenuUser"
 import "./styles_common.css"
-import useDetectScroll from "@smakss/react-scroll-direction"
 export interface HeaderProps {
   sx?: { [index: string]: string }
   className?: string
   isWhiteLogo?: boolean
   theme?:string
+  noItem?:boolean
 }
 
 export function Header(props: HeaderProps) {
-  const { sx, className, isWhiteLogo = true,theme="default" } = props
+  const { sx, className, isWhiteLogo = true,theme="default",noItem=false } = props
   const user = useInforUser()
   const dispatch = useAppDispatch()
   const scrollY = useScroll()
@@ -43,7 +44,7 @@ export function Header(props: HeaderProps) {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const setterBg =
     scrollY >= 40 || (scrollY >= 50 && width < 500) ? true : false
   const mobile = width <= 750 ? true : false
@@ -104,7 +105,8 @@ export function Header(props: HeaderProps) {
             />
           </Link>
           <Stack direction={"row"} alignItems="center" position={"relative"}>
-            {width > 500 ? (
+            {!noItem && <>
+              {width > 500 ? (
               <Badge
                 color="secondary"
                 badgeContent={lengthFood}
@@ -269,6 +271,7 @@ export function Header(props: HeaderProps) {
               </div>
             )}
 
+            </>}
             {user ? (
               <>
                 <CustomButton

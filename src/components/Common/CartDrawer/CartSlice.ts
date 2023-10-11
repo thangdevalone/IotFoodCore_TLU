@@ -106,6 +106,7 @@ const cartSlice = createSlice({
                 .find((item) => item.name === nameStore && item.id === idStore)
                 ?.items.map((food) => {
                   if (food.idFood === idFood && food.name === name) {
+                    
                     state.lengthFood =
                       state.lengthFood - food.quantity + quantity
                     return (food.quantity = quantity)
