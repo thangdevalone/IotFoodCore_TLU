@@ -8,6 +8,7 @@ import App from "./App"
 import NavigateSetter from "./Router/NavigateSetter"
 import { persistor, store } from "./app/store"
 import "./index.css"
+import { PersistGate } from "redux-persist/integration/react"
 const Container = () => {
   useEffect(() => {
     ;(async () => {
@@ -27,6 +28,7 @@ const Container = () => {
 
   return (
     <Provider store={store}>
+     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <SnackbarProvider
           autoHideDuration={2000}
@@ -37,6 +39,7 @@ const Container = () => {
           <App />
         </SnackbarProvider>
       </BrowserRouter>
+      </PersistGate>
     </Provider>
   )
 }
