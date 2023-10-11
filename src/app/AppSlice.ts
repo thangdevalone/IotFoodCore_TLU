@@ -13,10 +13,8 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     setWidth(state,action:PayloadAction<number>){
-      if(!state.width){
-        state.width=action.payload
-      } if(state.width+20<action.payload || state.width+20>action.payload){
-        state.width=action.payload
+      if (state.width === undefined || Math.abs(state.width - action.payload) >= 20) {
+        state.width = action.payload;
       }
     }
   }

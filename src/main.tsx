@@ -11,6 +11,7 @@ import "./index.css"
 const Container = () => {
   useEffect(() => {
     const VERSION = localStorage.getItem("APP_VERSION")
+    console.log(VERSION,import.meta.env.VITE_APP_VERSION)
     if (VERSION) {
       if (VERSION != import.meta.env.VITE_APP_VERSION) {
         localStorage.clear()
