@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect } from "react"
 import { CssBaseline } from "@mui/material"
 import { SnackbarProvider } from "notistack"
 import ReactDOM from "react-dom/client"
@@ -10,17 +10,19 @@ import { persistor, store } from "./app/store"
 import "./index.css"
 const Container = () => {
   useEffect(() => {
-    const VERSION = localStorage.getItem("APP_VERSION")
-    console.log(VERSION,import.meta.env.VITE_APP_VERSION)
-    if (VERSION) {
-      if (VERSION != import.meta.env.VITE_APP_VERSION) {
-        localStorage.clear()
-        persistor.purge();
+    ;(async () => {
+      const VERSION = localStorage.getItem("APP_VERSION")
+      console.log(VERSION, import.meta.env.VITE_APP_VERSION)
+      if (VERSION) {
+        if (VERSION != import.meta.env.VITE_APP_VERSION) {
+          await persistor.purge()
+          localStorage.clear()
+          localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
+        }
+      } else {
         localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
       }
-    } else {
-      localStorage.setItem("APP_VERSION", import.meta.env.VITE_APP_VERSION)
-    }
+    })()
   }, [])
 
   return (
