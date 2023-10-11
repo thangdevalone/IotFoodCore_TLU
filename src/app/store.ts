@@ -12,6 +12,7 @@ const persistConfig = {
   key: 'root', 
   storage,
   whitelist: ['auth','cart'],
+  version:import.meta.env.VITE_APP_VERSION
   
 };
 
