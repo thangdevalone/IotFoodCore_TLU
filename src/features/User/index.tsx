@@ -26,8 +26,9 @@ export default function User(props: UserProps) {
         style={{
           backgroundColor: "rgb(240, 242, 245)",
           height: width > 500 ? "auto" : "calc(100vh - 60px)",
+          minHeight: width > 500 ? "calc(100vh - 80px)" : "calc(100vh - 60px)"
         }}
-        className="w-screen h-full"
+        className="w-screen"
       >
         <div
           className={`flex container-base h-full ${

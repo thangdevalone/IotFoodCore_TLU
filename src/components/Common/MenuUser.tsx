@@ -99,12 +99,6 @@ export function MenuUser(props: MenuUserProps) {
         </ListItemIcon>
         Đơn mua
       </MenuItem>
-      <MenuItem onClick={handleClose}>
-        <ListItemIcon>
-          <SettingsOutlined fontSize="small" />
-        </ListItemIcon>
-        Cài đặt
-      </MenuItem>
       <MenuItem onClick={handleLogOut}>
         <ListItemIcon>
           <Logout fontSize="small" />
