@@ -77,14 +77,13 @@ export default function Checkout(props: CheckoutProps) {
     const bill: BillConfig = {
       totalAmount: 0,
       shipFee: 0,
+      finishTime:cart.timeDeliver,
       billFoodRequests: [],
-      finishTime: "",
     }
     if (cart.voucherUse) {
       bill["codeVoucher"] = cart.voucherUse.code
     }
     bill["shipFee"] = shipFee || 0
-    bill["finishTime"] = cart.timeDeliver
     const listBill: BillFoodRequest[] = []
     cart.dataStore.forEach((element) => {
       element.items.forEach((item) => {
@@ -94,12 +93,14 @@ export default function Checkout(props: CheckoutProps) {
     bill["billFoodRequests"] = listBill
     bill["totalAmount"] = cart.totalAmount || 0
     bill["note"] = noteShip
-    console.log(bill)
     ;(async () => {
       setLoading(true)
+      // await userApi.addOrder(bill)
       if (clientStomp) {
         clientStomp.send("/app/add-bill", headers, JSON.stringify(bill))
       }
+
+      setLoading(false)
     })()
   }
   const handleClickOpen = () => {
@@ -161,18 +162,26 @@ export default function Checkout(props: CheckoutProps) {
           console.log(data.body.usernameSend, user?.msv, data, message)
           if (data.body.usernameSend === user?.msv) {
             if (data.statusCodeValue === 400) {
-              enqueueSnackbar("Hết mã rồi tình yêu ơi", { variant: "error", preventDuplicate: true,})
+              enqueueSnackbar("Hết mã rồi tình yêu ơi", { variant: "error" })
             } else {
               enqueueSnackbar("Đặt hàng thành công. Bấm vào đơn mua để xem", {
                 variant: "success",
-                preventDuplicate: true,
               })
               const newVoucher = data.body.data as VoucherItem[]
               setVouchers(newVoucher)
               setOpenConfirm(false)
               dispatch(cartActions.resetCart())
+              if (cart.dataStore.length > 0 && newVoucher) {
+                const newVoucherUse = newVoucher.find(
+                  (item) =>
+                    item.code === cart.voucherUse?.code &&
+                    item.quantity !== cart.voucherUse?.quantity,
+                )
+                if (newVoucherUse) {
+                  dispatch(cartActions.addVoucherUse(newVoucherUse))
+                }
+              }
             }
-            setLoading(false)
           } else {
             const newVoucher = data.body.data as VoucherItem[]
             setVouchers(newVoucher)
@@ -192,16 +201,7 @@ export default function Checkout(props: CheckoutProps) {
       )
     }
   }, [clientStomp])
-  const cssVoucherDialog =
-    width < 550
-      ? {
-          width: "100vw",
-          height: "100vh",
-          maxHeight: "unset",
-          margin: 0,
-          borderRadius: "unset",
-        }
-      : { width: "90%", maxWidth: "650px" }
+  const cssVoucherDialog=width<550?{width:"100vw",height:"100vh",maxHeight:"unset",margin:0,borderRadius:"unset"}:{width:"90%",maxWidth:"650px"}
   return (
     <>
     {clientStomp?<Box>
@@ -250,7 +250,12 @@ export default function Checkout(props: CheckoutProps) {
             onClick={handleCloseConfirm}
             variant="outlined"
             sx={{
-              "& .MuiPaper-root": cssVoucherDialog,
+              borderColor: "#ef7692",
+              color: "#ef7692",
+              "&:hover": {
+                borderColor: "#ef7692",
+                color: "#ef7692",
+              },
             }}
           >
             Hủy
@@ -566,41 +571,30 @@ export default function Checkout(props: CheckoutProps) {
           ) : (
             <Box
               sx={{
-                backgroundColor: "#D3D3D3",
-                paddingTop: "20px !important",
-                overflow: "hidden auto",
+                padding: "12px",
+                width: "400px",
+                textAlign: "center",
               }}
             >
-              {vouchers?.map((item) => (
-                <VoucherDesign
-                  key={item.id}
-                  data={item}
-                  handleClose={handleClose}
-                />
-              ))}
-            </DialogContent>
-          </Dialog>
-          <Dialog open={openConfirm} onClose={handleCloseConfirm}>
-            <DialogTitle>Bạn chắn chắn muốn đặt hàng?</DialogTitle>
-            <DialogContent>
-              <b>Lưu ý:</b> Bạn chỉ có thể hủy đơn hàng trước khi đơn hàng được{" "}
-              <b>xác nhận hoặc đang giao</b> nên hãy thật chắc chắn trước khi
-              đặt hàng.
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={handleCloseConfirm}
-                variant="outlined"
-                sx={{
-                  borderColor: "#ef7692",
-                  color: "#ef7692",
-                  "&:hover": {
-                    borderColor: "#ef7692",
-                    color: "#ef7692",
-                  },
+              <img
+                src="/assets/empty-cart.svg"
+                style={{ width: "100%" }}
+                alt="empty-img"
+              />
+              <h5
+                style={{
+                  marginTop: "24px",
+                  fontSize: "1.2rem",
+                  fontWeight: "600",
                 }}
               >
-                Hủy
+                Giỏ hàng rỗng!
+              </h5>
+              <Box className="caption-tx" sx={{ color: "#9a9a9a" }}>
+                Thêm các mặt hàng vào giỏ hàng của bạn và đặt hàng tại đây
+              </Box>
+              <Button onClick={() => navigate("/")} variant="outlined">
+                Tiếp tục xem đồ ăn
               </Button>
             </Box>
           )}
