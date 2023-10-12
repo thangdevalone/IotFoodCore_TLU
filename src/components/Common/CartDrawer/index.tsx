@@ -4,13 +4,7 @@ import { useInforUser } from "@/hooks"
 import { CartItemData } from "@/models"
 import { handlePrice, handlePriceShip } from "@/utils"
 import { ArrowBackIosNew } from "@mui/icons-material"
-import {
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  SwipeableDrawer
-} from "@mui/material"
+import { Box, Button, IconButton, Stack, SwipeableDrawer } from "@mui/material"
 import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import { ToppingAccord } from ".."
@@ -68,7 +62,7 @@ export function CartDrawer(props: CardDrawerProps) {
     toggleDrawer()
     navigate("/checkout")
   }
-  const { width } = useAppSelector(state=>state.app)
+  const { width } = useAppSelector((state) => state.app)
   return (
     <div>
       <SwipeableDrawer
@@ -158,9 +152,8 @@ export function CartDrawer(props: CardDrawerProps) {
                       >
                         <Stack direction="column">
                           <span>Tổng</span>
-                        
-                            <p>Phí vận chuyển</p>
 
+                          <p>Phí vận chuyển</p>
                         </Stack>
                         <Stack direction="column">
                           <span className="text-end">
@@ -185,13 +178,14 @@ export function CartDrawer(props: CardDrawerProps) {
                   sx={{ padding: "10px 20px 5px 20px" }}
                   className="absolute bottom-3 border-t-2 border-gray-300 w-[100%] bg-white"
                 >
-                  <p className="text-sm py-2"><b>Lưu ý:</b> Xem chi tiết đơn hàng để dùng mã ưu đãi</p>
+                  <p className="text-sm py-2">
+                    <b>Lưu ý:</b> Xem chi tiết đơn hàng để dùng mã ưu đãi
+                  </p>
                   <div
                     className={`mb-4 ${
                       width < 400 && "flex flex-row items-center"
                     }`}
                   >
-                    
                     <label
                       htmlFor="timeDeliver"
                       className="block mb-2 w-full text-sm font-medium text-gray-900 dark:text-white"
@@ -224,8 +218,13 @@ export function CartDrawer(props: CardDrawerProps) {
                   <Box className="w-full">
                     <CustomButton
                       fullWidth
-                      disabled={!user}
-                      onClick={handlePay}
+                      onClick={() => {
+                        if (user) {
+                          handlePay()
+                        } else {
+                          navigate("/login")
+                        }
+                      }}
                       sx={{
                         background: "var(--color-df-1)",
                         color: "white",
@@ -234,7 +233,7 @@ export function CartDrawer(props: CardDrawerProps) {
                         height: "50px",
                         fontWeight: "600",
                         textTransform: "unset",
-                        "&.Mui-disabled":{
+                        "&.Mui-disabled": {
                           color: "white",
                         },
                         "&:hover": {

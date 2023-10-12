@@ -294,8 +294,8 @@ export default function Checkout(props: CheckoutProps) {
       >
         <div
           style={{ width: "100%", maxWidth: "1000px", margin: "0 auto" }}
-          className={`base-pd ${
-            !cart.dataStore?.length && "flex justify-center"
+          className={`${width>600?"base-pd":""} ${
+            !cart.dataStore?.length ? "flex justify-center" :""
           }`}
         >
           {cart.dataStore?.length > 0 ? (
@@ -531,7 +531,7 @@ export default function Checkout(props: CheckoutProps) {
                     margin: "0 auto",
                     flexDirection:`${width>600?"row":"column"}`
                   }}
-                  className="flex h-full gap-1 items-center justify-between base-pd"
+                  className={`flex h-full gap-1 items-center justify-between ${width>500?"base-pd":""}`}
                 >
                   <p className={`${width>600?"text-xl":"text-lg"}`}>
                     Tổng hóa đơn:{" "}

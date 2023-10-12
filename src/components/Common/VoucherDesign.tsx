@@ -449,7 +449,7 @@ const VoucherMD = (props: {
           background: blocker ? "rgba(0,0,0,0.5)" : "transparent",
         }}
       >
-        <div
+        {blocker && <div
           className="w-full h-full absolute flex items-center justify-center text-white z-[1100]"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
         >
@@ -465,7 +465,7 @@ const VoucherMD = (props: {
           >
             Chi tiết <ArrowForward fontSize="small" />
           </p>
-        </div>
+        </div>}
         <RailLeft h={h} />
         <div className="w-full h-full z-[400] bg-white absolute top-0 left-0"></div>
         {width > 650 && <RailMid h={h} />}
@@ -624,17 +624,28 @@ export function VoucherDesign(props: { data?: VoucherItem }) {
   const { data } = props
   const amount = useAppSelector((state) => state.cart.totalAmount)
   useEffect(() => {
-    if (data?.code.search("MIN")) {
-      const minAmount = Number(
-        data?.code.slice(data?.code.search("MIN") + 3, data?.code.length) +
-          "000",
-      )
+    if (data?.code.search("MI")) {
+      let minAmount=0
+      if(data?.code.search("MA")){
+        minAmount = Number(
+          data?.code.slice(data?.code.search("MI") + 3, data?.code.search("MA")) +
+            "000",
+        )
+      }
+      else{
+        minAmount = Number(
+          data?.code.slice(data?.code.search("MI") + 3, data?.code.length) +
+            "000",
+        )
+      }
       if (amount && amount < minAmount) {
         setBlocker(true)
       }
+      else{
+        setBlocker(false)
+      }
     }
   }, [amount])
-  console.log(blocker)
   const pushVoucher = () => {
     if (data) {
       dispatch(cartActions.addVoucherUse(data))

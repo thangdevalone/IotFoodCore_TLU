@@ -25,6 +25,7 @@ export function MenuUser(props: MenuUserProps) {
   const handleLogOut = () => {
     handleClose()
     dispatch(authActions.logout())
+    navigate("/")
   }
   const navUser = () => {
     handleClose()
