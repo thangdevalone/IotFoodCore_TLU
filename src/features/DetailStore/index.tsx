@@ -1,14 +1,14 @@
 import foodsApis from "@/api/foodsApi"
+import { useAppSelector } from "@/app/hooks"
 import { ItemFood } from "@/components/Common"
 import BreadcrumbsCommon from "@/components/Common/Breadcrumbs"
 import { VoucherIcon } from "@/components/Icon"
-import { useWindowDimensions } from "@/hooks"
 import { StoreDetailData } from "@/models"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import { Box, Grid, Stack, Typography, Skeleton } from "@mui/material"
+import { Box, Grid, Skeleton, Stack, Typography } from "@mui/material"
 import * as React from "react"
 import { useParams } from "react-router-dom"
-import { SkeletonRes, SkeletonCustom } from "../../components/Common/Skeleton"
+import { SkeletonCustom, SkeletonRes } from "../../components/Common/Skeleton"
 
 export interface DetailProps {}
 
@@ -16,7 +16,7 @@ const DetailStore = (props: DetailProps) => {
   const { idStore } = useParams()
   const [data, setData] = React.useState<StoreDetailData>()
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
 
   React.useEffect(() => {
     const fetchData = async () => {

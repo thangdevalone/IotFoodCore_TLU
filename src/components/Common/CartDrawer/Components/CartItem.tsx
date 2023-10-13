@@ -1,13 +1,12 @@
-import * as React from "react"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { CartItemData } from "@/models"
-import { Box, Stack, Typography } from "@mui/material"
+import { handlePrice } from "@/utils"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
-import { handlePrice } from "@/utils"
-import { useAppDispatch } from "@/app/hooks"
-import { cartActions } from "../CartSlice"
-import { useWindowDimensions } from "@/hooks"
+import { Box, Stack, Typography } from "@mui/material"
 import { useSnackbar } from "notistack"
+import * as React from "react"
+import { cartActions } from "../CartSlice"
 
 export interface propsData {
   item: CartItemData
@@ -16,10 +15,14 @@ export interface propsData {
 const CartItem = (props: propsData) => {
   const { item } = props
   const [quantity, setQuantity] = React.useState<number>(item.quantity)
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const dispatch = useAppDispatch()
   const handleAdd = () => {
-    if(quantity>=10) return
+    if(quantity>=10) {
+      enqueueSnackbar("Không thể mua quá 10 sản phẩm",{variant:"error"})
+    setQuantity(10)
+    return
+  }
     setQuantity((prev) => +prev + 1)
     dispatch(cartActions.addToCart(item))
   }
@@ -35,18 +38,15 @@ const CartItem = (props: propsData) => {
   }
 
   const handleOnChangeInput = (value: number) => {
-    if(quantity>10){
+    if(quantity>=10){
+        enqueueSnackbar("Không thể mua quá 10 sản phẩm",{variant:"error"})
       setQuantity(10)
     }
     setQuantity(value)
   }
-  React.useEffect(()=>{
-    if(quantity>10){
-      enqueueSnackbar("Không thể mua quá 10 sản phẩm",{variant:"error"})
-    }
-  },[quantity])
   const handleSetQuantity = (value: number) => {
     if(quantity>10){
+      enqueueSnackbar("Không thể mua quá 10 sản phẩm",{variant:"error"})
       setQuantity(10)
       return
     }

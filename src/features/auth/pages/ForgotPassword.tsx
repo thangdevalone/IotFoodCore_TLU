@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { InputField, PasswordField } from "@/components/FormControls"
-import { useWindowDimensions } from "@/hooks"
 import { ForgotForm } from "@/models/ForgotForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { ArrowBack } from "@mui/icons-material"
@@ -28,7 +27,7 @@ const ForgotPassword = () => {
   const [openPassword, setOpenPassword] = React.useState<boolean>(false)
   const [otpRes, setOtpRes] = React.useState<string>("")
   const { enqueueSnackbar } = useSnackbar()
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const dispatch = useAppDispatch()
   const schema = yup.object().shape({
     username: yup.string().required("Cần nhập mã sinh viên"),

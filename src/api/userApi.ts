@@ -20,6 +20,11 @@ const userApi = {
     const url = `user/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}`
     return axiosClient.post(url)
   },
+  cancelBill(id:number){
+    const url = `user/cancel-bill?id=${id}`
+    return axiosClient.put(url)
+
+  },
   forgotPassword(name: string) {
     // gửi otp quên mk
     const url = `auth/forgot-pass?username=${name}`

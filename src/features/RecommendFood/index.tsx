@@ -1,15 +1,15 @@
 import foodsApis from "@/api/foodsApi"
-import { useWindowDimensions } from "@/hooks"
+import { useAppSelector } from "@/app/hooks"
+import { CustomButton } from "@/components/Custom/CustomButon"
 import { foodData } from "@/models"
 import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 import { Box, IconButton, Stack } from "@mui/material"
 import * as React from "react"
+import { useNavigate } from "react-router-dom"
 import "swiper/css"
 import { Swiper, SwiperSlide } from "swiper/react"
-import SliderItemRecommend from "./SliderItemRecommend"
-import { CustomButton } from "@/components/Custom/CustomButon"
-import { useNavigate } from "react-router-dom"
 import { SkeletonCustom } from "../../components/Common/Skeleton"
+import SliderItemRecommend from "./SliderItemRecommend"
 
 export interface RecommendFoodProps {}
 
@@ -41,7 +41,7 @@ export function RecommendFood(props: RecommendFoodProps) {
     }
     fetchData()
   }, [])
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
 
   //
 

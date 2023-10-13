@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { InputField, PasswordField } from "@/components/FormControls"
-import { useWindowDimensions } from "@/hooks"
 import { LoginForm } from "@/models"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { ArrowBack } from "@mui/icons-material"
@@ -24,7 +23,7 @@ export function LoginPage(props: LoginPageProps) {
   const logging = useAppSelector((state) => state.auth.logging)
   const actionAuth = useAppSelector((state) => state.auth.actionAuth)
   const { enqueueSnackbar } = useSnackbar()
-  const { width } = useWindowDimensions()
+  const { width } = useAppSelector(state=>state.app)
   const dispatch = useAppDispatch()
   const schema = yup.object().shape({
     username: yup.string().required("Cần nhập mã sinh viên"),
