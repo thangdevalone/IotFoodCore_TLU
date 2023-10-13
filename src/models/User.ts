@@ -24,7 +24,7 @@ export interface UpdatePassWord {
 
 export interface UpdateInformationUser {
   password: string
-  newPassword: string
+  newPassword: string | null
   accountName: string | null
   img: File | null
   sdt: string | null

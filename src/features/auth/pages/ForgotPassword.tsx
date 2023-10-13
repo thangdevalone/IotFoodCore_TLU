@@ -47,9 +47,9 @@ const ForgotPassword = () => {
       console.log(err)
     }
   }
-  const handleConfirmOtp = async (otp: string) => {
+  const handleConfirmOtp = async (otp: string, username: string) => {
     try {
-      const response = await userApi.finalOtpForgot(otp)
+      const response = await userApi.finalOtpForgot(otp, username)
       if (response.status) {
         setOtpRes(response.data)
         setOpenPassword(true)
@@ -75,6 +75,7 @@ const ForgotPassword = () => {
         enqueueSnackbar("Cập nhật mật khẩu thành công", {
           variant: "success",
         })
+        navigate("/login")
       } else {
         enqueueSnackbar("Cập nhật mật khẩu không thành công", {
           variant: "error",
@@ -103,7 +104,7 @@ const ForgotPassword = () => {
     }
     if (openOtp && !openPassword) {
       if (data.otp?.length) {
-        handleConfirmOtp(data.otp)
+        handleConfirmOtp(data.otp, data.username)
       }
     }
     if (!openOtp && !openPassword) handleSendOtp(data.username)

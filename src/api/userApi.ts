@@ -35,9 +35,9 @@ const userApi = {
     const url = `user/validate-otp?otp=${otp}`
     return axiosClient.post(url)
   },
-  finalOtpForgot(otp: string) {
+  finalOtpForgot(otp: string, username: string) {
     const url = "auth/validate-otp-forgot-pass"
-    return axiosClient.post(url, { otp: otp })
+    return axiosClient.post(url, { otp: otp, username: username })
   },
   finalPassword(data: ChangePassword) {
     const url = "auth/change-password"
@@ -45,11 +45,20 @@ const userApi = {
   },
   updateUserInformation(data: UpdateInformationUser) {
     const formData = new FormData()
+    console.log(data)
     formData.append("password", data.password)
-    formData.append("newPassword", data.newPassword || "")
-    formData.append("img", data.img || "")
-    formData.append("sdt", data.sdt || "")
-    formData.append("accountName", data.accountName || "")
+    if (data.newPassword !== null) {
+      formData.append("newPassword", data.newPassword)
+    }
+    if (data.img !== null) {
+      formData.append("img", data.img)
+    }
+    if (data.sdt !== null) {
+      formData.append("sdt", data.sdt)
+    }
+    if (data.sdt !== null) {
+      formData.append("sdt", data.sdt)
+    }
     const url = "user/update-user-info"
     return axiosClient.put(url, formData, {
       headers: {

@@ -25,13 +25,17 @@ export interface ProfileProps {}
 
 export function Profile(props: ProfileProps) {
   const user = useInforUser()
-  console.log(user)
   const { enqueueSnackbar } = useSnackbar()
-  const [file, setFile] = React.useState<File | null>()
+  const [file, setFile] = React.useState<File | null>(null)
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [imagePreview, setImagePreview] = React.useState<string>("")
-  const [verifyOtp, setVerifyOtp] = React.useState<boolean>(false)
   const [otpValue, setOptValue] = React.useState<string>("")
+  const [pw, setPw] = React.useState<string>("")
+  const [openPw, setOpenPw] = React.useState<boolean>(false)
+  const [payload, setPayload] = React.useState({
+    name: "",
+    sdt: "",
+  })
   const schema = yup.object().shape({
     accountName: yup.string().required("Vui lòng nhập tên của bạn !"),
     sdt: yup.string().required("Vui lòng nhập số điện thoại !"),
@@ -54,6 +58,13 @@ export function Profile(props: ProfileProps) {
   const handleSendOtp = async (email: string) => {
     try {
       const response = await userApi.verifyEmail(email)
+      if (response.status) {
+        setOpen(true)
+      } else {
+        enqueueSnackbar("Tài khoản của bạn đã được xác thực trước đó !", {
+          variant: "error",
+        })
+      }
     } catch (err) {
       console.log(err)
     }
@@ -62,7 +73,6 @@ export function Profile(props: ProfileProps) {
   const confirmOtp = async (otp: string) => {
     try {
       const response = await userApi.validate(otp)
-      console.log(response)
       if (response.status) {
         enqueueSnackbar("Xác thực gmail thành công !", {
           variant: "success",
@@ -82,6 +92,10 @@ export function Profile(props: ProfileProps) {
     setOpen(false)
   }
 
+  const handleClosePw = () => {
+    setOpenPw(false)
+  }
+
   const handleConfirm = () => {
     confirmOtp(otpValue)
   }
@@ -95,11 +109,52 @@ export function Profile(props: ProfileProps) {
     resolver: yupResolver(schema),
   })
 
+  const handleChangeInfo = async (
+    accountName: string,
+    sdt: string,
+    file: File | null,
+  ) => {
+    try {
+      const response = await userApi.updateUserInformation({
+        password: pw,
+        newPassword: null,
+        accountName,
+        img: file,
+        sdt,
+      })
+      if (response.status) {
+        enqueueSnackbar("Thay đổi thành công !", {
+          variant: "success",
+        })
+      } else {
+        enqueueSnackbar("Thay đổi thất bại !", {
+          variant: "error",
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const handleConfirmUpdate = () => {
+    setOpenPw(false)
+    if (file !== null) handleChangeInfo(payload.name, payload.sdt, file)
+    else handleChangeInfo(payload.name, payload.sdt, null)
+  }
   const handleSubmit: SubmitHandler<InfoForm> = (data) => {
     if (data.email?.length && data.email !== user?.email) {
-      setOpen(true)
       handleSendOtp(data.email)
     }
+    if (
+      data.accountName !== user?.accountName ||
+      data.sdt !== user?.sdt ||
+      file !== null
+    ) {
+      setOpenPw(true)
+      setPayload({ name: data.accountName, sdt: data.sdt })
+    } else
+      enqueueSnackbar("Bạn chưa thay đổi gì !", {
+        variant: "info",
+      })
   }
 
   return (
@@ -129,7 +184,11 @@ export function Profile(props: ProfileProps) {
                   <InputField label="Số điện thoại" name="sdt" />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <InputField label="Email" name="email" />
+                  <InputField
+                    label="Email"
+                    name="email"
+                    disabled={user?.email.length ? true : false}
+                  />
                 </Grid>
               </Grid>
               <Button
@@ -193,6 +252,27 @@ export function Profile(props: ProfileProps) {
         <DialogActions>
           <Button onClick={handleClose}>Hủy</Button>
           <Button onClick={handleConfirm}>Xác Nhận</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openPw} onClose={handleClosePw}>
+        <DialogTitle>Vui lòng nhập mật khẩu</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Password"
+            type="text"
+            fullWidth
+            variant="standard"
+            style={{ width: "20vw" }}
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePw}>Hủy</Button>
+          <Button onClick={handleConfirmUpdate}>Xác Nhận</Button>
         </DialogActions>
       </Dialog>
     </div>

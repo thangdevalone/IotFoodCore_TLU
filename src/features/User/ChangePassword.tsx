@@ -7,6 +7,7 @@ import * as yup from "yup"
 import { useSnackbar } from "notistack"
 import userApi from "@/api/userApi"
 import { useRef } from "react"
+import { useNavigate } from "react-router-dom"
 
 export interface ChangePasswordProps {}
 
@@ -30,29 +31,31 @@ export function ChangePassword(props: ChangePasswordProps) {
   const form = useForm<UpdatePassWord>({
     resolver: yupResolver(schema),
   })
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const reset = () => {
     if (formRef.current) {
       formRef.current.reset()
     }
   }
-  const handleSubmit = async (pw: string, newPw: string) => {
+  const handleSubmitChangePw = async (
+    password: string,
+    newPassword: string,
+  ) => {
     try {
-      const form = {
-        password: pw,
-        newPassword: newPw,
+      const response = await userApi.updateUserInformation({
+        password,
+        newPassword,
+        accountName: null,
         img: null,
         sdt: null,
-        accountName: null,
-      }
-      const response = await userApi.updateUserInformation(form)
-      console.log(response)
-      console.log(response)
+      })
       if (response.status) {
         enqueueSnackbar("Đổi mật khẩu thành công !", {
           variant: "success",
         })
         reset()
+        navigate("/user/profile")
       } else {
         enqueueSnackbar("Đổi mật khẩu thất bại !", {
           variant: "error",
@@ -78,7 +81,7 @@ export function ChangePassword(props: ChangePasswordProps) {
               style={{ display: "flex", flexDirection: "column" }}
               className="flex items-center justify-center"
               onSubmit={form.handleSubmit((data) =>
-                handleSubmit(data.password, data.newPassword),
+                handleSubmitChangePw(data.password, data.newPassword),
               )}
             >
               <InputField label="Mật khẩu cũ" name="password" />
