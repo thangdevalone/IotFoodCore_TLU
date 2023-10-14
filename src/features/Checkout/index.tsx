@@ -159,7 +159,6 @@ export default function Checkout(props: CheckoutProps) {
         "/topic/add-bill",
         (message) => {
           const data = JSON.parse(message.body)
-          console.log(data.body.usernameSend, user?.msv, data, message)
           if (data.body.usernameSend === user?.msv) {
             if (data.statusCodeValue === 400) {
               enqueueSnackbar("Hết mã rồi tình yêu ơi", { variant: "error" })

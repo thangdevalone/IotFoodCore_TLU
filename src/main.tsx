@@ -29,7 +29,7 @@ const Container = () => {
      <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <SnackbarProvider
-          autoHideDuration={2000}
+          autoHideDuration={1500}
           anchorOrigin={{ horizontal: "right", vertical: "top" }}
         >
           <NavigateSetter />

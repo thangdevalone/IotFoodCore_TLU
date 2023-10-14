@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/app/hooks"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { cartActions } from "@/components/Common/CartDrawer/CartSlice"
 import { VoucherIcon } from "@/components/Icon/VoucherIcon"
 import { foodData } from "@/models"
@@ -11,21 +11,23 @@ const SliderItemRecommend = (props: foodData) => {
     id,
     foodName,
     price,
-    detail,
     nameRestaurantFood,
     imgFood,
     distance,
-    createBy,
-    createAt,
     quantityPurchased,
-    typeFoodEntityId,
     restaurantEntityId,
-    status,
   } = props
 
   const dispatch = useAppDispatch()
   const { enqueueSnackbar } = useSnackbar()
+  const dataStore=useAppSelector(state=>state.cart.dataStore)
   const handleAddToCart = () => {
+    const store=dataStore.find(item=>item.id===restaurantEntityId)
+    const food=store?.items.find(item=>item.idFood===id)
+    if(food &&food?.quantity>=10){
+      enqueueSnackbar("Không thể thêm quá 10 sản phẩm",{variant:"error"})
+      return
+    }
     const data = {
       idFood: id,
       name: foodName,

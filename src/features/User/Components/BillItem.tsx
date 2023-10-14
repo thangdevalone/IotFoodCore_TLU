@@ -167,42 +167,61 @@ const BillItem = (props: BillItemProps) => {
             <p className="text-sm ">{renStatus(data.orderStatus)}</p>
           </div>
           <div className="py-2">
-            <p className="text-base font-semibold mb-1">Chi tiết đơn hàng</p>
+            <p className="text-xl font-semibold mb-1">Chi tiết đơn hàng</p>
             <div className=" overflow-x-auto ">
-              <div className="flex flex-col min-w-[500px]">
+              <div className="flex flex-col min-w-[300px]">
                 {foodBill.map((item, index) => (
-                  <div className="" key={index}>
+                  <div key={index}>
                     <p className="font-semibold mb-2">{item.nameRes}</p>
                     <Grid className="border-b border-gray-400 py-2" container>
-                      <Grid item xs={6}>
+                      <Grid item xs={width>500?6:8}>
                         Tên
                       </Grid>
-                      <Grid item xs={2}>
-                        Số lượng
-                      </Grid>
-                      <Grid item xs={2}>
-                        Đơn giá
-                      </Grid>
-                      <Grid item xs={2}>
-                        Thành tiền
-                      </Grid>
+                      {width > 500 ? (
+                        <>
+                          <Grid item xs={2}>
+                            Số lượng
+                          </Grid>
+                          <Grid item xs={2}>
+                            Đơn giá
+                          </Grid>
+                          <Grid item xs={2}>
+                            Thành tiền
+                          </Grid>
+                        </>
+                      ) : (
+                        <Grid item xs={4}>
+                          Thành tiền
+                        </Grid>
+                      )}
                     </Grid>
                     {item.data.map((food) => (
-                      <Grid className="py-2 " spacing={2} container>
-                        <Grid item xs={6}>
+                      <Grid className="py-2" key={food.foodId} spacing={2} container>
+                        <Grid item xs={width>500?6:8}>
                           {food.nameFood}
+                          {width <= 500 ? `*${food.quantity}` : ""}
                         </Grid>
-                        <Grid item xs={2}>
-                          {food.quantity}
-                        </Grid>
-                        <Grid item xs={2}>
-                          {food.priceFood}
-                        </Grid>
-                        <Grid item xs={2}>
-                          {formatCurrencyVND(
-                            String(food.quantity * food.priceFood),
-                          )}
-                        </Grid>
+                        {width > 500 ? (
+                          <>
+                            <Grid item xs={2}>
+                              {food.quantity}
+                            </Grid>
+                            <Grid item xs={2}>
+                              {food.priceFood}
+                            </Grid>
+                            <Grid item xs={2}>
+                              {formatCurrencyVND(
+                                String(food.quantity * food.priceFood),
+                              )}
+                            </Grid>
+                          </>
+                        ) : (
+                          <Grid item xs={4}>
+                            {formatCurrencyVND(
+                              String(food.quantity * food.priceFood),
+                            )}
+                          </Grid>
+                        )}
                       </Grid>
                     ))}
                   </div>
@@ -210,11 +229,27 @@ const BillItem = (props: BillItemProps) => {
               </div>
             </div>
           </div>
-          <div className="py-2">
-            <p className="text-base font-semibold mb-2">Tổng hóa đơn</p>
-            <p className=" text-sm">
-              {formatCurrencyVND(String(data.shipFee + data.totalAmount))}
-            </p>
+          <div
+            className={`flex w-full ${width > 500 ? "flex-row" : "flex-col"}`}
+          >
+            <div className="py-2 flex-1">
+              <p className="text-base font-semibold mb-2">Tổng đơn hàng</p>
+              <p className=" text-sm">
+                {formatCurrencyVND(String(data.totalAmount))}
+              </p>
+            </div>
+            <div className="py-2 flex-1">
+              <p className="text-base font-semibold mb-2">Phí vận chuyển</p>
+              <p className=" text-sm">
+                {formatCurrencyVND(String(data.shipFee))}
+              </p>
+            </div>
+            <div className="py-2 flex-1">
+              <p className="text-base font-semibold mb-2">Tổng hóa đơn</p>
+              <p className=" text-sm">
+                {formatCurrencyVND(String(data.shipFee + data.totalAmount))}
+              </p>
+            </div>
           </div>
           <div className="py-2">
             <p className="text-base font-semibold mb-2">Mã sử dụng</p>
@@ -249,8 +284,8 @@ const BillItem = (props: BillItemProps) => {
       </Dialog>
 
       <div
-        onClick={()=>{
-          if(width>600) return;
+        onClick={() => {
+          if (width > 600) return
           setDialog(true)
         }}
         style={{
@@ -282,12 +317,31 @@ const BillItem = (props: BillItemProps) => {
               #{dayjs(data.createAt).format("DDMMYY")}O{data.id}
             </Box>
           </div>
+          <div className="absolute top-8 left-[-4px] z-[2]">
+            <Box
+              className="py-1  px-1.5 text-xs bg-[var(--color-layer-2)] text-white"
+              sx={{
+                "&:before": {
+                  borderTop: "4px solid var(--color-layer-2)",
+                  borderLeft: "4px solid transparent",
+                  position: "absolute",
+                  display: "block",
+                  content: '""',
+                  top: "24px",
+                  left: "0px",
+                },
+              }}
+            >
+              #{dayjs(data.createAt).format("DD/MM/YY")}
+            </Box>
+          </div>
         </Box>
         <Box className="flex flex-col px-2 pb-2 overflow-hidden pt-1 justify-between">
           <div>
             <p className="font-semibold mb-1 line-clamp-1 text-xl">
               {width < 850 ? "" : "Đơn hàng "}#
-              {dayjs(data.createAt).format("DDMMYY")}O{data.id} {data.orderStatus==="CANCELED"?"(Đã hủy)":""}
+              {dayjs(data.createAt).format("DDMMYY")}O{data.id}{" "}
+              {data.orderStatus === "CANCELED" ? "(Đã hủy)" : ""}
             </p>
             <p className="text-gray-500 mb-[2px] text-sm line-clamp-2">
               {width > 550 && (

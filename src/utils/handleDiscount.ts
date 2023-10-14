@@ -8,7 +8,7 @@ export function handleDiscount(
   }
   if (code.search("MA") !== -1) {
     const maxDis =
-      Number(code.slice(code.search("MA") + 3, code.length) + "000") ||
+      Number(code.slice(code.search("MA") + 2, code.length) + "000") ||
       10000
     const dis =
       (price * discount) / 100 > maxDis ? maxDis : (price * discount) / 100

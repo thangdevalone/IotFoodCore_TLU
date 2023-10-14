@@ -21,8 +21,7 @@ export function CartDrawer(props: CardDrawerProps) {
     timeDeliver,
     lengthFood,
     totalPrice,
-    totalAmount,
-    totalShip,
+
   } = useAppSelector((state) => state.cart)
   const user = useInforUser()
   const iOS =
@@ -204,8 +203,9 @@ export function CartDrawer(props: CardDrawerProps) {
                     >
                       <option value="10:00 AM">10:00 AM</option>
                       <option value="10:30 AM">10:30 AM</option>
-                      <option value="11:15 AM">11:15 AM</option>
-                      <option value="11:45 AM">11:45 AM</option>
+                      <option value="11:00 AM">11:00 AM</option>
+                      <option value="11:30 AM">11:30 AM</option>
+                      <option value="12:00 AM">12:00 AM</option>
                       <option value="12:30 AM">12:30 AM</option>
                     </select>
                   </div>
@@ -222,6 +222,7 @@ export function CartDrawer(props: CardDrawerProps) {
                         if (user) {
                           handlePay()
                         } else {
+                          dispatch(cartActions.toggleCart())
                           navigate("/login")
                         }
                       }}

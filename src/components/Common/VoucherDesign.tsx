@@ -460,7 +460,7 @@ const VoucherMD = (props: {
               setDialog(true)
             }}
             className={`ml-1 cursor-pointer flex flex-row items-center ${
-              blocker ? "text-white" : "text-[var(--color-df-2)]"
+              "text-[var(--color-df-2)]"
             } font-semibold"`}
           >
             Chi tiết <ArrowForward fontSize="small" />
@@ -624,22 +624,24 @@ export function VoucherDesign(props: { data?: VoucherItem }) {
   const { data } = props
   const amount = useAppSelector((state) => state.cart.totalAmount)
   useEffect(() => {
-    if (data?.code.search("MI")) {
+    if (data?.code.search("MI")!==-1) {
       let minAmount=0
-      if(data?.code.search("MA")){
+      if(data?.code.search("MA")!==-1){
         minAmount = Number(
-          data?.code.slice(data?.code.search("MI") + 3, data?.code.search("MA")) +
+          data?.code.slice(data?.code.search("MI") + 2, data?.code.search("MA")) +
             "000",
         )
       }
       else{
         minAmount = Number(
-          data?.code.slice(data?.code.search("MI") + 3, data?.code.length) +
+          data?.code.slice(data?.code.search("MI") + 2, data?.code.length) +
             "000",
         )
       }
+     
       if (amount && amount < minAmount) {
         setBlocker(true)
+        removeVoucher()
       }
       else{
         setBlocker(false)

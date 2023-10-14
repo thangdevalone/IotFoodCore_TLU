@@ -29,7 +29,7 @@ const initialState: CardState = {
   lengthFood: 0,
   dataStore: [],
   voucherUse: undefined,
-  timeDeliver: "11:15 AM",
+  timeDeliver: "12:30 AM",
 }
 
 export const cartSlice = createSlice({

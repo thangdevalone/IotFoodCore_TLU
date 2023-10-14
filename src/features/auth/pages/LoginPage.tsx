@@ -157,7 +157,7 @@ export function LoginPage(props: LoginPageProps) {
 
                   <Button
                     size="large"
-                    sx={{ marginTop: 1 }}
+                    sx={{ marginTop: 1, }}
                     variant="contained"
                     type="submit"
                     disabled={logging}
