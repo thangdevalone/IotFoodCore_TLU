@@ -50,7 +50,6 @@ export function Profile(props: ProfileProps) {
   })
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = event.target.files && event.target.files[0]
-    console.log(selectedImage)
     if (selectedImage && event.target.files) {
       setFile(event.target.files[0])
       const reader = new FileReader()

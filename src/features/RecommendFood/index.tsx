@@ -90,15 +90,15 @@ export function RecommendFood(props: RecommendFoodProps) {
           {!isLoading ? (
             <>
               {[1, 2, 3, 4].map((item, index) => (
-                <SwiperSlide key={index + item}>
+                <SwiperSlide key={index}>
                   <SkeletonCustom />
                 </SwiperSlide>
               ))}
             </>
           ) : (
             <>
-              {data?.map((item, index) => (
-                <SwiperSlide key={index + item?.id}>
+              {data?.map((item) => (
+                <SwiperSlide key={item.id}>
                   <SliderItemRecommend {...item} />
                 </SwiperSlide>
               ))}

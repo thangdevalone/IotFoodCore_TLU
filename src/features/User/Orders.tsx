@@ -61,7 +61,6 @@ export function UserOrders(props: UserOrdersProps) {
         } else {
           const response = await userApi.getBill(pagination, status)
           const myRes = response.data as RootBillUser
-          console.log(myRes)
           setInvoice(myRes.data)
           setRowCount(Math.ceil(myRes.totalRow/pagination.pageSize))
         }

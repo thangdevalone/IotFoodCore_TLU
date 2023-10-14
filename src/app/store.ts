@@ -16,7 +16,6 @@ const persistConfig = {
   debug:import.meta.env.MODE==="development",
   whitelist: ['auth','cart'],
   migrate: async (state: PersistedState,currentVersion:number)=>{
-    console.log(state?._persist.version,currentVersion)
     if(state?._persist.version !==currentVersion){
       const newState: any = {...state,_persist:{...state?._persist,version:currentVersion}}
       newState[authSlice.name]=authSlice.getInitialState()

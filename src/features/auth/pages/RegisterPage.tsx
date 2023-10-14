@@ -178,7 +178,7 @@ export function RegisterPage(props: RegisterPageProps) {
                 disabled={registering || !checked}
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2,backgroundColor:"var(--color-df-1)" }}
+                sx={{ mt: 3, mb: 2 }}
               >
                 Đăng ký
               </Button>

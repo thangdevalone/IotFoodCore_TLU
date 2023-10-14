@@ -1,6 +1,6 @@
 import { ThemeProvider, useTheme } from "@emotion/react"
-import { useEffect } from "react"
-import { Route, Routes } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import "./App.css"
 import { appActions } from "./app/AppSlice"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
@@ -22,6 +22,9 @@ import { AuthCard } from "./features/auth/pages/AuthCard"
 import ForgotPassword from "./features/auth/pages/ForgotPassword"
 import { LoginPage } from "./features/auth/pages/LoginPage"
 import { RegisterPage } from "./features/auth/pages/RegisterPage"
+import { useInforUser } from "./hooks"
+import { authActions } from "./features/auth/AuthSlice"
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window
   return {
@@ -29,10 +32,19 @@ function getWindowDimensions() {
     height,
   }
 }
+
 function App() {
+  const [open, setOpen] =useState(false);
+  const navigate=useNavigate()
+  const handleClose = () => {
+    dispatch(authActions.logout())
+    navigate("/login")
+    setOpen(false);
+  };
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { width } = useAppSelector((state) => state.app)
+  const user = useInforUser()
   useEffect(() => {
     function handleResize() {
       dispatch(appActions.setWidth(getWindowDimensions().width))
@@ -40,9 +52,48 @@ function App() {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
+  const location = useLocation()
+  useEffect(() => {
+    if (user) {
+      if (!user.token) {
+        // Nếu không có token, người dùng đã đăng xuất
+        // Thực hiện đăng xuất ở đây
+        dispatch(authActions.logout())
+        return
+      }
 
+      const tokenData = JSON.parse(atob(user.token.split(".")[1])) // Giải mã phần data trong token
+      const expirationTime = tokenData.exp * 1000 // Chuyển từ giây sang mili giây
+      const currentTime = Date.now()
+      if (currentTime > expirationTime) {
+        // Token đã hết hạn
+        // Thực hiện đăng xuất ở đây
+        setOpen(true)
+      }
+    }
+  }, [location])
   return (
     <ThemeProvider theme={theme}>
+      <Dialog
+        open={open}
+        onClose={()=>{return}}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Phiên đăng nhập của bạn đã quá hạn"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Đăng nhập lại để tiếp tục sử dụng
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Đăng nhập
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Routes>
         <Route element={<LoadServer />}>
           <Route

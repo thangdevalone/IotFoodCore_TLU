@@ -43,7 +43,7 @@ export function MessageInput(props: MessageInputProps) {
 
     }
     const handleTypeInput=(e:React.ChangeEvent<HTMLInputElement>)=>{
-        console.log(e.target.value)
+
     }
     return (
         <div className="absolute bottom-0 flex justify-between py-3 ">

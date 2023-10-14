@@ -8,7 +8,6 @@ export interface ItemMessageProps {
 export function ItemMessage(props: ItemMessageProps) {
   const { data } = props
   const handleClick = () => {
-    console.log("jhee")
   }
   return (
     <div

@@ -175,7 +175,6 @@ export const cartSlice = createSlice({
         state.dataStore[storeIndex].items = updatedItems
         if (updatedItems.length === 0) {
           state.dataStore = state.dataStore.filter((item, index) => {
-            console.log(index, storeIndex)
             return index !== storeIndex
           })
         }

@@ -14,7 +14,6 @@ export interface HomeProps {}
 export function Home(props: HomeProps) {
   const { width } = useAppSelector(state=>state.app)
 
-
   return (
     <Box className="relative">
       <Header />
