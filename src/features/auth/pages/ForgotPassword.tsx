@@ -4,8 +4,10 @@ import { ForgotForm } from "@/models/ForgotForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { ArrowBack } from "@mui/icons-material"
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   IconButton,
   LinearProgress,
   Paper,
@@ -22,12 +24,12 @@ import userApi from "@/api/userApi"
 
 const ForgotPassword = () => {
   const logging = useAppSelector((state) => state.auth.logging)
-  const actionAuth = useAppSelector((state) => state.auth.actionAuth)
   const [openOtp, setOpenOtp] = React.useState<boolean>(false)
+  const [loading, setLoading] = React.useState<boolean>(false)
   const [openPassword, setOpenPassword] = React.useState<boolean>(false)
   const [otpRes, setOtpRes] = React.useState<string>("")
   const { enqueueSnackbar } = useSnackbar()
-  const { width } = useAppSelector(state=>state.app)
+  const { width } = useAppSelector((state) => state.app)
   const dispatch = useAppDispatch()
   const schema = yup.object().shape({
     username: yup.string().required("Cần nhập mã sinh viên"),
@@ -40,18 +42,28 @@ const ForgotPassword = () => {
   })
   const handleSendOtp = async (name: string) => {
     try {
+      setLoading(true)
       const response = await userApi.forgotPassword(name)
-      if (response.status) setOpenOtp(true)
+      if (response.status) {
+        setOpenOtp(true)
+        setLoading(false)
+      } else {
+        setLoading(false)
+      }
     } catch (err) {
       console.log(err)
     }
   }
-  const handleConfirmOtp = async (otp: string) => {
+  const handleConfirmOtp = async (otp: string, username: string) => {
     try {
-      const response = await userApi.finalOtpForgot(otp)
+      setLoading(true)
+      const response = await userApi.finalOtpForgot(otp, username)
       if (response.status) {
         setOtpRes(response.data)
         setOpenPassword(true)
+        setLoading(false)
+      } else {
+        setLoading(false)
       }
     } catch (err) {
       console.log(err)
@@ -65,16 +77,20 @@ const ForgotPassword = () => {
     username: string
   }) => {
     try {
+      setLoading(true)
       const response = await userApi.finalPassword({
         otp: otpRes,
         newPassword,
         username,
       })
       if (response.status) {
+        setLoading(false)
         enqueueSnackbar("Cập nhật mật khẩu thành công", {
           variant: "success",
         })
+        navigate("/login")
       } else {
+        setLoading(false)
         enqueueSnackbar("Cập nhật mật khẩu không thành công", {
           variant: "error",
         })
@@ -102,7 +118,7 @@ const ForgotPassword = () => {
     }
     if (openOtp && !openPassword) {
       if (data.otp?.length) {
-        handleConfirmOtp(data.otp)
+        handleConfirmOtp(data.otp, data.username)
       }
     }
     if (!openOtp && !openPassword) handleSendOtp(data.username)
@@ -125,6 +141,12 @@ const ForgotPassword = () => {
           sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
         />
       )}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Paper
         elevation={8}
         sx={{

@@ -1,12 +1,15 @@
 import userApi from "@/api/userApi"
-import { InputField } from "@/components/FormControls"
+import { InputField, PasswordField } from "@/components/FormControls"
 import { useInforUser } from "@/hooks"
+import { UserInfo } from "@/models"
 import { InfoForm } from "@/models/InfoForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
   Avatar,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Container,
   Dialog,
   Divider,
@@ -25,13 +28,20 @@ export interface ProfileProps {}
 
 export function Profile(props: ProfileProps) {
   const user = useInforUser()
-  console.log(user)
   const { enqueueSnackbar } = useSnackbar()
-  const [file, setFile] = React.useState<File | null>()
+  const [file, setFile] = React.useState<File | null>(null)
   const imgRef = React.useRef<HTMLInputElement | null>(null)
   const [imagePreview, setImagePreview] = React.useState<string>("")
-  const [verifyOtp, setVerifyOtp] = React.useState<boolean>(false)
   const [otpValue, setOptValue] = React.useState<string>("")
+  const [pw, setPw] = React.useState<string>("")
+  const [openPw, setOpenPw] = React.useState<boolean>(false)
+  const [userInfo, setUserInfo] = React.useState<UserInfo>()
+  const [checkUpdateUser, setCheckUpdateUser] = React.useState<string[]>(["a"])
+  const [payload, setPayload] = React.useState({
+    name: "",
+    sdt: "",
+  })
+
   const schema = yup.object().shape({
     accountName: yup.string().required("Vui lòng nhập tên của bạn !"),
     sdt: yup.string().required("Vui lòng nhập số điện thoại !"),
@@ -51,24 +61,58 @@ export function Profile(props: ProfileProps) {
     }
   }
   const [open, setOpen] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
   const handleSendOtp = async (email: string) => {
     try {
+      setLoading(true)
       const response = await userApi.verifyEmail(email)
+      if (response.status) {
+        setOpen(true)
+        setLoading(false)
+      } else {
+        setLoading(false)
+        enqueueSnackbar("Tài khoản của bạn đã được xác thực trước đó !", {
+          variant: "error",
+        })
+      }
     } catch (err) {
       console.log(err)
     }
   }
+  const handleConfirmUpdate = () => {
+    setOpenPw(false)
+    if (file !== null) handleChangeInfo(payload.name, payload.sdt, file)
+    else handleChangeInfo(payload.name, payload.sdt, null)
+  }
+  const handleSubmit: SubmitHandler<InfoForm> = (data) => {
+    if (data.email?.length && data.email !== user?.email) {
+      handleSendOtp(data.email)
+    }
+    if (
+      data.accountName !== user?.accountName ||
+      data.sdt !== user?.sdt ||
+      file !== null
+    ) {
+      setOpenPw(true)
+      setPayload({ name: data.accountName, sdt: data.sdt })
+    } else
+      enqueueSnackbar("Bạn chưa thay đổi gì !", {
+        variant: "info",
+      })
+  }
 
   const confirmOtp = async (otp: string) => {
     try {
+      setLoading(true)
       const response = await userApi.validate(otp)
-      console.log(response)
       if (response.status) {
+        setLoading(false)
         enqueueSnackbar("Xác thực gmail thành công !", {
           variant: "success",
         })
         setOpen(false)
       } else {
+        setLoading(false)
         enqueueSnackbar("Xác thực gmail thất bại !", {
           variant: "error",
         })
@@ -82,26 +126,66 @@ export function Profile(props: ProfileProps) {
     setOpen(false)
   }
 
+  const handleClosePw = () => {
+    setOpenPw(false)
+  }
+
   const handleConfirm = () => {
     confirmOtp(otpValue)
   }
+
+  const handleChangeInfo = async (
+    accountName: string,
+    sdt: string,
+    file: File | null,
+  ) => {
+    try {
+      setLoading(true)
+      const response = await userApi.updateUserInformation({
+        password: pw,
+        newPassword: null,
+        accountName,
+        img: file,
+        sdt,
+      })
+      if (response.status) {
+        enqueueSnackbar("Thay đổi thành công !", {
+          variant: "success",
+        })
+      }
+      setLoading(false)
+    } catch (err) {
+      setLoading(false)
+      enqueueSnackbar("Thay đổi thất bại !", {
+        variant: "error",
+      })
+      console.log(err)
+    }
+  }
   const form = useForm<InfoForm>({
     defaultValues: {
-      accountName: user?.accountName || "",
-      sdt: user?.sdt || "",
-      msv: user?.msv || "",
-      email: user?.email || "",
+      accountName: userInfo?.accountName || user?.accountName,
+      sdt: userInfo?.sdt || user?.sdt,
+      msv: userInfo?.username || user?.msv,
+      email: userInfo?.email || user?.email,
     },
     resolver: yupResolver(schema),
   })
 
-  const handleSubmit: SubmitHandler<InfoForm> = (data) => {
-    if (data.email?.length && data.email !== user?.email) {
-      setOpen(true)
-      handleSendOtp(data.email)
+  React.useEffect(() => {
+    const fetchDataUser = async () => {
+      try {
+        const response = await userApi.getUserInfo()
+        if (response.status) {
+          setUserInfo(response.data)
+          setImagePreview(response.data.img || user?.imgUser || "")
+        }
+      } catch (err) {
+        console.log(err)
+      }
     }
-  }
-  console.log("reload")
+    fetchDataUser()
+  }, [checkUpdateUser])
 
   return (
     <div className="relative w-full">
@@ -112,6 +196,12 @@ export function Profile(props: ProfileProps) {
         </p>
       </div>
       <Divider />
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="flex mt-5">
         <Container className="!pl-0">
           <FormProvider {...form}>
@@ -130,7 +220,11 @@ export function Profile(props: ProfileProps) {
                   <InputField label="Số điện thoại" name="sdt" />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <InputField label="Email" name="email" />
+                  <InputField
+                    label="Email"
+                    name="email"
+                    disabled={user?.email.length ? true : false}
+                  />
                 </Grid>
               </Grid>
               <Button
@@ -194,6 +288,27 @@ export function Profile(props: ProfileProps) {
         <DialogActions>
           <Button onClick={handleClose}>Hủy</Button>
           <Button onClick={handleConfirm}>Xác Nhận</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openPw} onClose={handleClosePw}>
+        <DialogTitle>Vui lòng nhập mật khẩu</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Password"
+            type="text"
+            fullWidth
+            variant="standard"
+            style={{ width: "20vw" }}
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePw}>Hủy</Button>
+          <Button onClick={handleConfirmUpdate}>Xác Nhận</Button>
         </DialogActions>
       </Dialog>
     </div>

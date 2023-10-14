@@ -1,12 +1,19 @@
-import { InputField } from "@/components/FormControls"
-import { UpdateInformationUser, UpdatePassWord } from "@/models"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { Button, Container, Divider } from "@mui/material"
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
-import * as yup from "yup"
-import { useSnackbar } from "notistack"
 import userApi from "@/api/userApi"
-import { useRef } from "react"
+import { PasswordField } from "@/components/FormControls"
+import { UpdatePassWord } from "@/models"
+import { yupResolver } from "@hookform/resolvers/yup"
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Container,
+  Divider,
+} from "@mui/material"
+import { useSnackbar } from "notistack"
+import React, { useRef } from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import * as yup from "yup"
 
 export interface ChangePasswordProps {}
 
@@ -30,30 +37,36 @@ export function ChangePassword(props: ChangePasswordProps) {
   const form = useForm<UpdatePassWord>({
     resolver: yupResolver(schema),
   })
+  const [loading, setLoading] = React.useState<boolean>(false)
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const reset = () => {
     if (formRef.current) {
       formRef.current.reset()
     }
   }
-  const handleSubmit = async (pw: string, newPw: string) => {
+  const handleSubmitChangePw = async (
+    password: string,
+    newPassword: string,
+  ) => {
     try {
-      const form = {
-        password: pw,
-        newPassword: newPw,
+      setLoading(true)
+      const response = await userApi.updateUserInformation({
+        password,
+        newPassword,
+        accountName: null,
         img: null,
         sdt: null,
-        accountName: null,
-      }
-      const response = await userApi.updateUserInformation(form)
-      console.log(response)
-      console.log(response)
+      })
       if (response.status) {
+        setLoading(false)
         enqueueSnackbar("Đổi mật khẩu thành công !", {
           variant: "success",
         })
         reset()
+        navigate("/user/profile")
       } else {
+        setLoading(false)
         enqueueSnackbar("Đổi mật khẩu thất bại !", {
           variant: "error",
         })
@@ -69,7 +82,12 @@ export function ChangePassword(props: ChangePasswordProps) {
         <h1 className="text-18-500">Thay đổi mật khẩu</h1>
       </div>
       <Divider />
-
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="flex mt-5">
         <Container className="!pl-0">
           <FormProvider {...form}>
@@ -78,12 +96,12 @@ export function ChangePassword(props: ChangePasswordProps) {
               style={{ display: "flex", flexDirection: "column" }}
               className="flex items-center justify-center"
               onSubmit={form.handleSubmit((data) =>
-                handleSubmit(data.password, data.newPassword),
+                handleSubmitChangePw(data.password, data.newPassword),
               )}
             >
-              <InputField label="Mật khẩu cũ" name="password" />
-              <InputField label="Mật khẩu mới" name="newPassword" />
-              <InputField
+              <PasswordField label="Mật khẩu cũ" name="password" />
+              <PasswordField label="Mật khẩu mới" name="newPassword" />
+              <PasswordField
                 label="Nhập lại mật khẩu mới"
                 name="passwordNewConfirm"
               />
