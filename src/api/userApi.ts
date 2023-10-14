@@ -20,10 +20,9 @@ const userApi = {
     const url = `user/get-bill?pageIndex=${page.pageIndex}&pageSize=${page.pageSize}`
     return axiosClient.post(url)
   },
-  cancelBill(id:number){
+  cancelBill(id: number) {
     const url = `user/cancel-bill?id=${id}`
     return axiosClient.put(url)
-
   },
   forgotPassword(name: string) {
     // gửi otp quên mk
@@ -50,7 +49,6 @@ const userApi = {
   },
   updateUserInformation(data: UpdateInformationUser) {
     const formData = new FormData()
-    console.log(data)
     formData.append("password", data.password)
     if (data.newPassword !== null) {
       formData.append("newPassword", data.newPassword)
@@ -61,8 +59,8 @@ const userApi = {
     if (data.sdt !== null) {
       formData.append("sdt", data.sdt)
     }
-    if (data.sdt !== null) {
-      formData.append("sdt", data.sdt)
+    if (data.accountName !== null) {
+      formData.append("accountName", data.accountName)
     }
     const url = "user/update-user-info"
     return axiosClient.put(url, formData, {

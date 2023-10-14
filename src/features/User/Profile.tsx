@@ -1,12 +1,15 @@
 import userApi from "@/api/userApi"
-import { InputField } from "@/components/FormControls"
+import { InputField, PasswordField } from "@/components/FormControls"
 import { useInforUser } from "@/hooks"
+import { UserInfo } from "@/models"
 import { InfoForm } from "@/models/InfoForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
   Avatar,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Container,
   Dialog,
   Divider,
@@ -32,10 +35,13 @@ export function Profile(props: ProfileProps) {
   const [otpValue, setOptValue] = React.useState<string>("")
   const [pw, setPw] = React.useState<string>("")
   const [openPw, setOpenPw] = React.useState<boolean>(false)
+  const [userInfo, setUserInfo] = React.useState<UserInfo>()
+  const [checkUpdateUser, setCheckUpdateUser] = React.useState<string[]>(["a"])
   const [payload, setPayload] = React.useState({
     name: "",
     sdt: "",
   })
+
   const schema = yup.object().shape({
     accountName: yup.string().required("Vui lòng nhập tên của bạn !"),
     sdt: yup.string().required("Vui lòng nhập số điện thoại !"),
@@ -55,79 +61,17 @@ export function Profile(props: ProfileProps) {
     }
   }
   const [open, setOpen] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
   const handleSendOtp = async (email: string) => {
     try {
+      setLoading(true)
       const response = await userApi.verifyEmail(email)
       if (response.status) {
         setOpen(true)
+        setLoading(false)
       } else {
+        setLoading(false)
         enqueueSnackbar("Tài khoản của bạn đã được xác thực trước đó !", {
-          variant: "error",
-        })
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const confirmOtp = async (otp: string) => {
-    try {
-      const response = await userApi.validate(otp)
-      if (response.status) {
-        enqueueSnackbar("Xác thực gmail thành công !", {
-          variant: "success",
-        })
-        setOpen(false)
-      } else {
-        enqueueSnackbar("Xác thực gmail thất bại !", {
-          variant: "error",
-        })
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  const handleClosePw = () => {
-    setOpenPw(false)
-  }
-
-  const handleConfirm = () => {
-    confirmOtp(otpValue)
-  }
-  const form = useForm<InfoForm>({
-    defaultValues: {
-      accountName: user?.accountName || "",
-      sdt: user?.sdt || "",
-      msv: user?.msv || "",
-      email: user?.email || "",
-    },
-    resolver: yupResolver(schema),
-  })
-
-  const handleChangeInfo = async (
-    accountName: string,
-    sdt: string,
-    file: File | null,
-  ) => {
-    try {
-      const response = await userApi.updateUserInformation({
-        password: pw,
-        newPassword: null,
-        accountName,
-        img: file,
-        sdt,
-      })
-      if (response.status) {
-        enqueueSnackbar("Thay đổi thành công !", {
-          variant: "success",
-        })
-      } else {
-        enqueueSnackbar("Thay đổi thất bại !", {
           variant: "error",
         })
       }
@@ -157,6 +101,92 @@ export function Profile(props: ProfileProps) {
       })
   }
 
+  const confirmOtp = async (otp: string) => {
+    try {
+      setLoading(true)
+      const response = await userApi.validate(otp)
+      if (response.status) {
+        setLoading(false)
+        enqueueSnackbar("Xác thực gmail thành công !", {
+          variant: "success",
+        })
+        setOpen(false)
+      } else {
+        setLoading(false)
+        enqueueSnackbar("Xác thực gmail thất bại !", {
+          variant: "error",
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleClosePw = () => {
+    setOpenPw(false)
+  }
+
+  const handleConfirm = () => {
+    confirmOtp(otpValue)
+  }
+
+  const handleChangeInfo = async (
+    accountName: string,
+    sdt: string,
+    file: File | null,
+  ) => {
+    try {
+      setLoading(true)
+      const response = await userApi.updateUserInformation({
+        password: pw,
+        newPassword: null,
+        accountName,
+        img: file,
+        sdt,
+      })
+      if (response.status) {
+        enqueueSnackbar("Thay đổi thành công !", {
+          variant: "success",
+        })
+      }
+      setLoading(false)
+    } catch (err) {
+      setLoading(false)
+      enqueueSnackbar("Thay đổi thất bại !", {
+        variant: "error",
+      })
+      console.log(err)
+    }
+  }
+  const form = useForm<InfoForm>({
+    defaultValues: {
+      accountName: userInfo?.accountName || user?.accountName,
+      sdt: userInfo?.sdt || user?.sdt,
+      msv: userInfo?.username || user?.msv,
+      email: userInfo?.email || user?.email,
+    },
+    resolver: yupResolver(schema),
+  })
+
+  React.useEffect(() => {
+    const fetchDataUser = async () => {
+      try {
+        const response = await userApi.getUserInfo()
+        if (response.status) {
+          setUserInfo(response.data)
+          setImagePreview(response.data.img || user?.imgUser || "")
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchDataUser()
+  }, [checkUpdateUser])
+
   return (
     <div className="relative w-full">
       <div className="mb-5">
@@ -166,6 +196,12 @@ export function Profile(props: ProfileProps) {
         </p>
       </div>
       <Divider />
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="flex mt-5">
         <Container className="!pl-0">
           <FormProvider {...form}>

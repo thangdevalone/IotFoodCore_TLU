@@ -29,3 +29,11 @@ export interface UpdateInformationUser {
   img: File | null
   sdt: string | null
 }
+
+export interface UserInfo {
+  accountName: string
+  email: string
+  img: string
+  sdt: string
+  username: string
+}
