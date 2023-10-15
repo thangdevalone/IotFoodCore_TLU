@@ -134,17 +134,14 @@ export function RegisterPage(props: RegisterPageProps) {
       try {
         setLoading(true)
         const res = (await checkSv(formData)) as unknown as { MSV: string }
-        if(res?.MSV){
-
+        if (res?.MSV) {
           setMsv(res.MSV)
           form.setValue("username", res.MSV)
-        }
-        else{
-          enqueueSnackbar("Ảnh không rõ nét",{variant:"error"})
+        } else {
+          enqueueSnackbar("Ảnh không rõ nét", { variant: "error" })
         }
       } catch (error) {
         console.log(error)
-        
       } finally {
         setLoading(false)
       }
@@ -158,17 +155,7 @@ export function RegisterPage(props: RegisterPageProps) {
         const reader = new FileReader()
         reader.onload = (e) => {
           if (e.target) {
-            const image = new Image()
-            image.src = e.target?.result as string
-            image.onload = () => {
-              if (image.width > 1350 || image.height > 800) {
-                alert(
-                  "Kích thước ảnh quá lớn, hãy chọn ảnh có kích thước nhỏ hơn 1350x800 pixels.",
-                )
-              } else {
-                setSelectedImage(e.target?.result as string)
-              }
-            }
+            setSelectedImage(e.target?.result as string)
           }
         }
         reader.readAsDataURL(file)
@@ -177,12 +164,13 @@ export function RegisterPage(props: RegisterPageProps) {
   }
   return (
     <div className="dot-backg min-h-[100vh] w-screen">
-      {registering || loading && (
-        <LinearProgress
-          sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
-        />
-      )}
-      <Container component="main" maxWidth={msv?.length===0?"md":"xs"}>
+      {registering ||
+        (loading && (
+          <LinearProgress
+            sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
+          />
+        ))}
+      <Container component="main" maxWidth={msv?.length === 0 ? "md" : "xs"}>
         <>
           {msv?.length === 0 ? (
             <div className="flex items-center flex-col pt-[15vh]">
@@ -190,7 +178,8 @@ export function RegisterPage(props: RegisterPageProps) {
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
               <p className="text-gray-500 text-sm mb-10">
-                Kích thước không vượt quá: 1350px * 800px
+                Chúng tôi sẽ không lưu ảnh của bạn mà chỉ sử dụng để xác minh
+                bạn có phải là sinh viên Thăng Long hay không
               </p>
 
               <div className="flex flex-col items-center">
@@ -229,8 +218,8 @@ export function RegisterPage(props: RegisterPageProps) {
                 </Button>
               )}
               <p className="text-gray-500 text-sm text-center mt-5">
-                Ảnh phải rõ ràng không mờ, và đầy đủ mã sinh viên, mã vạch,.. nếu trường hợp bị sai mã sinh viên vui
-                lòng F5 để thực hiện lại
+                Ảnh phải rõ ràng không mờ, và đầy đủ mã sinh viên, mã vạch,..
+                nếu trường hợp bị sai mã sinh viên vui lòng F5 để thực hiện lại
               </p>
             </div>
           ) : (
