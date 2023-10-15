@@ -134,7 +134,7 @@ export function RegisterPage(props: RegisterPageProps) {
     ;(async () => {
       try {
         setLoading(true)
-        const res = (await checkSv(formData)) as unknown as { MSV: string }
+        const res = (await checkSv(formData)) as any
         if (res?.MSV) {
           setMsv(res.MSV)
           form.setValue("username", res.MSV)
@@ -173,16 +173,16 @@ export function RegisterPage(props: RegisterPageProps) {
             sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
           />
         ))}
-      <Container component="main" maxWidth={next <= 6 && msv?.length === 0 ? "sm" : "xs"}>
+      <Container component="main" maxWidth={next <= 3 && msv?.length === 0 ? "sm" : "xs"}>
         <>
-          {next <= 6 && msv?.length === 0 ? (
+          {next <= 3 && msv?.length === 0 ? (
             <div className="flex items-center flex-col pt-[15vh]">
               <p className="font-semibold text-center mb-2 text-xl">
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
               <p className="text-gray-500 text-center text-sm mb-10">
                 Chúng tôi sẽ không lưu ảnh của bạn, chỉ sử dụng để xác minh bạn
-                có phải là sinh viên Thăng Long hay không
+                có phải là sinh viên Thăng Long hay không. Do đây là chương trình thử nghiệm nên bạn có thể bấm bỏ qua
               </p>
 
               <div className="flex flex-col items-center">
@@ -193,14 +193,25 @@ export function RegisterPage(props: RegisterPageProps) {
                   style={{ display: "none" }}
                   onChange={handleImageUpload}
                 />
+                <div className="flex flex-row gap-2">
                 <Button
                   variant="contained"
+                  
                   onClick={() =>
                     fileInputRef.current && fileInputRef.current.click()
                   }
                 >
                   Tải Ảnh Lên
                 </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() =>
+                    setNext(5)
+                  }
+                >
+                  Bỏ qua
+                </Button>
+                </div>
                 <br />
                 {selectedImage && (
                   <img
