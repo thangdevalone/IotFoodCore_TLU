@@ -190,7 +190,7 @@ export function RegisterPage(props: RegisterPageProps) {
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
               <p className="text-gray-500 text-sm mb-10">
-                Kích thước không vượt quá: 1400px * 800px
+                Kích thước không vượt quá: 1300px * 780px
               </p>
 
               <div className="flex flex-col items-center">
