@@ -138,6 +138,7 @@ export function RegisterPage(props: RegisterPageProps) {
         form.setValue("username", res.MSV)
       } catch (error) {
         console.log(error)
+        enqueueSnackbar("Ảnh không rõ nét",{variant:"error"})
       } finally {
         setLoading(false)
       }
@@ -177,7 +178,7 @@ export function RegisterPage(props: RegisterPageProps) {
       )}
       <Container component="main" maxWidth={msv.length===0?"md":"xs"}>
         <>
-          {msv.length === 0 ? (
+          {msv?.length === 0 ? (
             <div className="flex items-center flex-col pt-[15vh]">
               <p className="font-semibold text-center mb-2 text-xl">
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
