@@ -178,7 +178,7 @@ export function RegisterPage(props: RegisterPageProps) {
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
               <p className="text-gray-500 text center text-sm mb-10">
-                Chúng tôi sẽ không lưu ảnh của bạn mà chỉ sử dụng để xác minh
+                Chúng tôi sẽ không lưu ảnh của bạn, chỉ sử dụng để xác minh
                 bạn có phải là sinh viên Thăng Long hay không
               </p>
 
@@ -218,7 +218,7 @@ export function RegisterPage(props: RegisterPageProps) {
                 </Button>
               )}
               <p className="text-gray-500 text-sm text-center mt-5">
-                Ảnh phải rõ ràng không mờ, và đầy đủ mã sinh viên, mã vạch,..
+                Ảnh phải rõ ràng không mờ, chỉ gồm thẻ không có cảnh quan, và đầy đủ mã sinh viên, mã vạch,..
                 nếu trường hợp bị sai mã sinh viên vui lòng F5 để thực hiện lại
               </p>
             </div>
