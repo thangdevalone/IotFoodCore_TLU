@@ -5,16 +5,74 @@ import { RecommendFood } from "@/features/RecommendFood"
 import { RecommendRestaurant } from "@/features/RecommendRestaurant"
 import { SearchFood } from "@/features/SearchFood"
 import TypeFood from "@/features/TypeFood"
-import { Box } from "@mui/material"
+import { Backdrop, Box, IconButton } from "@mui/material"
 import { Footer, Header } from "../Common"
 import "./styles_home.css"
 import { useAppSelector } from "@/app/hooks"
+import { useInforUser } from "@/hooks"
+import { CustomButton } from "../Custom/CustomButon"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { Close } from "@mui/icons-material"
 export interface HomeProps {}
 
 export function Home(props: HomeProps) {
   const { width } = useAppSelector(state=>state.app)
-
+  const user=useInforUser()
+  const navigate=useNavigate()
+  const [gmailBackDrop, setGmailBackDrop] = useState(!user?.email)
   return (
+    <>
+    {!user?.email && (
+        <Backdrop
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            zIndex: 1000,
+            height: "100vh",
+          }}
+          open={gmailBackDrop}
+          onClick={()=>setGmailBackDrop(false)}
+        >
+          <div style={{ maxWidth: "450px", width: "80%" }} className="relative">
+            <IconButton onClick={()=>setGmailBackDrop(false)} sx={{top:"5px",right:"5px",position:"absolute"}}>
+            <Close/>
+            </IconButton>
+            <img style={{ width: "100%" }} src="/imp/gmail.svg" />
+            <CustomButton
+              onClick={(e) => {
+                e.stopPropagation()
+                setGmailBackDrop(false)
+                navigate(width > 800 ? "/user/profile" : "/user/account")
+              }}
+              sx={{
+                background: "#51C9C2",
+                color: "white",
+                minWidth: "200px",
+                position: "absolute",
+                bottom: "20px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                borderRadius: "8px",
+                border: "none",
+                fontSize: "14px",
+                height: "40px",
+                fontWeight: "600",
+                textTransform: "unset",
+                "&:hover": {
+                  background: "#51C9C2",
+                  color: "white",
+                },
+              }}
+            >
+              Thêm gmail ngay!
+            </CustomButton>
+          </div>
+        </Backdrop>
+      )}
+
     <Box className="relative">
       <Header />
       {width > 750 && <Banner />}
@@ -51,7 +109,7 @@ export function Home(props: HomeProps) {
           </Box>
         </>
       )}
-      {width >= 600 && (
+      {width >= 500 && (
         <>
           <p className="base-tx  base-pd  mb-[24px]">
             Các loại đồ ăn có sẵn để lựa chọn
@@ -71,5 +129,6 @@ export function Home(props: HomeProps) {
         </>
       )}
     </Box>
+    </>
   )
 }

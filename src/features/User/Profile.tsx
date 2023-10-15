@@ -46,7 +46,7 @@ export function Profile(props: ProfileProps) {
     accountName: yup.string().required("Vui lòng nhập tên của bạn !"),
     sdt: yup.string().required("Vui lòng nhập số điện thoại !"),
     msv: yup.string().required("Vui lòng nhập mã sinh viên của bạn !"),
-    email: yup.string().email("Vui lòng nhập đúng định dạng !"),
+    email: yup.string().notRequired().email("Vui lòng nhập đúng định dạng !"),
   })
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = event.target.files && event.target.files[0]
@@ -166,7 +166,7 @@ export function Profile(props: ProfileProps) {
       accountName: userInfo?.accountName || user?.accountName,
       sdt: userInfo?.sdt || user?.sdt,
       msv: userInfo?.username || user?.msv,
-      email: userInfo?.email || user?.email,
+      email: userInfo?.email || user?.email || undefined,
     },
     resolver: yupResolver(schema),
   })
@@ -222,7 +222,7 @@ export function Profile(props: ProfileProps) {
                   <InputField
                     label="Email"
                     name="email"
-                    disabled={user?.email.length ? true : false}
+                    disabled={user?.email?.length ? true : false}
                   />
                 </Grid>
               </Grid>

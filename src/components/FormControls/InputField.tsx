@@ -25,7 +25,7 @@ export function InputField(props: InputFieldProps) {
                 control={control}
                 defaultValue=""
                 render={({ field}) => (
-                    <OutlinedInput  disabled={disabled} {...field} type='text'  label={label} />
+                    <OutlinedInput sx={{backgroundColor:"white"}}  disabled={disabled} {...field} type='text'  label={label} />
                 )}
             />
 

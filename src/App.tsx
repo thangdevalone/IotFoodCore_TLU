@@ -1,4 +1,12 @@
 import { ThemeProvider, useTheme } from "@emotion/react"
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@mui/material"
 import { useEffect, useState } from "react"
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import "./App.css"
@@ -18,13 +26,11 @@ import { Account } from "./features/User/Account"
 import { ChangePassword } from "./features/User/ChangePassword"
 import { UserOrders } from "./features/User/Orders"
 import { Profile } from "./features/User/Profile"
-import { AuthCard } from "./features/auth/pages/AuthCard"
+import { authActions } from "./features/auth/AuthSlice"
 import ForgotPassword from "./features/auth/pages/ForgotPassword"
 import { LoginPage } from "./features/auth/pages/LoginPage"
-import { RegisterPage } from "./features/auth/pages/RegisterPage"
+import RedirectRole from "./features/auth/pages/RedirectRole"
 import { useInforUser } from "./hooks"
-import { authActions } from "./features/auth/AuthSlice"
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window
   return {
@@ -34,13 +40,13 @@ function getWindowDimensions() {
 }
 
 function App() {
-  const [open, setOpen] =useState(false);
-  const navigate=useNavigate()
+  const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
   const handleClose = () => {
     dispatch(authActions.logout())
     navigate("/login")
-    setOpen(false);
-  };
+    setOpen(false)
+  }
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { width } = useAppSelector((state) => state.app)
@@ -72,11 +78,15 @@ function App() {
       }
     }
   }, [location])
+
   return (
     <ThemeProvider theme={theme}>
+      
       <Dialog
         open={open}
-        onClose={()=>{return}}
+        onClose={() => {
+          return
+        }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -128,9 +138,8 @@ function App() {
           <Route path="/checkout" element={<ProtectCheckout />} />
           <Route element={<ProtectAuth />}>
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/register" element={<RedirectRole />} />
             <Route path="/forgot" element={<ForgotPassword />} />
-            <Route path="/auth/the-sv" element={<AuthCard />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>

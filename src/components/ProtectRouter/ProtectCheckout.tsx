@@ -6,12 +6,13 @@ import dayjs from "dayjs"
 
 export function ProtectCheckout() {
   const user = useInforUser()
+  // time là hiện tại 9:00 PM
   const time = dayjs(new Date()).format("hh:mm A")
-  const timeDeliver = useAppSelector((state) => state.cart.timeDeliver)
+  const timeDeliver = useAppSelector((state) => state.cart.timeDeliver) // 11:00 AM
   return !!user ? (
-    time.search("PM") === -1 ? (
+    time.search("PM") !== -1 ? (
       <>
-        Giờ nay mình không ship nữa hic😞. Hãy quay lại vào ngày mai.{" "}
+        Giờ này mình không ship nữa hic😞. Hãy quay lại vào ngày mai.{" "}
         <a className="text-blue-600 hover:underline" href="/">
           Quay lại trang chủ
         </a>
