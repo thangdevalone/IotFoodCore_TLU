@@ -161,9 +161,9 @@ export function RegisterPage(props: RegisterPageProps) {
             const image = new Image()
             image.src = e.target?.result as string
             image.onload = () => {
-              if (image.width > 1300 || image.height > 780) {
+              if (image.width > 1350 || image.height > 800) {
                 alert(
-                  "Kích thước ảnh quá lớn, hãy chọn ảnh có kích thước nhỏ hơn 1300x780 pixels.",
+                  "Kích thước ảnh quá lớn, hãy chọn ảnh có kích thước nhỏ hơn 1350x800 pixels.",
                 )
               } else {
                 setSelectedImage(e.target?.result as string)
@@ -190,7 +190,7 @@ export function RegisterPage(props: RegisterPageProps) {
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
               <p className="text-gray-500 text-sm mb-10">
-                Kích thước không vượt quá: 1300px * 780px
+                Kích thước không vượt quá: 1350px * 800px
               </p>
 
               <div className="flex flex-col items-center">
