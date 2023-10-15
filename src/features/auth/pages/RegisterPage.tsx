@@ -177,7 +177,7 @@ export function RegisterPage(props: RegisterPageProps) {
               <p className="font-semibold text-center mb-2 text-xl">
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
-              <p className="text-gray-500 text-sm mb-10">
+              <p className="text-gray-500 text center text-sm mb-10">
                 Chúng tôi sẽ không lưu ảnh của bạn mà chỉ sử dụng để xác minh
                 bạn có phải là sinh viên Thăng Long hay không
               </p>
