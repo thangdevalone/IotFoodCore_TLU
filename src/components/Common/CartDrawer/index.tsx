@@ -39,8 +39,9 @@ export function CartDrawer(props: CardDrawerProps) {
       let amount = 0
       store.items.forEach((item) => {
         amount += item.price * item.quantity
-        sum += amount
+        
       })
+      sum += amount
       const shipFee = handlePriceShip(
         store.distance,
         store.items.reduce(
