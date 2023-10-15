@@ -119,6 +119,7 @@ export function RegisterPage(props: RegisterPageProps) {
     }
     dispatch(authActions.register(rsData))
   }
+  const [next, setNext] = useState(1)
   useEffect(() => {
     if (actionAuth == "Failed") {
       enqueueSnackbar("Mã sinh viên đã được sử dụng", {
@@ -139,6 +140,7 @@ export function RegisterPage(props: RegisterPageProps) {
           form.setValue("username", res.MSV)
         } else {
           enqueueSnackbar("Ảnh không rõ nét", { variant: "error" })
+          setNext(next + 1)
         }
       } catch (error) {
         console.log(error)
@@ -162,6 +164,7 @@ export function RegisterPage(props: RegisterPageProps) {
       }
     }
   }
+  console.log(next)
   return (
     <div className="dot-backg min-h-[100vh] w-screen">
       {registering ||
@@ -170,16 +173,16 @@ export function RegisterPage(props: RegisterPageProps) {
             sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
           />
         ))}
-      <Container component="main" maxWidth={msv?.length === 0 ? "md" : "xs"}>
+      <Container component="main" maxWidth={next <= 6 && msv?.length === 0 ? "sm" : "xs"}>
         <>
-          {msv?.length === 0 ? (
+          {next <= 6 && msv?.length === 0 ? (
             <div className="flex items-center flex-col pt-[15vh]">
               <p className="font-semibold text-center mb-2 text-xl">
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
-              <p className="text-gray-500 text center text-sm mb-10">
-                Chúng tôi sẽ không lưu ảnh của bạn, chỉ sử dụng để xác minh
-                bạn có phải là sinh viên Thăng Long hay không
+              <p className="text-gray-500 text-center text-sm mb-10">
+                Chúng tôi sẽ không lưu ảnh của bạn, chỉ sử dụng để xác minh bạn
+                có phải là sinh viên Thăng Long hay không
               </p>
 
               <div className="flex flex-col items-center">
@@ -218,8 +221,16 @@ export function RegisterPage(props: RegisterPageProps) {
                 </Button>
               )}
               <p className="text-gray-500 text-sm text-center mt-5">
-                Ảnh phải rõ ràng không mờ, chỉ gồm thẻ không có cảnh quan, và đầy đủ mã sinh viên, mã vạch,..
-                nếu trường hợp bị sai mã sinh viên vui lòng F5 để thực hiện lại
+                Ảnh phải rõ ràng không mờ, và đầy đủ mã sinh viên, mã vạch,..
+                <a
+                  href="https://ik.imagekit.io/TLIT/slug_dEDE-5Ajd.jpg?updatedAt=1697391726021"
+                  target="_blank"
+                  className="underline text-blue-500"
+                >
+                  Ví dụ (Bấm để xem - Có che chủ thẻ)
+                </a>
+                . Nếu trường hợp bị sai mã sinh viên vui lòng F5 để thực hiện
+                lại
               </p>
             </div>
           ) : (
@@ -248,7 +259,7 @@ export function RegisterPage(props: RegisterPageProps) {
                     <Grid item xs={6}>
                       <InputField
                         name="username"
-                        disabled={true}
+                        disabled={Boolean(msv && msv?.length !== 0)}
                         label="Mã sinh viên"
                       />
                     </Grid>

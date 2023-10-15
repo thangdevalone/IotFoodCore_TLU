@@ -5,7 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 export interface InputFieldProps {
     label: string;
     name: string;
-    disabled?:boolean;
+    disabled?:boolean|undefined;
  
 }
 
