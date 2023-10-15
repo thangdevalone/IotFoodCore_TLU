@@ -46,6 +46,7 @@ export function PasswordField(props: PasswordFieldProps) {
             autoComplete="true"
             label={label}
             disabled={disabled}
+            sx={{backgroundColor:"white"}}
             {...field}
             type={showPassword ? "text" : "password"}
             endAdornment={
