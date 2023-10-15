@@ -161,9 +161,9 @@ export function RegisterPage(props: RegisterPageProps) {
             const image = new Image()
             image.src = e.target?.result as string
             image.onload = () => {
-              if (image.width > 1400 || image.height > 800) {
+              if (image.width > 1300 || image.height > 780) {
                 alert(
-                  "Kích thước ảnh quá lớn, hãy chọn ảnh có kích thước nhỏ hơn 1400x800 pixels.",
+                  "Kích thước ảnh quá lớn, hãy chọn ảnh có kích thước nhỏ hơn 1300x780 pixels.",
                 )
               } else {
                 setSelectedImage(e.target?.result as string)
@@ -229,7 +229,7 @@ export function RegisterPage(props: RegisterPageProps) {
                 </Button>
               )}
               <p className="text-gray-500 text-sm text-center mt-5">
-                Ảnh phải rõ ràng không mờ nếu trường hợp bị sai mã sinh viên vui
+                Ảnh phải rõ ràng không mờ, và đầy đủ mã sinh viên, mã vạch,.. nếu trường hợp bị sai mã sinh viên vui
                 lòng F5 để thực hiện lại
               </p>
             </div>
