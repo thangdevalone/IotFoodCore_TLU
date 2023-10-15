@@ -23,7 +23,7 @@ export function Home(props: HomeProps) {
   const [gmailBackDrop, setGmailBackDrop] = useState(!user?.email)
   return (
     <>
-    {!user?.email && (
+    {user && !user?.email && (
         <Backdrop
           sx={{
             position: "fixed",

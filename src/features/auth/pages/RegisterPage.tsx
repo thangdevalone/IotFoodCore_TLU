@@ -134,11 +134,17 @@ export function RegisterPage(props: RegisterPageProps) {
       try {
         setLoading(true)
         const res = (await checkSv(formData)) as unknown as { MSV: string }
-        setMsv(res.MSV)
-        form.setValue("username", res.MSV)
+        if(res?.MSV){
+
+          setMsv(res.MSV)
+          form.setValue("username", res.MSV)
+        }
+        else{
+          enqueueSnackbar("Ảnh không rõ nét",{variant:"error"})
+        }
       } catch (error) {
         console.log(error)
-        enqueueSnackbar("Ảnh không rõ nét",{variant:"error"})
+        
       } finally {
         setLoading(false)
       }
@@ -176,7 +182,7 @@ export function RegisterPage(props: RegisterPageProps) {
           sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
         />
       )}
-      <Container component="main" maxWidth={msv.length===0?"md":"xs"}>
+      <Container component="main" maxWidth={msv?.length===0?"md":"xs"}>
         <>
           {msv?.length === 0 ? (
             <div className="flex items-center flex-col pt-[15vh]">
