@@ -202,10 +202,8 @@ export function CartDrawer(props: CardDrawerProps) {
                         width < 400 ? "max-w-[150px] ml-2  p-2" : "p-2.5"
                       }`}
                     >
-                      <option value="10:00 AM">10:00 AM</option>
-                      <option value="10:30 AM">10:30 AM</option>
+                      <option value="10:00 AM">10:00 AM</option>  
                       <option value="11:00 AM">11:00 AM</option>
-                      <option value="11:30 AM">11:30 AM</option>
                       <option value="12:00 AM">12:00 AM</option>
                       <option value="12:30 AM">12:30 AM</option>
                     </select>
