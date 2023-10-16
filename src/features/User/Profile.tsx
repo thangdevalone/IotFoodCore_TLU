@@ -96,12 +96,10 @@ export function Profile(props: ProfileProps) {
     ) {
       setOpenPw(true)
       setPayload({ name: data.accountName, sdt: data.sdt })
-    } else
-      enqueueSnackbar("Bạn chưa thay đổi gì !", {
-        variant: "info",
-      })
+    } 
+      
   }
-
+  const dispatch=useAppDispatch()
   const confirmOtp = async (otp: string) => {
     try {
       setLoading(true)
@@ -111,6 +109,8 @@ export function Profile(props: ProfileProps) {
         enqueueSnackbar("Xác thực gmail thành công !", {
           variant: "success",
         })
+        const resInfor = await userApi.getUserInfo()
+        dispatch(authActions.updateInfor(resInfor.data))
         setOpen(false)
       } else {
         setLoading(false)
@@ -134,7 +134,7 @@ export function Profile(props: ProfileProps) {
   const handleConfirm = () => {
     confirmOtp(otpValue)
   }
-  const dispatch=useAppDispatch()
+
   const handleChangeInfo = async (
     accountName: string,
     sdt: string,
