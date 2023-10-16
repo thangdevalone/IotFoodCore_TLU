@@ -1,5 +1,6 @@
 import userApi from "@/api/userApi"
-import { InputField, PasswordField } from "@/components/FormControls"
+import { useAppDispatch } from "@/app/hooks"
+import { InputField } from "@/components/FormControls"
 import { useInforUser } from "@/hooks"
 import { UserInfo } from "@/models"
 import { InfoForm } from "@/models/InfoForm"
@@ -23,6 +24,7 @@ import { useSnackbar } from "notistack"
 import * as React from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import * as yup from "yup"
+import { authActions } from "../auth/AuthSlice"
 
 export interface ProfileProps {}
 
@@ -132,7 +134,7 @@ export function Profile(props: ProfileProps) {
   const handleConfirm = () => {
     confirmOtp(otpValue)
   }
-
+  const dispatch=useAppDispatch()
   const handleChangeInfo = async (
     accountName: string,
     sdt: string,
@@ -147,15 +149,15 @@ export function Profile(props: ProfileProps) {
         img: file,
         sdt,
       })
-      if (response.status) {
-        enqueueSnackbar("Thay đổi thành công !", {
-          variant: "success",
-        })
-      }
+      dispatch(authActions.updateInfor(response.data))
+      enqueueSnackbar("Thay đổi thành công !", {
+        variant: "success",
+      })
+
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      enqueueSnackbar("Thay đổi thất bại !", {
+      enqueueSnackbar("Mật khẩu không chính xác", {
         variant: "error",
       })
       console.log(err)

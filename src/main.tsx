@@ -1,15 +1,14 @@
-import { useRef, useEffect } from "react"
 import { CssBaseline } from "@mui/material"
 import { SnackbarProvider } from "notistack"
+import { useEffect } from "react"
 import ReactDOM from "react-dom/client"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
+import { PersistGate } from "redux-persist/integration/react"
 import App from "./App"
 import NavigateSetter from "./Router/NavigateSetter"
 import { persistor, store } from "./app/store"
 import "./index.css"
-import { PersistGate } from "redux-persist/integration/react"
-import storage from "redux-persist/lib/storage"
 const Container = () => {
   useEffect(() => {
       const VERSION = localStorage.getItem("APP_VERSION")
