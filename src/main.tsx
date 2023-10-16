@@ -33,7 +33,8 @@ const Container = () => {
         >
           <NavigateSetter />
           <CssBaseline />
-          <App />
+          {/* <App /> */}
+            <img src="/imp/baotri.svg"/>
         </SnackbarProvider>
       </BrowserRouter>
       </PersistGate>
