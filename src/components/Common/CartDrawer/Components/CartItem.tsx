@@ -24,7 +24,7 @@ const CartItem = (props: propsData) => {
     return
   }
     setQuantity((prev) => +prev + 1)
-    dispatch(cartActions.addToCart(item))
+    dispatch(cartActions.addToCart({...item,quantity:1}))
   }
   const {enqueueSnackbar}=useSnackbar()
   

@@ -115,21 +115,21 @@ export const cartSlice = createSlice({
                   }
                 })
             } else {
-              state.lengthFood += 1
+              state.lengthFood += quantity
               state.dataStore
                 .find((item) => item.name === nameStore && item.id === idStore)
                 ?.items.map((food) =>
                   food.idFood === idFood
-                    ? (food.quantity = food.quantity + 1)
+                    ? (food.quantity = food.quantity + quantity)
                     : food.quantity,
                 )
             }
           } else {
-            state.lengthFood += 1
+            state.lengthFood += quantity
             existingStore.items = [...existingStore.items, action.payload]
           }
         } else {
-          state.lengthFood += 1
+          state.lengthFood += quantity
           state.dataStore = [
             ...state.dataStore,
             {
@@ -141,7 +141,7 @@ export const cartSlice = createSlice({
           ]
         }
       } else {
-        state.lengthFood = 1
+        state.lengthFood = quantity
         state.dataStore = [
           {
             id: idStore,
