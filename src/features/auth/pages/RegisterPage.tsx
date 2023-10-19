@@ -119,7 +119,6 @@ export function RegisterPage(props: RegisterPageProps) {
     }
     dispatch(authActions.register(rsData))
   }
-  const [next, setNext] = useState(1)
   useEffect(() => {
     if (actionAuth == "Failed") {
       enqueueSnackbar("Mã sinh viên đã được sử dụng", {
@@ -140,7 +139,6 @@ export function RegisterPage(props: RegisterPageProps) {
           form.setValue("username", res.MSV)
         } else {
           enqueueSnackbar("Ảnh không rõ nét", { variant: "error" })
-          setNext(next + 1)
         }
       } catch (error) {
         console.log(error)
@@ -164,7 +162,6 @@ export function RegisterPage(props: RegisterPageProps) {
       }
     }
   }
-  console.log(next)
   return (
     <div className="dot-backg min-h-[100vh] w-screen">
       {registering ||
@@ -173,9 +170,9 @@ export function RegisterPage(props: RegisterPageProps) {
             sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
           />
         ))}
-      <Container component="main" maxWidth={next <= 3 && msv?.length === 0 ? "sm" : "xs"}>
+      <Container component="main" maxWidth={ msv?.length === 0 ? "sm" : "xs"}>
         <>
-          {next <= 3 && msv?.length === 0 ? (
+          {msv?.length === 0 ? (
             <div className="flex items-center flex-col pt-[15vh]">
               <p className="font-semibold text-center mb-2 text-xl">
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
@@ -202,14 +199,6 @@ export function RegisterPage(props: RegisterPageProps) {
                   }
                 >
                   Tải Ảnh Lên
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() =>
-                    setNext(5)
-                  }
-                >
-                  Bỏ qua
                 </Button>
                 </div>
                 <br />
