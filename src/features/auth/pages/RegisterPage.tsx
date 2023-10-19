@@ -162,6 +162,7 @@ export function RegisterPage(props: RegisterPageProps) {
       }
     }
   }
+  const [next,setNext]=useState(false)
   return (
     <div className="dot-backg min-h-[100vh] w-screen">
       {registering ||
@@ -170,16 +171,17 @@ export function RegisterPage(props: RegisterPageProps) {
             sx={{ position: "fixed", top: "0px", left: "0px", width: "100%" }}
           />
         ))}
-      <Container component="main" maxWidth={ msv?.length === 0 ? "sm" : "xs"}>
+      <Container component="main" maxWidth={msv?.length === 0 && !next ? "sm" : "xs"}>
         <>
-          {msv?.length === 0 ? (
+          {msv?.length === 0 && !next ? (
             <div className="flex items-center flex-col pt-[15vh]">
               <p className="font-semibold text-center mb-2 text-xl">
                 Yêu cầu bạn cung cấp ảnh thẻ sinh viên của bạn để tiếp tục
               </p>
               <p className="text-gray-500 text-center text-sm mb-10">
                 Chúng tôi sẽ không lưu ảnh của bạn, chỉ sử dụng để xác minh bạn
-                có phải là sinh viên Thăng Long hay không. Do đây là chương trình thử nghiệm nên bạn có thể bấm bỏ qua
+                có phải là sinh viên Thăng Long hay không. Do đây là chương
+                trình thử nghiệm nên bạn có thể bấm bỏ qua
               </p>
 
               <div className="flex flex-col items-center">
@@ -191,15 +193,17 @@ export function RegisterPage(props: RegisterPageProps) {
                   onChange={handleImageUpload}
                 />
                 <div className="flex flex-row gap-2">
-                <Button
-                  variant="contained"
-                  
-                  onClick={() =>
-                    fileInputRef.current && fileInputRef.current.click()
-                  }
-                >
-                  Tải Ảnh Lên
-                </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() =>
+                      fileInputRef.current && fileInputRef.current.click()
+                    }
+                  >
+                    Tải Ảnh Lên
+                  </Button>
+                  <Button variant="outlined" onClick={()=>setNext(true)}>
+                    Bỏ qua
+                  </Button>
                 </div>
                 <br />
                 {selectedImage && (
