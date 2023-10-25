@@ -17,13 +17,15 @@ import { Close } from "@mui/icons-material"
 export interface HomeProps {}
 
 export function Home(props: HomeProps) {
-  const { width } = useAppSelector(state=>state.app)
-  const user=useInforUser()
-  const navigate=useNavigate()
+  const { width } = useAppSelector((state) => state.app)
+  const user = useInforUser()
+  const navigate = useNavigate()
+  const [alertBackDrop, setAlertBackDrop] = useState(true)
+
   const [gmailBackDrop, setGmailBackDrop] = useState(!user?.email)
   return (
     <>
-    {user && !user?.email && (
+      {user && !user?.email && (
         <Backdrop
           sx={{
             position: "fixed",
@@ -34,11 +36,14 @@ export function Home(props: HomeProps) {
             height: "100vh",
           }}
           open={gmailBackDrop}
-          onClick={()=>setGmailBackDrop(false)}
+          onClick={() => setGmailBackDrop(false)}
         >
           <div style={{ maxWidth: "450px", width: "80%" }} className="relative">
-            <IconButton onClick={()=>setGmailBackDrop(false)} sx={{top:"5px",right:"5px",position:"absolute"}}>
-            <Close/>
+            <IconButton
+              onClick={() => setGmailBackDrop(false)}
+              sx={{ top: "5px", right: "5px", position: "absolute" }}
+            >
+              <Close />
             </IconButton>
             <img style={{ width: "100%" }} src="/imp/gmail.svg" />
             <CustomButton
@@ -72,63 +77,85 @@ export function Home(props: HomeProps) {
           </div>
         </Backdrop>
       )}
-
-    <Box className="relative">
-      <Header />
-      {width > 750 && <Banner />}
-      <section className="container-base search-food">
-        <SearchFood />
-      </section>
-      <div className="line-1"></div>
-      <p className="base-tx base-pd mb-[24px]">
-        Cửa hàng bán chạy nhất tại{" "}
-        <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
-      </p>
-      <section className="recommend-store">
-        <RecommendRestaurant />
-      </section>
-      {width < 501 && <div className="line-1"></div>}
-      <p className="base-tx base-pd mb-[24px]">
-        Các món bán chạy nhất tại{" "}
-        <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
-      </p>
-      <section className="recommend-store">
-        <RecommendFood />
-      </section>
-      {width < 501 && <div className="line-1"></div>}
-      {width < 501 && (
-        <>
-          <p className="base-tx base-pd mb-[24px]">Các món bán hiện tại</p>
-          <Box
-            className="h-[auto] py-5"
-            sx={{ backgroundColor: " rgb(240, 242, 245)" }}
-          >
-            <section className={"container-base base-pd type-food"}>
-              <PagingFood />
+      <Backdrop
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          zIndex: 1000,
+          height: "100vh",
+          overflow:'hidden auto'
+        }}
+        open={alertBackDrop}
+        onClick={() => setAlertBackDrop(false)}
+      >
+        <div  style={{ maxWidth: "600px", width: "80%" }}  className="relative">
+            <IconButton
+              onClick={() => setAlertBackDrop(false)}
+              sx={{ top: "5px", right: "5px", position: "absolute" }}
+            >
+              <Close />
+            </IconButton>
+            <img style={{ width: "100%" }}  src="/imp/tb.svg" />
+          </div>
+      </Backdrop>
+      <Box className="relative">
+        <Header />
+        {width > 750 && <Banner />}
+        <section className="container-base search-food">
+          <SearchFood />
+        </section>
+        <div className="line-1"></div>
+        <p className="base-tx base-pd mb-[24px]">
+          Cửa hàng bán chạy nhất tại{" "}
+          <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
+        </p>
+        <section className="recommend-store">
+          <RecommendRestaurant />
+        </section>
+        {width < 501 && <div className="line-1"></div>}
+        <p className="base-tx base-pd mb-[24px]">
+          Các món bán chạy nhất tại{" "}
+          <span style={{ color: "var(--color-df-2)" }}>Đại học Thăng Long</span>
+        </p>
+        <section className="recommend-store">
+          <RecommendFood />
+        </section>
+        {width < 501 && <div className="line-1"></div>}
+        {width < 501 && (
+          <>
+            <p className="base-tx base-pd mb-[24px]">Các món bán hiện tại</p>
+            <Box
+              className="h-[auto] py-5"
+              sx={{ backgroundColor: " rgb(240, 242, 245)" }}
+            >
+              <section className={"container-base base-pd type-food"}>
+                <PagingFood />
+              </section>
+            </Box>
+          </>
+        )}
+        {width >= 500 && (
+          <>
+            <p className="base-tx  base-pd  mb-[24px]">
+              Các loại đồ ăn có sẵn để lựa chọn
+            </p>
+            <section className="container-base base-pd type-food">
+              <TypeFood />
             </section>
-          </Box>
-        </>
-      )}
-      {width >= 500 && (
-        <>
-          <p className="base-tx  base-pd  mb-[24px]">
-            Các loại đồ ăn có sẵn để lựa chọn
-          </p>
-          <section className="container-base base-pd type-food">
-            <TypeFood />
-          </section>
-          <p className="base-tx base-pd mb-[16px]">IotFood có gì nổi bật?</p>
-          <section className="container-base base-pd why-choose">
-            <WhyChoose />
-          </section>
-          <p className="base-tx base-pd mb-[16px]">Câu hỏi về chúng tôi</p>
-          <section className="container-base base-pd why-choose">
-            <Question />
-          </section>
-          <Footer />
-        </>
-      )}
-    </Box>
+            <p className="base-tx base-pd mb-[16px]">IotFood có gì nổi bật?</p>
+            <section className="container-base base-pd why-choose">
+              <WhyChoose />
+            </section>
+            <p className="base-tx base-pd mb-[16px]">Câu hỏi về chúng tôi</p>
+            <section className="container-base base-pd why-choose">
+              <Question />
+            </section>
+            <Footer />
+          </>
+        )}
+      </Box>
     </>
   )
 }

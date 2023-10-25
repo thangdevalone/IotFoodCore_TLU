@@ -1,4 +1,5 @@
 import authApi from "@/api/authApi"
+import { authActions } from "@/features/auth/AuthSlice"
 import {
   Box,
   LinearProgress,
@@ -6,8 +7,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
+import { useSnackbar } from "notistack"
 
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { Outlet } from "react-router-dom"
 
 export interface LoadServerProps {}
@@ -28,8 +31,10 @@ function LinearProgressWithLabel(
   )
 }
 export function LoadServer(props: LoadServerProps) {
+  const dispatch=useDispatch()
   const [progress, setProgress] = useState(0)
   const [done, setDone] = useState(false)
+  const {enqueueSnackbar}=useSnackbar()
   useEffect(() => {
     const timer = setInterval(() => {
       const random = Math.floor(Math.random() * 4) + 1
@@ -57,6 +62,9 @@ export function LoadServer(props: LoadServerProps) {
         }
       } catch (error) {
         console.log(error)
+        dispatch(authActions.logout())
+        enqueueSnackbar("Có lỗi hoặc hết hạn token vui lòng tải lại trang",{variant:'error'})
+
       }
     })()
 
