@@ -43,12 +43,33 @@ export function Profile(props: ProfileProps) {
     name: "",
     sdt: "",
   })
-
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const schema = yup.object().shape({
-    accountName: yup.string().required("Vui lòng nhập tên của bạn !"),
-    sdt: yup.string().required("Vui lòng nhập số điện thoại !"),
     msv: yup.string().required("Vui lòng nhập mã sinh viên của bạn !"),
     email: yup.string().notRequired().email("Vui lòng nhập đúng định dạng !"),
+    accountName: yup
+      .string()
+      .required("Hãy nhập tên đầy đủ của bạn")
+      .test(
+        "Họ và tên nên gồm 2 từ trở lên",
+        "Họ và tên gồm 2 từ trở lên chỉ bao gồm chữ cái",
+        (value) => {
+          const words = value.trim().split(" ")
+          return (
+            words.length >= 2 &&
+            words.every(
+              (word) => !/\d[@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/.test(word),
+            )
+          )
+        },
+      ),
+    sdt: yup
+      .string()
+      .required("Điền số điện thoại")
+      .matches(phoneRegExp, "Số điện thoại không hợp lệ")
+      .min(9, "Quá ngắn")
+      .max(11, "Quá dài"),
   })
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = event.target.files && event.target.files[0]
@@ -96,10 +117,9 @@ export function Profile(props: ProfileProps) {
     ) {
       setOpenPw(true)
       setPayload({ name: data.accountName, sdt: data.sdt })
-    } 
-      
+    }
   }
-  const dispatch=useAppDispatch()
+  const dispatch = useAppDispatch()
   const confirmOtp = async (otp: string) => {
     try {
       setLoading(true)
@@ -149,7 +169,8 @@ export function Profile(props: ProfileProps) {
         img: file,
         sdt,
       })
-      dispatch(authActions.updateInfor(response.data))
+      const resInfor = await userApi.getUserInfo()
+      dispatch(authActions.updateInfor(resInfor.data))
       enqueueSnackbar("Thay đổi thành công !", {
         variant: "success",
       })
