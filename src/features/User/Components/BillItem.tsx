@@ -71,6 +71,7 @@ const BillItem = (props: BillItemProps) => {
         if (dialog === true) {
           setDialog(false)
         }
+        setOpenConfirm(false)
         enqueueSnackbar("Hủy thành công", { variant: "success" })
       } catch (error) {
         console.log(error)
