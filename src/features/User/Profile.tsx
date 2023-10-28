@@ -124,22 +124,19 @@ export function Profile(props: ProfileProps) {
     try {
       setLoading(true)
       const response = await userApi.validate(otp)
-      if (response.status) {
-        setLoading(false)
-        enqueueSnackbar("Xác thực gmail thành công !", {
-          variant: "success",
-        })
-        const resInfor = await userApi.getUserInfo()
-        dispatch(authActions.updateInfor(resInfor.data))
-        setOpen(false)
-      } else {
-        setLoading(false)
-        enqueueSnackbar("Xác thực gmail thất bại !", {
-          variant: "error",
-        })
-      }
+      setLoading(false)
+      enqueueSnackbar("Xác thực gmail thành công !", {
+        variant: "success",
+      })
+      const resInfor = await userApi.getUserInfo()
+      dispatch(authActions.updateInfor(resInfor.data))
+      setOpen(false)
     } catch (err) {
       console.log(err)
+      setLoading(false)
+      enqueueSnackbar("Xác thực gmail thất bại !", {
+        variant: "error",
+      })
     }
   }
 
