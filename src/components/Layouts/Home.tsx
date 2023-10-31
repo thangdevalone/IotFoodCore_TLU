@@ -77,7 +77,7 @@ export function Home(props: HomeProps) {
           </div>
         </Backdrop>
       )}
-      {/* <Backdrop
+      <Backdrop
         sx={{
           position: "fixed",
           top: 0,
@@ -99,7 +99,7 @@ export function Home(props: HomeProps) {
             </IconButton>
             <img style={{ width: "100%" }}  src="/imp/tb.svg" />
           </div>
-      </Backdrop> */}
+      </Backdrop>
       <Box className="relative">
         <Header />
         {width > 750 && <Banner />}
