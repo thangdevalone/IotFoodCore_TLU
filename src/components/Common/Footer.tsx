@@ -40,7 +40,7 @@ export function Footer(props: FooterProps) {
               }}
             >
               <p className="mb-2 font-semibold text-lg">Phát triển bởi</p>
-              <Stack direction="column" spacing={1}>
+              {/* <Stack direction="column" spacing={1}>
                 <Typography
                   sx={{
                     "&:hover": { textDecoration: "underline" },
@@ -72,7 +72,7 @@ export function Footer(props: FooterProps) {
                   </Link>
                 </Typography>
                
-              </Stack>
+              </Stack> */}
             </Box>
           </Grid>
           <Grid item xs={3}>
@@ -85,7 +85,7 @@ export function Footer(props: FooterProps) {
               }}
             >
               <p className="mb-2 font-semibold text-lg">Dẫn dắt bởi</p>
-              <Stack direction="column" spacing={1}>
+              {/* <Stack direction="column" spacing={1}>
                 <Typography
                   sx={{
                     "&:hover": { textDecoration: "underline" },
@@ -99,7 +99,7 @@ export function Footer(props: FooterProps) {
                     Bùi Trường Giang (Teacher_TLU)
                   </Link>
                 </Typography>
-              </Stack>
+              </Stack> */}
             </Box>
           </Grid>
           <Grid item xs={3}>
