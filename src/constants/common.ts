@@ -1,3 +1,3 @@
-export const STATIC_HOST = "https://thangdev.online/"
-export const SOCKET_URL = "https://thangdev.online/ws-iotfood"
+export const STATIC_HOST = "https://server-iot-food-04.onrender.com/"
+export const SOCKET_URL = "https://server-iot-food-04.onrender.com/ws-iotfood"
 export const AI_URL = "https://ai.thangdev.online/"
