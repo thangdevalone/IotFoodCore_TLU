@@ -146,13 +146,13 @@ export function Home(props: HomeProps) {
             </section>
             <p className="base-tx base-pd mb-[16px]">IotFood có gì nổi bật?</p>
             <section className="container-base base-pd why-choose">
-              <WhyChoose />
+              {/* <WhyChoose /> */}
             </section>
             <p className="base-tx base-pd mb-[16px]">Câu hỏi về chúng tôi</p>
             <section className="container-base base-pd why-choose">
-              <Question />
+              {/* <Question /> */}
             </section>
-            <Footer />
+            {/* <Footer /> */}
           </>
         )}
       </Box>
