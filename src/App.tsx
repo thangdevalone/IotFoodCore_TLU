@@ -114,7 +114,7 @@ function App() {
             }
           />
           <Route path="/" element={<Home />} />
-          {/* <Route path="/user/*" element={<User />}>
+           <Route path="/user/*" element={<User />}>
             <Route path="orders" element={<UserOrders />} />
             {width > 800 ? (
               <>
@@ -125,15 +125,15 @@ function App() {
               <Route path="account" element={<Account />} />
             )}
             <Route path="*" element={<NotFound />}></Route>
-          </Route> */}
+          </Route> 
           <Route path="/store" element={<Store />}>
             <Route path="get-all-store" element={<GetAllStore />} />
             <Route path="get-all-food" element={<AllFood />} />
             <Route path="detail-store/:idStore" element={<DetailStore />} />
             <Route path="type-food/:idTypeFood" element={<FoodByType />} />
           </Route>
-          {/* <Route path="/search" element={<SearchList />}></Route> */}
-          {/* <Route path="/checkout" element={<ProtectCheckout />} /> */}
+           <Route path="/search" element={<SearchList />}></Route> 
+          <Route path="/checkout" element={<ProtectCheckout />} /> 
           <Route element={<ProtectAuth />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RedirectRole />} />
